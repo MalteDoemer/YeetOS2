@@ -9,9 +9,9 @@ export LD=i686-elf-ld -m elf_i386
 export AR=i686-elf-ar
 export AS=nasm -f elf32
 
-export CFLAGS=-ggdb -ffreestanding -nostdlib -std=c99 -I $(abspath include)
-export ASFLAGS=
-export LDFLAGS=
+export CPP_FLAGS=-ggdb -ffreestanding -nostdlib -fno-leading-underscore -I $(abspath include)
+export AS_FLAGS=
+export LD_FLAGS=
 
 IMAGE=$(abspath disk.img)
 HDD=/dev/loop0
@@ -21,16 +21,13 @@ KERNEL=YeetOS
 
 OBJECTS=\
 kernel/kernel.o \
-lib/lib.a \
-drivers/drivers.a \
 arch/$(ARCH)/arch.o \
-#filesys/filesys.o
 
-SUBDIRS=arch/$(ARCH) kernel lib drivers 
+SUBDIRS=arch/$(ARCH) kernel
 
 
 YeetOS: subdirs
-	$(LD) -T arch/$(ARCH)/link.ld $(LINKFLAGS) $(OBJECTS) -o YeetOS
+	$(LD) -T arch/$(ARCH)/link.ld $(LD_FLAGS) $(OBJECTS) -o YeetOS
 
 subdirs: 
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i; done
