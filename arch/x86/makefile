@@ -1,7 +1,6 @@
 
 OBJECTS=\
 entry.o \
-setup.o \
 
 
 arch.o: $(OBJECTS)

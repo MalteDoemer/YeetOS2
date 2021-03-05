@@ -1,6 +1,7 @@
 
 OBJECTS=\
-init.o
+init.o \
+Multiboot.o \
 
 kernel.o: $(OBJECTS)
 	$(LD) -r $(LD_FLAGS) -o $@ $(OBJECTS)

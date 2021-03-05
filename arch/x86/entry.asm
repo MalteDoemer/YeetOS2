@@ -1,6 +1,5 @@
 bits 32
 
-extern arch_main
 extern code
 extern bss
 extern end
@@ -67,22 +66,33 @@ start:
 
 section .text
 
+extern multiboot_ptr
+extern multiboot_sig
+extern kernel_main
+
 up:
     ; delete the identety  mapped entry
     mov dword [boot_page_dir + KERNEL_BASE], 0
     invlpg [0]
 
-    mov esp, kernel_stack.top
+init:
+    mov esp, kernel_stack_top
     mov ebp, esp
 
-    ; correct the pointer to mboot structure
+
+    ; correct mboot structure for higher half
     add ebx, KERNEL_BASE
 
-    ; push the arguments to arch_main on the stack
-    push kernel_stack.top
-    push eax
-    push ebx
-    call arch_main
+    
+
+
+    ; store the pointer to mboot structure
+    mov dword [multiboot_ptr], ebx
+
+    ; store the multiboot signature
+    mov dword [multiboot_sig], eax
+
+    call kernel_main
 
 .halt:
     hlt
@@ -93,4 +103,4 @@ section .bss
 
 kernel_stack:
 resb 1024 * 4
-.top:
+kernel_stack_top:
