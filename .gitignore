@@ -1,0 +1,6 @@
+*.o
+*.d
+*.a
+.clang-format
+disk.img
+YeetOS
