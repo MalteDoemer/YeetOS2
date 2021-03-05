@@ -26,7 +26,7 @@ drivers/drivers.a \
 arch/$(ARCH)/arch.o \
 #filesys/filesys.o
 
-SUBDIRS=arch/$(ARCH) kernel lib drivers #filesys
+SUBDIRS=arch/$(ARCH) kernel lib drivers 
 
 
 YeetOS: subdirs
