@@ -1,8 +1,6 @@
 #include "YeetOS.h"
 #include "Heap.h"
 
-bool default_ctor_ran = false;
-
 Heap::Heap(uintptr_t start, uintptr_t end)
 {
     this->size = end - start;
@@ -17,25 +15,31 @@ Heap::Heap(uintptr_t start, uintptr_t end)
 
 Heap::Heap()
 {
-    default_ctor_ran = true;   
 }
 
 void* Heap::alloc(size_t size)
 {
     HeapBlock* block = start;
 
-    while (block && block->allocated)
-        block = block->next;
+    size = ALIGN(size, sizeof(void*));
 
-    if (!block)
-        return nullptr;
+    do {
+        while (block && block->allocated)
+            block = block->next;
+
+        if (!block)
+            return nullptr;
+
+    } while (block->size < size);
 
     if (block->size > size + sizeof(HeapBlock)) {
         HeapBlock* temp = (HeapBlock*)((uintptr_t)block + sizeof(HeapBlock) + size);
 
         temp->allocated = false;
         temp->magic = HEAP_MAGIC;
+        temp->next = block->next;
         temp->size = block->size - size - sizeof(HeapBlock);
+
 
         HeapBlock* next = block->next;
         if (next)
@@ -43,6 +47,7 @@ void* Heap::alloc(size_t size)
 
         block->next = temp;
         temp->prev = block;
+        block->size = size;
     }
 
     block->allocated = true;
@@ -101,5 +106,3 @@ void Heap::initialize()
 }
 
 Heap Heap::kheap;
-
-

@@ -15,8 +15,8 @@ public:
 };
 
 
-CtorTest t1;
-CtorTest t2;
+// CtorTest t1;
+// CtorTest t2;
 
 void call_ctors()
 {
@@ -43,9 +43,10 @@ extern "C" void kernel_main()
     // call all global constructors
     call_ctors();
 
+    #ifdef __KERNEL__
 
-    if (t1.initialized)
-    {
-        int i = 0;
-    }
+    char* c = new char[10];
+
+    #endif
+
 }

@@ -13,6 +13,12 @@ export CPP_FLAGS=-ggdb -ffreestanding -nostdlib -fno-leading-underscore -I $(abs
 export AS_FLAGS=
 export LD_FLAGS= 
 
+DEFINES=__KERNEL__ ARCH=$(ARCH)
+DEFINES := $(patsubst %,-D%,$(DEFINES))
+
+export CPP_FLAGS := $(CPP_FLAGS) $(DEFINES)
+
+
 IMAGE=$(abspath disk.img)
 HDD=/dev/loop0
 PART=/dev/loop1
