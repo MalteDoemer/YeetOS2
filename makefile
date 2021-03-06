@@ -10,12 +10,13 @@ export AR=i686-elf-ar
 export AS=nasm -f elf32
 
 export CPP_FLAGS=-ggdb -ffreestanding -nostdlib -fno-leading-underscore -I $(abspath include)
+export C_FLAGS=-ggdb -ffreestanding -nostdlib -std=c99
 export AS_FLAGS=
 export LD_FLAGS= 
 
+
 DEFINES=__KERNEL__ ARCH=$(ARCH)
 DEFINES := $(patsubst %,-D%,$(DEFINES))
-
 export CPP_FLAGS := $(CPP_FLAGS) $(DEFINES)
 
 
@@ -27,14 +28,16 @@ KERNEL=YeetOS
 
 OBJECTS=\
 kernel/kernel.a \
-arch/$(ARCH)/arch.a \
+arch/$(ARCH)/arch.a
 
+ARCHIVES=\
+libc/libc.a\
 
-SUBDIRS=arch/$(ARCH) kernel
+SUBDIRS=arch/$(ARCH) kernel libc
 
 
 YeetOS: subdirs
-	$(LD) -T arch/$(ARCH)/link.ld $(LD_FLAGS) --whole-archive $(OBJECTS) -o YeetOS
+	$(LD) -T arch/$(ARCH)/link.ld $(LD_FLAGS) --whole-archive $(OBJECTS) --no-whole-archive $(ARCHIVES) -o YeetOS
 
 subdirs: 
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i; done

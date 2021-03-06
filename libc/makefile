@@ -1,11 +1,8 @@
 
 OBJECTS=\
-init.o \
-new.o \
-Multiboot.o \
-Heap.o \
+memcpy.o \
 
-kernel.a: $(OBJECTS)
+libc.a: $(OBJECTS)
 	$(AR) -rcs $(LD_FLAGS) -o $@ $(OBJECTS)
 
 %.o: %.cpp
@@ -15,4 +12,4 @@ kernel.a: $(OBJECTS)
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<
 
 clean:
-	rm -f kernel.a $(OBJECTS) $(OBJECTS:.o=.d)
+	rm -f libc.a $(OBJECTS) $(OBJECTS:.o=.d)
