@@ -58,7 +58,7 @@ detach:
 	sudo losetup -d $(HDD)
 	sudo losetup -d $(PART)
 
-install: subdirs
+install: YeetOS
 	$(MAKE) attach
 	sudo mkdir -p $(MNT)/boot
 	sudo mkdir -p $(MNT)/boot/grub
