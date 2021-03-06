@@ -13,9 +13,9 @@ SECTIONS {
 
       *Heap.o(.ctors)
 
-      start_ctor = .;
+      ctors_start = .;
       *(.ctors)
-      end_ctor = .;
+      ctors_end = .;
 
       *(.rodata*)
    }

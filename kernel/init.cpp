@@ -3,28 +3,49 @@
 #include "Multiboot.h"
 #include "Heap.h"
 
-typedef void (*ctor_t)();
 
-extern ctor_t start_ctor;
-extern ctor_t end_ctor;
+class CtorTest {
+public:
+    bool initialized = false;
+    
+    CtorTest()
+    {
+        initialized = true;
+    }
+};
 
-bool initialized = false;
 
-void ctor_test() __attribute__((__constructor__));
+CtorTest t1;
+CtorTest t2;
 
-void ctor_test()
+void call_ctors()
 {
-    initialized = true;
+    typedef void (*ctor_t)();
+
+    extern ctor_t ctors_start;
+    extern ctor_t ctors_end;
+
+    ctor_t* ctor = &ctors_end;
+
+    for (ctor_t* ctor = &ctors_start; ctor < &ctors_end; ctor++)
+    {
+        (*ctor)();
+    }
 }
+
 
 extern "C" void kernel_main()
 {
+
     MultibootInfo::initialize();
     Heap::initialize();
 
     // call all global constructors
-    for (ctor_t* ctor = &start_ctor; ctor < &end_ctor; ctor++) {
-        (*ctor)();
-    }
+    call_ctors();
 
+
+    if (t1.initialized)
+    {
+        int i = 0;
+    }
 }

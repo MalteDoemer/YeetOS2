@@ -24,7 +24,7 @@ public:
 
 public:
     Heap(uintptr_t start, uintptr_t end);
-    Heap();// __attribute__((section(".heap_ctor")));
+    Heap();
 
     void* alloc(size_t size);
     void* realloc(void* mem, size_t size);

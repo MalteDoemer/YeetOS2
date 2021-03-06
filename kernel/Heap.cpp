@@ -1,6 +1,8 @@
 #include "YeetOS.h"
 #include "Heap.h"
 
+bool default_ctor_ran = false;
+
 Heap::Heap(uintptr_t start, uintptr_t end)
 {
     this->size = end - start;
@@ -15,7 +17,7 @@ Heap::Heap(uintptr_t start, uintptr_t end)
 
 Heap::Heap()
 {
-    
+    default_ctor_ran = true;   
 }
 
 void* Heap::alloc(size_t size)
@@ -99,4 +101,5 @@ void Heap::initialize()
 }
 
 Heap Heap::kheap;
+
 

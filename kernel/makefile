@@ -3,13 +3,13 @@ OBJECTS=\
 init.o \
 new.o \
 Multiboot.o \
-Heap.o
+Heap.o \
 
-kernel.o: $(OBJECTS)
-	$(LD) -r $(LD_FLAGS) -o $@ $(OBJECTS)
+kernel.a: $(OBJECTS)
+	$(AR) -rcs $(LD_FLAGS) -o $@ $(OBJECTS)
 
 %.o: %.cpp
 	$(CC) $(CPP_FLAGS) -MMD -c -o $@ $<
 
 clean:
-	rm -f kernel.o $(OBJECTS) $(OBJECTS:.o=.d)
+	rm -f kernel.a $(OBJECTS) $(OBJECTS:.o=.d)

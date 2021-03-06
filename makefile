@@ -11,7 +11,7 @@ export AS=nasm -f elf32
 
 export CPP_FLAGS=-ggdb -ffreestanding -nostdlib -fno-leading-underscore -I $(abspath include)
 export AS_FLAGS=
-export LD_FLAGS=
+export LD_FLAGS= 
 
 IMAGE=$(abspath disk.img)
 HDD=/dev/loop0
@@ -20,14 +20,15 @@ MNT=/mnt/vdisk
 KERNEL=YeetOS
 
 OBJECTS=\
-kernel/kernel.o \
-arch/$(ARCH)/arch.o \
+kernel/kernel.a \
+arch/$(ARCH)/arch.a \
+
 
 SUBDIRS=arch/$(ARCH) kernel
 
 
 YeetOS: subdirs
-	$(LD) -T arch/$(ARCH)/link.ld $(LD_FLAGS) $(OBJECTS) -o YeetOS
+	$(LD) -T arch/$(ARCH)/link.ld $(LD_FLAGS) --whole-archive $(OBJECTS) -o YeetOS
 
 subdirs: 
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i; done
@@ -70,6 +71,7 @@ run: install
 	-drive format=raw,file='\\wsl$$\Ubuntu$(IMAGE)',if=ide \
 	-m 512 \
 	-name "YeetOS" \
+	-d cpu_reset \
 	-monitor stdio
 
 debug: install
@@ -78,4 +80,5 @@ debug: install
 	-m 512 \
 	-name "YeetOS" \
 	-S -gdb tcp::9000 \
+	-d cpu_reset \
 	-monitor stdio

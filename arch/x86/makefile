@@ -3,8 +3,8 @@ OBJECTS=\
 entry.o \
 
 
-arch.o: $(OBJECTS)
-	$(LD) -r $(LD_FLAGS) -o $@ $(OBJECTS)
+arch.a: $(OBJECTS)
+	$(AR) -rcs -o $@ $(OBJECTS)
 
 %.o: %.cpp
 	$(CC) $(CPP_FLAGS) -MMD -c -o $@ $<
@@ -13,4 +13,4 @@ arch.o: $(OBJECTS)
 	$(AS) $(AS_FLAGS) -o $@ $<
 
 clean:
-	rm -f arch.o $(OBJECTS) $(OBJECTS:.o=.d)
+	rm -f arch.a $(OBJECTS) $(OBJECTS:.o=.d)
