@@ -104,7 +104,7 @@ struct MultibootInfo {
         } PACKED;
     } PACKED;
 
-    void initialize();
+    static void initialize();
 };
 
 extern "C" MultibootInfo* multiboot_ptr;

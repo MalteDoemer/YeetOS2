@@ -13,8 +13,9 @@
             "cwd": "${workspaceRoot}",
             "gdbpath": "/usr/bin/gdb",
             "autorun": [
-                "symbol-file kernel/YeetOS",
-                "directory kernel"
+                "symbol-file YeetOS",
+                "directory kernel",
+                "directory arch/x86"
             ]
         }
     ]

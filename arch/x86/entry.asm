@@ -1,8 +1,8 @@
 bits 32
 
 extern code
-extern bss
-extern end
+extern bss_start
+extern bss_end
 
 global start
 
@@ -28,8 +28,8 @@ mboot_header:
 
     dd mboot_header
     dd code
-    dd bss
-    dd end
+    dd bss_start
+    dd bss_end
     dd start
 
 align 4*1024
@@ -76,14 +76,13 @@ up:
     invlpg [0]
 
 init:
+
     mov esp, kernel_stack_top
     mov ebp, esp
 
 
     ; correct mboot structure for higher half
     add ebx, KERNEL_BASE
-
-    
 
 
     ; store the pointer to mboot structure
