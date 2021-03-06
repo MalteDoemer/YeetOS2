@@ -1,5 +1,5 @@
-#include "YeetOS.h"
-#include "Heap.h"
+#include "kernel/YeetOS.h"
+#include "kernel/Heap.h"
 
 Heap::Heap(uintptr_t start, uintptr_t end)
 {
@@ -23,14 +23,11 @@ void* Heap::alloc(size_t size)
 
     size = ALIGN(size, sizeof(void*));
 
-    do {
-        while (block && block->allocated)
-            block = block->next;
+    while (block && block->allocated && block->size < size)
+        block = block->next;
 
-        if (!block)
-            return nullptr;
-
-    } while (block->size < size);
+    if (!block)
+        return nullptr;
 
     if (block->size > size + sizeof(HeapBlock)) {
         HeapBlock* temp = (HeapBlock*)((uintptr_t)block + sizeof(HeapBlock) + size);
@@ -39,7 +36,6 @@ void* Heap::alloc(size_t size)
         temp->magic = HEAP_MAGIC;
         temp->next = block->next;
         temp->size = block->size - size - sizeof(HeapBlock);
-
 
         HeapBlock* next = block->next;
         if (next)
@@ -67,7 +63,7 @@ void Heap::free(void* mem)
     uintptr_t block_ptr = ((uintptr_t)mem - sizeof(HeapBlock));
     HeapBlock* block = (HeapBlock*)block_ptr;
 
-    if (block_ptr < start_ptr || block_ptr < start_ptr + this->size)
+    if (block_ptr < start_ptr || block_ptr > start_ptr + this->size)
         return;
 
     if (block->magic != HEAP_MAGIC)

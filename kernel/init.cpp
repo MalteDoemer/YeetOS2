@@ -1,7 +1,8 @@
 
 #include "stdint.h"
-#include "Multiboot.h"
-#include "Heap.h"
+#include "libc/string.h"
+#include "kernel/Multiboot.h"
+#include "kernel/Heap.h"
 
 
 class CtorTest {
@@ -43,10 +44,13 @@ extern "C" void kernel_main()
     // call all global constructors
     call_ctors();
 
-    #ifdef __KERNEL__
+    char* c = new char[5];
+    memcpy(c, "Fett", 5);
+    delete[] c;
 
-    char* c = new char[10];
+    int* i = new int(36);
+    char* buff = new char[1024];
 
-    #endif
-
+    delete i;
+    delete[] buff;
 }

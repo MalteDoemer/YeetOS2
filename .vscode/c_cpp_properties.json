@@ -5,6 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**"
             ],
+
             "defines": [
                 "__KERNEL__"
             ],

@@ -1,5 +1,5 @@
 
-#include "Multiboot.h"
+#include "kernel/Multiboot.h"
 
 void MultibootInfo::initialize()
 {
