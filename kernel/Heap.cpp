@@ -1,5 +1,5 @@
-#include "kernel/YeetOS.h"
-#include "kernel/Heap.h"
+#include "kernel/YeetOS.hpp"
+#include "kernel/Heap.hpp"
 
 Heap::Heap(uintptr_t start, uintptr_t end)
 {

@@ -2,8 +2,8 @@
 #include "stdint.h"
 #include "libc/string.h"
 #include "libc/stdio.h"
-#include "kernel/Multiboot.h"
-#include "kernel/Heap.h"
+#include "kernel/Multiboot.hpp"
+#include "kernel/Heap.hpp"
 
 class CtorTest {
 public:

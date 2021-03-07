@@ -1,6 +1,6 @@
 #pragma once
 
-#include "YeetOS.h"
+#include "YeetOS.hpp"
 
 #define MULTIBOOT_FLAGS_MEMORY (1 << 0)
 #define MULTIBOOT_FLAGS_DECICE (1 << 1)

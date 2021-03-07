@@ -1,6 +1,6 @@
 
-#include "kernel/YeetOS.h"
-#include "kernel/Heap.h"
+#include "kernel/YeetOS.hpp"
+#include "kernel/Heap.hpp"
 
 void* operator new(size_t size)
 {
