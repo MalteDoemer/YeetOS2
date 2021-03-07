@@ -26,7 +26,7 @@ extern "C" void kernel_main()
 {
 
     init_multiboot();
-    Heap::initialize();
+    init_heap();
 
     // call all global constructors
     call_ctors();
