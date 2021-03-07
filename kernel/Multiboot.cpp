@@ -1,7 +1,7 @@
 
 #include "kernel/Multiboot.hpp"
 
-void MultibootInfo::initialize()
+void init_multiboot()
 {
 
     uint32_t flags = multiboot_ptr->flags;

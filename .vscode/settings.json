@@ -1,3 +1,12 @@
 {
-    "debug.allowBreakpointsEverywhere": true
+    "debug.allowBreakpointsEverywhere": true,
+    "files.associations": {
+        "*.config": "makefile",
+        "*.h": "cpp",
+        "*.asm": "nasm",
+        "*.Z80": "asm-collection",
+        "string": "cpp",
+        "*.tcc": "cpp",
+        "optional": "cpp"
+    }
 }

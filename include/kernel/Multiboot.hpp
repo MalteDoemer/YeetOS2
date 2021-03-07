@@ -103,9 +103,9 @@ struct MultibootInfo {
             uint8_t framebuffer_blue_mask_size;
         } PACKED;
     } PACKED;
-
-    static void initialize();
 };
 
+void init_multiboot();
+
 extern "C" MultibootInfo* multiboot_ptr;
-extern uint32_t multiboot_sig;
+extern "C" uint32_t multiboot_sig;

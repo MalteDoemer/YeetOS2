@@ -19,10 +19,6 @@ private:
     size_t size;
 
 public:
-    static void initialize();
-    static Heap kheap;
-
-public:
     Heap(uintptr_t start, uintptr_t end);
     Heap();
 
@@ -30,3 +26,6 @@ public:
     void* realloc(void* mem, size_t size);
     void free(void* mem);
 };
+
+extern Heap kheap;
+void init_heap();

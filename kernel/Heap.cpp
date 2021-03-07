@@ -90,7 +90,9 @@ void Heap::free(void* mem)
     }
 }
 
-void Heap::initialize()
+Heap kheap;
+
+void init_heap()
 {
     extern char heap_start;
     extern char heap_end;
@@ -98,7 +100,5 @@ void Heap::initialize()
     uintptr_t start = (uintptr_t)&heap_start;
     uintptr_t end = (uintptr_t)&heap_end;
 
-    Heap::kheap = Heap(start, end);
+    kheap = Heap(start, end);
 }
-
-Heap Heap::kheap;

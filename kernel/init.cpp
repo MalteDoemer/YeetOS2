@@ -5,19 +5,6 @@
 #include "kernel/Multiboot.hpp"
 #include "kernel/Heap.hpp"
 
-class CtorTest {
-public:
-    bool initialized = false;
-    
-    CtorTest()
-    {
-        initialized = true;
-    }
-};
-
-
-// CtorTest t1;
-// CtorTest t2;
 
 void call_ctors()
 {
@@ -35,12 +22,10 @@ void call_ctors()
 }
 
 
-extern "C" void test_format();
-
 extern "C" void kernel_main()
 {
 
-    MultibootInfo::initialize();
+    init_multiboot();
     Heap::initialize();
 
     // call all global constructors
