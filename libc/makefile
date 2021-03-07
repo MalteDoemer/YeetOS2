@@ -1,6 +1,8 @@
 
 OBJECTS=\
 memcpy.o \
+memset.o \
+vsnprintf.o \
 
 libc.a: $(OBJECTS)
 	$(AR) -rcs $(LD_FLAGS) -o $@ $(OBJECTS)
