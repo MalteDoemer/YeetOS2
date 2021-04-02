@@ -3,6 +3,5 @@ YeetOS
 *.d
 *.a
 *.bin
-.clang-format
 disk.img
 /old
