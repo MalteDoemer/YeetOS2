@@ -23,12 +23,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "stdint.h"
 #include "Kernel/Kernel.hpp"
 
 int init_arch()
 {
-    volatile uint16_t* vram = (volatile uint16_t*)(0xB8000 + KERNEL_BASE);
+    volatile Uint16* vram = (volatile Uint16*)(0xB8000 + KERNEL_BASE);
     vram[0] = 0x1F20;
 
     return 0;
