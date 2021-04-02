@@ -38,6 +38,11 @@ using Int32 = __INT32_TYPE__;
 using Int64 = __INT64_TYPE__;
 
 using size_t = __SIZE_TYPE__;
+using ptrdiff_t = __PTRDIFF_TYPE__;
+
+namespace std {
+using nullptr_t = decltype(nullptr);
+}
 
 inline constexpr Uint64 KiB = 1024;
 inline constexpr Uint64 MiB = KiB * KiB;
@@ -45,3 +50,14 @@ inline constexpr Uint64 GiB = KiB * KiB * KiB;
 inline constexpr Uint64 TiB = KiB * KiB * KiB * KiB;
 inline constexpr Uint64 PiB = KiB * KiB * KiB * KiB * KiB;
 inline constexpr Uint64 EiB = KiB * KiB * KiB * KiB * KiB * KiB;
+
+namespace YT {
+enum class MemoryOrder {
+    relaxed = __ATOMIC_RELAXED,
+    consume = __ATOMIC_CONSUME,
+    acquire = __ATOMIC_ACQUIRE,
+    release = __ATOMIC_RELEASE,
+    acq_rel = __ATOMIC_ACQ_REL,
+    seq_cst = __ATOMIC_SEQ_CST
+};
+}

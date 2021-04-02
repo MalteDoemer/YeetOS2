@@ -23,25 +23,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Array.hpp"
 #include "Assertions.hpp"
+#include "Atomic.hpp"
 #include "InitializerList.hpp"
 #include "Concepts.hpp"
 
 #include "Kernel/Kernel.hpp"
 
-template<Integral T>
-class Test {
-public:
-    Test(T __t)
-        : m_t(__t)
-    {
-    }
-
-    T m_t;
-};
-
 ASM_LINKAGE void kernel_main()
 {
-    Test<int> test(-36);
 }
