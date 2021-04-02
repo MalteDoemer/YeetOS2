@@ -5,5 +5,5 @@
         "*.h": "c",
         "*.asm": "nasm",
     },
-    "git.decorations.enabled": false
+    "git.decorations.enabled": true
 }
