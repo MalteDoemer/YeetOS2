@@ -15,4 +15,4 @@ AllowShortIfStatementsOnASingleLine: Never
 AllowShortBlocksOnASingleLine: Empty
 AllowShortLoopsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: Inline
-SortIncludes: Never
+SortIncludes: false

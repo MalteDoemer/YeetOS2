@@ -25,23 +25,49 @@
 
 #pragma once
 
-using FlatPtr = __UINTPTR_TYPE__;
+#include "StdLibExtras.hpp"
 
-using Uint8 = __UINT8_TYPE__;
-using Uint16 = __UINT16_TYPE__;
-using Uint32 = __UINT32_TYPE__;
-using Uint64 = __UINT64_TYPE__;
+namespace YT {
 
-using Int8 = __INT8_TYPE__;
-using Int16 = __INT16_TYPE__;
-using Int32 = __INT32_TYPE__;
-using Int64 = __INT64_TYPE__;
+template<class T>
+concept ArithmeticType = IsArithmetic<T>::value;
 
-using size_t = __SIZE_TYPE__;
+template<class T>
+concept ConstType = IsConst<T>::value;
 
-inline constexpr Uint64 KiB = 1024;
-inline constexpr Uint64 MiB = KiB * KiB;
-inline constexpr Uint64 GiB = KiB * KiB * KiB;
-inline constexpr Uint64 TiB = KiB * KiB * KiB * KiB;
-inline constexpr Uint64 PiB = KiB * KiB * KiB * KiB * KiB;
-inline constexpr Uint64 EiB = KiB * KiB * KiB * KiB * KiB * KiB;
+template<class T>
+concept EnumType = IsEnum<T>::value;
+
+template<class T>
+concept FloatingPointType = IsFloatingPoint<T>::value;
+template<class T>
+
+concept FundamentalType = IsFundamental<T>::value;
+template<class T>
+
+concept IntegralType = IsIntegral<T>::value;
+template<class T>
+
+concept NullPointerType = IsNullPointer<T>::value;
+template<class T>
+
+concept SigendType = IsSigned<T>::value;
+template<class T>
+
+concept UnionType = IsUnion<T>::value;
+
+template<class T>
+concept UnsigendType = IsUnsigned<T>::value;
+
+}
+
+using YT::ArithmeticType;
+using YT::ConstType;
+using YT::EnumType;
+using YT::FloatingPointType;
+using YT::FundamentalType;
+using YT::IntegralType;
+using YT::NullPointerType;
+using YT::SigendType;
+using YT::UnionType;
+using YT::UnsigendType;
