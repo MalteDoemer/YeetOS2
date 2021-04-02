@@ -1,7 +1,8 @@
+YeetOS
 *.o
 *.d
 *.a
+*.bin
 .clang-format
 disk.img
-YeetOS
-/test
+/old

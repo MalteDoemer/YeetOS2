@@ -1,8 +1,8 @@
 bits 32
 
-extern code
-extern bss_start
-extern bss_end
+extern _code
+extern _bss_start
+extern _bss_end
 
 global start
 
@@ -27,9 +27,9 @@ mboot_header:
     dd MBOOT_CHECKSUM
 
     dd mboot_header
-    dd code
-    dd bss_start
-    dd bss_end
+    dd _code
+    dd _bss_start
+    dd _bss_end
     dd start
 
 align 4*1024
@@ -66,15 +66,9 @@ start:
 
 section .text
 
-extern multiboot_ptr
-extern multiboot_sig
+;extern multiboot_ptr
+;extern multiboot_sig
 extern kernel_main
-
-extern ctors_start
-extern ctors_end
-
-test_call:
-    ret
 
 up:
     ; delete the identety  mapped entry
@@ -87,29 +81,15 @@ init:
     mov esp, kernel_stack_top
     mov ebp, esp
 
-    
-    ; mov edi, ctors_end
-
-    ; cmp edi, ctors_start
-    ; je .done
-
-    ; .ctor_loop:
-    ;     sub edi, 4
-    ;     call [edi]
-    ;     cmp edi, ctors_start
-    ;     jne .ctor_loop
-
-    ; .done:
-
     ; correct mboot structure for higher half
     add ebx, KERNEL_BASE
 
 
     ; store the pointer to mboot structure
-    mov dword [multiboot_ptr], ebx
+    ; mov dword [multiboot_ptr], ebx
 
     ; store the multiboot signature
-    mov dword [multiboot_sig], eax
+    ; mov dword [multiboot_sig], eax
 
     call kernel_main
 
