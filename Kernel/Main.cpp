@@ -27,14 +27,13 @@
 #include "Atomic.hpp"
 #include "InitializerList.hpp"
 #include "Concepts.hpp"
+#include "Iterator.hpp"
 
 #include "Kernel/Kernel.hpp"
 #include "Kernel/CPU.hpp"
 
+
 ASM_LINKAGE void kernel_main()
 {
-    VERIFY(true);
-
-    return;
-    VERIFY_NOT_REACHED();
+    // if constexpr (IsConvertible<int, int&>::value) {}
 }
