@@ -60,18 +60,46 @@ concept UnionType = IsUnion<T>::value;
 template<class T>
 concept UnsigendType = IsUnsigned<T>::value;
 
-template <class From, class To>
+template<class T, class U>
+concept SameAs = IsSame<T, U>::value;
+
+template<class From, class To>
 concept ConvertibleTo = IsConvertible<From, To>::value;
+
+template<class T>
+concept EqualityCompareable = requires (T a, T b)
+{
+    { a == b } -> ConvertibleTo<bool>;
+    { a != b } -> ConvertibleTo<bool>;
+};
+
+
+template<class T>
+concept Compareable = requires (T a, T b)
+{
+    { a == b } -> ConvertibleTo<bool>;
+    { a != b } -> ConvertibleTo<bool>;
+    { a <= b } -> ConvertibleTo<bool>;
+    { a >= b } -> ConvertibleTo<bool>;
+    { a < b } -> ConvertibleTo<bool>;
+    { a > b } -> ConvertibleTo<bool>;
+};
+
+
 
 }
 
 using YT::ArithmeticType;
+using YT::Compareable;
 using YT::ConstType;
+using YT::ConvertibleTo;
 using YT::EnumType;
+using YT::EqualityCompareable;
 using YT::FloatingPointType;
 using YT::FundamentalType;
 using YT::IntegralType;
 using YT::NullPointerType;
+using YT::SameAs;
 using YT::SigendType;
 using YT::UnionType;
 using YT::UnsigendType;
