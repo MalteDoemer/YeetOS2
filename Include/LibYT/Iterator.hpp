@@ -131,47 +131,47 @@ public:
     using ConstReferenceType = Container::ConstReferenceType;
 
 public:
-    ALWAYS_INLINE constexpr Iterator(Container& container) : 
+    constexpr Iterator(Container& container) : 
         m_container(container), m_index(0) {}
 
-    ALWAYS_INLINE constexpr Iterator(Container& container, SizeType index) : 
-        m_container(container), m_index(pos) {}
+    constexpr Iterator(Container& container, SizeType index) : 
+        m_container(container), m_index(index) {}
 
-    ALWAYS_INLINE constexpr Iterator(const Iterator& other) = default;
+    constexpr Iterator(const Iterator& other) = default;
 
-    ALWAYS_INLINE constexpr Iterator& operator=(const Iterator& other){
+    constexpr Iterator& operator=(const Iterator& other){
         m_index = other.m_index;
         m_container = other.m_container;
         return *this;
     }
 
 public:
-    ALWAYS_INLINE constexpr SizeType index(){ return m_index; }
+    constexpr SizeType index(){ return m_index; }
 
-    ALWAYS_INLINE constexpr Iterator operator+(DifferenceType delta) const { return Iterator {m_container, m_index + delta }; }
-    ALWAYS_INLINE constexpr Iterator operator-(DifferenceType delta) const { return Iterator {m_container, m_index - delta }; }
+    constexpr Iterator operator+(DifferenceType delta) const { return Iterator {m_container, m_index + delta }; }
+    constexpr Iterator operator-(DifferenceType delta) const { return Iterator {m_container, m_index - delta }; }
 
-    ALWAYS_INLINE constexpr Iterator operator+=(DifferenceType delta) const { m_index += delta; return *this; }
-    ALWAYS_INLINE constexpr Iterator operator-=(DifferenceType delta) const { m_index -= delta; return *this; }    
+    constexpr Iterator operator+=(DifferenceType delta) const { m_index += delta; return *this; }
+    constexpr Iterator operator-=(DifferenceType delta) const { m_index -= delta; return *this; }    
 
-    ALWAYS_INLINE constexpr Iterator operator++() { ++m_index; return *this; }
-    ALWAYS_INLINE constexpr Iterator operator++(int) { return Iterator { m_container, m_index++ }; }
+    constexpr Iterator operator++() { ++m_index; return *this; }
+    constexpr Iterator operator++(int) { return Iterator { m_container, m_index++ }; }
 
-    ALWAYS_INLINE constexpr Iterator operator--() { --m_index; return *this; }
-    ALWAYS_INLINE constexpr Iterator operator--(int) { return Iterator { m_container, m_index-- }; }
+    constexpr Iterator operator--() { --m_index; return *this; }
+    constexpr Iterator operator--(int) { return Iterator { m_container, m_index-- }; }
 
-    ALWAYS_INLINE constexpr bool operator==(Iterator other) const { return m_index == other.m_index; }
-    ALWAYS_INLINE constexpr bool operator!=(Iterator other) const { return m_index != other.m_index; }
-    ALWAYS_INLINE constexpr bool operator<=(Iterator other) const { return m_index <= other.m_index; }
-    ALWAYS_INLINE constexpr bool operator>=(Iterator other) const { return m_index >= other.m_index; }
-    ALWAYS_INLINE constexpr bool operator<(Iterator other) const { return m_index < other.m_index; }
-    ALWAYS_INLINE constexpr bool operator>(Iterator other) const { return m_index > other.m_index; }
+    constexpr bool operator==(Iterator other) const { return m_index == other.m_index; }
+    constexpr bool operator!=(Iterator other) const { return m_index != other.m_index; }
+    constexpr bool operator<=(Iterator other) const { return m_index <= other.m_index; }
+    constexpr bool operator>=(Iterator other) const { return m_index >= other.m_index; }
+    constexpr bool operator<(Iterator other) const { return m_index < other.m_index; }
+    constexpr bool operator>(Iterator other) const { return m_index > other.m_index; }
 
-    ALWAYS_INLINE constexpr ReferenceType operator*() { return m_container.at(m_index); }
-    ALWAYS_INLINE constexpr ConstReferenceType operator*() const { return m_container.at(m_index); }
+    constexpr ReferenceType operator*() { return m_container.at(m_index); }
+    constexpr ConstReferenceType operator*() const { return m_container.at(m_index); }
 
-    ALWAYS_INLINE constexpr PointerType operator->() { return &m_container.at(m_index); }
-    ALWAYS_INLINE constexpr ConstPointerType operator->() const { return &m_container.at(m_index); }
+    constexpr PointerType operator->() { return &m_container.at(m_index); }
+    constexpr ConstPointerType operator->() const { return &m_container.at(m_index); }
 
 private:
     Container& m_container;

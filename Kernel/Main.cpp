@@ -35,5 +35,4 @@
 
 ASM_LINKAGE void kernel_main()
 {
-    // if constexpr (IsConvertible<int, int&>::value) {}
 }
