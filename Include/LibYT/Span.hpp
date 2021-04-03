@@ -25,3 +25,37 @@
 
 #pragma once
 
+#include "Types.hpp"
+#include "Platform.hpp"
+#include "Concepts.hpp"
+
+template<class T, IntegralType SizeType = size_t>
+class Span {
+private:
+    T* m_data { nullptr };
+    SizeType m_size { 0 };
+
+public:
+    using Span = Span<T, SizeType>;
+
+    ALWAYS_INLINE constexpr Span() = default;
+
+    ALWAYS_INLINE constexpr Span(T* data, SizeType size) :
+        m_data(data), m_size(size) {}
+
+    template<SizeType size>
+    ALWAYS_INLINE constexpr Span(T (&data)[size]) :
+        m_data(data), m_size(size) {}
+
+    ALWAYS_INLINE constexpr Span(const Span& other) :
+        m_data(other.m_data), m_size(other.m_size) {}
+
+    ALWAYS_INLINE constexpr const T* data() const { return m_data; }
+    ALWAYS_INLINE constexpr T* data() { return m_data; }
+
+    ALWAYS_INLINE constexpr SizeType size() const { return m_size; }
+    ALWAYS_INLINE constexpr bool is_null() const { return m_data == nullptr; }
+    ALWAYS_INLINE constexpr bool is_empty() const { return m_size == 0; }
+
+    ~Span();
+};

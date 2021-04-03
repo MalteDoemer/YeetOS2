@@ -25,3 +25,28 @@
 
 #pragma once
 
+#include "Platform.hpp"
+#include "Concepts.hpp"
+#include "Types.hpp"
+
+namespace YT {
+
+template<class Iterator>
+struct IteratorTraits {
+    using ValueType = Iterator::ValueType;
+    using DifferenceType = Iterator::DiferenceType;
+    using PointerType = Iterator::PointerType;
+    using ReferenceType = Iterator::ReferenceType;
+};
+
+template<class T>
+struct IteratorTraits<T*> {
+    using ValueType = T;
+    using DifferenceType = ptrdiff_t;
+    using PointerType = T*;
+    using ReferenceType = T&;
+};
+
+}
+
+using YT::IteratorTraits;
