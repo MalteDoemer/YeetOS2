@@ -46,6 +46,7 @@ subdirs:
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i; done
 
 clean:
+	rm YeetOS
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i clean; done
 
 # to compensate typos XD

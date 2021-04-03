@@ -14,8 +14,9 @@
             "gdbpath": "/usr/bin/gdb",
             "autorun": [
                 "symbol-file YeetOS",
-                "directory kernel",
-                "directory arch/x86"
+                "directory Kernel",
+                "directory Arch/x86",
+                "directory LibYT"
             ]
         }
     ]
