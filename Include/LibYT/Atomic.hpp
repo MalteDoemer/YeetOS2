@@ -165,7 +165,8 @@ public:
     Atomic(Atomic&&) = delete;
 
     Atomic(T val) noexcept
-        : m_value(val)
+        :
+        m_value(val)
     {
     }
 
@@ -295,10 +296,8 @@ public:
     Atomic(const Atomic&) = delete;
     Atomic(Atomic&&) = delete;
 
-    Atomic(T* val) noexcept
-        : m_value(val)
-    {
-    }
+    Atomic(T* val) noexcept :
+        m_value(val) {}
 
     volatile T** ptr() noexcept
     {

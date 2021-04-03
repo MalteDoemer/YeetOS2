@@ -28,7 +28,7 @@
 /* We need to use std here because the compiler needs it */
 namespace std {
 
-template <class T>
+template<class T>
 class initializer_list {
 public:
     using ValueType = T;
@@ -42,12 +42,12 @@ private:
     Iterator m_iter;
     SizeType m_size;
 
-    constexpr initializer_list(ConstIterator __iter, SizeType __size)
-        : m_iter(__iter), m_size(__size) { }
+    constexpr initializer_list(ConstIterator __iter, SizeType __size) :
+        m_iter(__iter), m_size(__size) {}
 
 public:
-    constexpr initializer_list()
-        : m_iter(0), m_size(0) { }
+    constexpr initializer_list() :
+        m_iter(0), m_size(0) {}
 
     constexpr SizeType size() const { return m_size; }
 
@@ -59,13 +59,13 @@ public:
 
 namespace YT {
 
-template <class T>
+template<class T>
 constexpr const T* begin(std::initializer_list<T> __list)
 {
     return __list.begin();
 }
 
-template <class T>
+template<class T>
 constexpr const T* end(std::initializer_list<T> __list)
 {
     return __list.end();

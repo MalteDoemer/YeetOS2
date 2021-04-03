@@ -3,16 +3,23 @@ BasedOnStyle: WebKit
 SpaceAfterTemplateKeyword: false
 AlignEscapedNewlines: true
 AlignTrailingComments: true
+AccessModifierOffset: -4
+SortIncludes: false
+SpaceInEmptyBlock: false
+NamespaceIndentation: None
+
 BreakBeforeInheritanceComma: true
-BreakConstructorInitializers: BeforeComma
-IndentPPDirectives: AfterHash
+
+BreakConstructorInitializers: AfterColon
+AllowAllConstructorInitializersOnNextLine: true
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+
 BreakBeforeBraces: Custom
 BraceWrapping:
     AfterFunction: true
-NamespaceIndentation: None
-AccessModifierOffset: -4
+
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortBlocksOnASingleLine: Empty
 AllowShortLoopsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: Inline
-SortIncludes: false
+

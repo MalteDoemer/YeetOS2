@@ -29,7 +29,7 @@
 
 namespace YT {
 
-template <typename T, size_t Size>
+template<typename T, size_t Size>
 class Array {
 private:
     T __data[Size];
