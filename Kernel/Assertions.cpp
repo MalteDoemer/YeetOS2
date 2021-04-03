@@ -25,10 +25,12 @@
 
 void __verify_failed(const char* expr, const char* function, const char* file, int line)
 {
+    // TODO: implement verify_failed
     while (1) {}
 }
 
 void __verify_not_reached_failed(const char* function, const char* file, int line)
 {
+    // TODO: implement verify_not_reached_failed
     while (1) {}
 }
