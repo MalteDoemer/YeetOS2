@@ -25,3 +25,10 @@
 
 #pragma once
 
+#ifdef __KERNEL__
+
+#include "Kernel/Assertions.hpp"
+
+#else
+#error "Assertions not available in userspace"
+#endif

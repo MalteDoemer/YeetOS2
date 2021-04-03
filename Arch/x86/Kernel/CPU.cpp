@@ -23,18 +23,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Assertions.hpp"
-#include "Atomic.hpp"
-#include "InitializerList.hpp"
-#include "Concepts.hpp"
+#include "Arch/x86/Asm.hpp"
 
-#include "Kernel/Kernel.hpp"
-#include "Kernel/CPU.hpp"
+namespace CPU {
 
-ASM_LINKAGE void kernel_main()
+void halt()
 {
-    VERIFY(true);
+    hlt();
+}
 
-    return;
-    VERIFY_NOT_REACHED();
+void enable_ints()
+{
+    sti();
+}
+
+void disable_ints()
+{
+    cli();
+}
+
+void crash()
+{
+    while (1) {
+        asm volatile("ud2");
+    }
+}
+
 }

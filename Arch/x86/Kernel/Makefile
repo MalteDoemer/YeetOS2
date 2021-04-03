@@ -1,7 +1,7 @@
 
 OBJECTS=\
 Arch.o \
-
+CPU.o \
 
 Kernel.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)

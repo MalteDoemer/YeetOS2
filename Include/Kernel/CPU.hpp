@@ -23,18 +23,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Assertions.hpp"
-#include "Atomic.hpp"
-#include "InitializerList.hpp"
-#include "Concepts.hpp"
+#pragma once
 
-#include "Kernel/Kernel.hpp"
-#include "Kernel/CPU.hpp"
+namespace CPU {
 
-ASM_LINKAGE void kernel_main()
-{
-    VERIFY(true);
+void halt();
+void enable_ints();
+void disable_ints();
+void crash();
 
-    return;
-    VERIFY_NOT_REACHED();
 }

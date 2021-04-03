@@ -23,18 +23,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Assertions.hpp"
-#include "Atomic.hpp"
-#include "InitializerList.hpp"
-#include "Concepts.hpp"
-
-#include "Kernel/Kernel.hpp"
-#include "Kernel/CPU.hpp"
-
-ASM_LINKAGE void kernel_main()
+void __verify_failed(const char* expr, const char* function, const char* file, int line)
 {
-    VERIFY(true);
+    while (1) {}
+}
 
-    return;
-    VERIFY_NOT_REACHED();
+void __verify_not_reached_failed(const char* function, const char* file, int line)
+{
+    while (1) {}
 }

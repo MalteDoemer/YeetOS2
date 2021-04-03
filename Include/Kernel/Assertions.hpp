@@ -23,18 +23,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Assertions.hpp"
-#include "Atomic.hpp"
-#include "InitializerList.hpp"
-#include "Concepts.hpp"
+#pragma once
 
-#include "Kernel/Kernel.hpp"
+#ifndef NBEBUG
+
+[[noreturn]] void __verify_failed(const char* expr, const char* function, const char* file, int line);
+[[noreturn]] void __verify_not_reached_failed(const char* function, const char* file, int line);
+
+#define VERIFY(x) \
+    if (!(x))     \
+    __verify_failed(#x, __PRETTY_FUNCTION__, __FILE__, __LINE__)
+
+#define VERIFY_NOT_REACHED(x) __verify_not_reached_failed(__PRETTY_FUNCTION__, __FILE__, __LINE__)
+
+#else
+
 #include "Kernel/CPU.hpp"
 
-ASM_LINKAGE void kernel_main()
-{
-    VERIFY(true);
+#define VERIFY
+#define VERIFY_NOT_REACHED CPU::crash();
 
-    return;
-    VERIFY_NOT_REACHED();
-}
+#endif

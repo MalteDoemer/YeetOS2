@@ -33,7 +33,6 @@
 #define PACKED __attribute__((packed))
 #define PACKED_AND_ALIGNED(x) __attribute__((packed, aligned(x)))
 #define ALIGNED(x) __attribute__((aligned(x)))
-#define NORETURN __attribute__((noreturn))
 #define SECTION(x) __attribute__((section(x)))
 
 #define SYMBOL_VALUE(x) ({ extern char x; (FlatPtr)&x; })

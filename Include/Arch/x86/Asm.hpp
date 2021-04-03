@@ -23,18 +23,72 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Assertions.hpp"
-#include "Atomic.hpp"
-#include "InitializerList.hpp"
-#include "Concepts.hpp"
+#pragma once
 
-#include "Kernel/Kernel.hpp"
-#include "Kernel/CPU.hpp"
+#include "Types.hpp"
 
-ASM_LINKAGE void kernel_main()
+static inline void outb(Uint16 port, Uint8 data)
 {
-    VERIFY(true);
-
-    return;
-    VERIFY_NOT_REACHED();
+    asm volatile("outb %1, %0" ::"dN"(port), "a"(data));
 }
+
+static inline void outw(Uint16 port, Uint16 data)
+{
+    asm volatile("outw %1, %0" ::"dN"(port), "a"(data));
+}
+
+static inline Uint8 inb(Uint16 port)
+{
+    Uint8 ret;
+    asm volatile("inb %1, %0" : "=a"(ret) : "dN"(port));
+    return ret;
+}
+
+static inline Uint16 inw(Uint16 port)
+{
+    Uint16 ret;
+    asm volatile("inw %1, %0" : "=a"(ret) : "dN"(port));
+    return ret;
+}
+
+static inline void stosb(void* buf, Uint16 val, Uint32 count)
+{
+    asm("rep stosw" ::"a"(val), "c"(count), "D"(buf));
+}
+
+static inline void stosw(void* buf, Uint16 val, Uint32 count)
+{
+    asm("rep stosw" ::"a"(val), "c"(count), "D"(buf));
+}
+
+static inline void stosd(void* buf, Uint32 val, Uint32 count)
+{
+    asm("rep stosl" ::"a"(val), "c"(count), "D"(buf));
+}
+
+static inline void invlpg(FlatPtr addr)
+{
+    asm("invlpg %0" ::"m"(addr));
+}
+
+static inline void set_cr3(Uint32 val)
+{
+    asm("movl %%eax, %%cr3" ::"a"(val));
+}
+
+static inline void cli()
+{
+    asm("cli");
+}
+
+static inline void sti()
+{
+    asm("sti");
+}
+
+static inline void hlt()
+{
+    asm("hlt");
+}
+
+
