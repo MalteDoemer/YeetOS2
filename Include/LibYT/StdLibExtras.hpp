@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2018-2021, Andreas Kling <kling@serenityos.org>
+ * Copyright (c) 2021, Malte Dömer
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

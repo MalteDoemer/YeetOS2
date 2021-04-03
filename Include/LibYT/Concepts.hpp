@@ -26,6 +26,7 @@
 #pragma once
 
 #include "StdLibExtras.hpp"
+#include "Types.hpp"
 
 namespace YT {
 
@@ -58,6 +59,9 @@ concept UnionType = IsUnion<T>::value;
 
 template<class T>
 concept UnsigendType = IsUnsigned<T>::value;
+
+template <class From, class To>
+concept ConvertibleTo = IsConvertible<From, To>::value;
 
 }
 
