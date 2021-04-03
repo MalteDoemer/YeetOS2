@@ -600,6 +600,22 @@ template<class T>
 struct UnderlyingType : __UnderlyingType<T> {
 };
 
+namespace Detail::IsConvertible {
+
+template<typename To>
+static void convert(To);
+
+template<typename From, typename To>
+static auto test(From&&, To&&) -> decltype(convert<To>(declval<From>()), declval<TrueType>());
+
+static auto test(...) -> FalseType;
+
+}
+
+template<typename From, typename To>
+struct IsConvertible : decltype(Detail::IsConvertible::test(declval<From>(), declval<To>())) {
+};
+
 }
 
 using YT::AddConst;
@@ -620,6 +636,7 @@ using YT::IsArithmetic;
 using YT::IsBaseOf;
 using YT::IsClass;
 using YT::IsConst;
+using YT::IsConvertible;
 using YT::IsEnum;
 using YT::IsFloatingPoint;
 using YT::IsFundamental;
