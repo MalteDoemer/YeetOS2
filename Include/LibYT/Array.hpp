@@ -26,27 +26,51 @@
 #pragma once
 
 #include "Types.hpp"
+#include "Iterator.hpp"
 
 namespace YT {
 
 template<typename T, size_t Size>
 class Array {
-private:
-    T __data[Size];
+
+    static_assert(Size > 0, "Array: Size must be grater than zero!");
 
 public:
-    constexpr const T* data() const { return __data; }
-    constexpr T* data() { return __data; }
+    using ValueType = T;
+    using SizeType = size_t;
+    using DifferenceType = ptrdiff_t;
+    using PointerType = T*;
+    using ReferenceType = T&;
+    using IteratorType = Iterator<Array>;
+    using ConstIteratorType = Iterator<Array>;
+    using ConstPointerType = const T*;
+    using ConstReferenceType = const T&;
 
-    constexpr size_t size() const { return Size; }
-
-    constexpr const T& at(size_t index) const { return __data[index]; }
-    constexpr T& at(size_t index) { return __data[index]; }
-
+public:
+public:
+    constexpr SizeType count() const { return Size; }
     constexpr bool is_empty() { return Size == 0; }
 
-    constexpr const T& operator[](size_t index) const { return at(index); }
-    constexpr T& operator[](size_t index) { return at(index); }
+    constexpr Iterator<Array> begin() { return Iterator<Array> { *this, 0 }; }
+    constexpr Iterator<Array> end() { return Iterator<Array> { *this, count() }; }
+
+    constexpr ConstReferenceType at(DifferenceType index) const { return m_data[index]; }
+    constexpr ReferenceType at(DifferenceType index) { return m_data[index]; }
+
+    constexpr ConstReferenceType front() const { return m_data[0]; }
+    constexpr ReferenceType front() { return m_data[0]; }
+
+    constexpr ConstReferenceType back() const { return m_data[Size - 1]; }
+    constexpr ReferenceType back() { return m_data[Size - 1]; }
+
+    constexpr ConstPointerType data() const { return m_data; }
+    constexpr PointerType data() { return m_data; }
+
+    constexpr ConstReferenceType operator[](DifferenceType index) const { return at(index); }
+    constexpr ReferenceType operator[](DifferenceType index) { return at(index); }
+
+private:
+    T m_data[Size];
 };
 
 };

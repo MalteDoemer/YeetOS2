@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "Array.hpp"
 #include "Assertions.hpp"
 #include "Atomic.hpp"
 #include "InitializerList.hpp"
@@ -32,7 +33,15 @@
 #include "Kernel/Kernel.hpp"
 #include "Kernel/CPU.hpp"
 
-
 ASM_LINKAGE void kernel_main()
 {
+    Array<int, 5> arr;
+
+    for (auto itr = arr.begin(); itr != arr.end(); ++itr){
+        *itr = 36;
+    }
+
+    for (auto& i : arr) {
+        i = 0;
+    }
 }

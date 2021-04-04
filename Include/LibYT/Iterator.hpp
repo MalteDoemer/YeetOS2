@@ -52,6 +52,7 @@ struct IteratorTraits<T*> {
     using ConstReferenceType = const T&;
 };
 
+#if 0
 template<class Iter>
 concept IteratorType = requires(Iter i1, Iter i2)
 {
@@ -75,7 +76,6 @@ concept IteratorType = requires(Iter i1, Iter i2)
     { i1-- } -> ConvertibleTo<Iter>;
 };
 
-#if 0
 template<class Iter>
 concept AdvancedIterator = IteratorType<Iter> && requires(Iter i1, Iter i2, typename IteratorTraits<Iter>::DifferenceType n)
 {     
@@ -96,7 +96,6 @@ concept AdvancedIterator = IteratorType<Iter> && requires(Iter i1, Iter i2, type
     { i1[n] } -> ConvertibleTo<typename IteratorTraits<Iter>::ValueType>;
 
 };
-#endif
 
 
 template<class T>
@@ -109,7 +108,6 @@ concept ContainerType = requires (T a, typename T::DifferenceType n){
     typename T::ReferenceType;
     typename T::ConstPointerType;
     typename T::ConstReferenceType;
-    typename T::IteratorType;
 
     { a.begin() } -> IteratorType;
     { a.end() } -> IteratorType;
@@ -117,8 +115,9 @@ concept ContainerType = requires (T a, typename T::DifferenceType n){
     { a.at(n) } -> ConvertibleTo<typename T::ValueType>;
 };
 
+#endif
 
-template<ContainerType Container>
+template<class Container>
 class Iterator {
 
 public:
@@ -170,8 +169,12 @@ public:
     constexpr ReferenceType operator*() { return m_container.at(m_index); }
     constexpr ConstReferenceType operator*() const { return m_container.at(m_index); }
 
+    constexpr ReferenceType operator[](DifferenceType index) { return m_container.at(index); }
+    constexpr ConstReferenceType operator[](DifferenceType index) const { return m_container.at(index); }
+
     constexpr PointerType operator->() { return &m_container.at(m_index); }
     constexpr ConstPointerType operator->() const { return &m_container.at(m_index); }
+
 
 private:
     Container& m_container;
@@ -181,6 +184,4 @@ private:
 }
 
 using YT::IteratorTraits;
-using YT::ContainerType;
-using YT::IteratorType;
 using YT::Iterator;
