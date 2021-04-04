@@ -31,48 +31,52 @@
 namespace YT {
 
 template<typename T, size_t Size>
+requires requires
+{
+    requires Size > 0;
+}
 class Array {
-
-    static_assert(Size > 0, "Array: Size must be grater than zero!");
 
 public:
     using ValueType = T;
     using SizeType = size_t;
     using DifferenceType = ptrdiff_t;
-    using PointerType = T*;
-    using ReferenceType = T&;
-    using IteratorType = Iterator<Array>;
-    using ConstIteratorType = Iterator<Array>;
-    using ConstPointerType = const T*;
-    using ConstReferenceType = const T&;
+    using Pointer = T*;
+    using Reference = T&;
+    using ConstPointer = const T*;
+    using ConstReference = const T&;
+    using Iterator = Pointer;
+    using ConstIterator = ConstPointer;
 
-public:
 public:
     constexpr SizeType count() const { return Size; }
-    constexpr bool is_empty() { return Size == 0; }
+    constexpr bool is_empty() const { return Size == 0; }
 
-    constexpr Iterator<Array> begin() { return Iterator<Array> { *this, 0 }; }
-    constexpr Iterator<Array> end() { return Iterator<Array> { *this, count() }; }
+    constexpr Iterator begin() { return m_data; }
+    constexpr ConstIterator begin() const { return m_data; }
 
-    constexpr ConstReferenceType at(DifferenceType index) const { return m_data[index]; }
-    constexpr ReferenceType at(DifferenceType index) { return m_data[index]; }
+    constexpr Iterator end() { return m_data + Size; }
+    constexpr ConstIterator end() const { return m_data + Size; }
 
-    constexpr ConstReferenceType front() const { return m_data[0]; }
-    constexpr ReferenceType front() { return m_data[0]; }
+    constexpr ConstReference at(DifferenceType index) const { return m_data[index]; }
+    constexpr Reference at(DifferenceType index) { return m_data[index]; }
 
-    constexpr ConstReferenceType back() const { return m_data[Size - 1]; }
-    constexpr ReferenceType back() { return m_data[Size - 1]; }
+    constexpr ConstReference front() const { return m_data[0]; }
+    constexpr Reference front() { return m_data[0]; }
 
-    constexpr ConstPointerType data() const { return m_data; }
-    constexpr PointerType data() { return m_data; }
+    constexpr ConstReference back() const { return m_data[Size - 1]; }
+    constexpr Reference back() { return m_data[Size - 1]; }
 
-    constexpr ConstReferenceType operator[](DifferenceType index) const { return at(index); }
-    constexpr ReferenceType operator[](DifferenceType index) { return at(index); }
+    constexpr ConstPointer data() const { return m_data; }
+    constexpr Pointer data() { return m_data; }
 
-private:
+    constexpr ConstReference operator[](DifferenceType index) const { return m_data[index]; }
+    constexpr Reference operator[](DifferenceType index) { return m_data[index]; }
+
+public:
     T m_data[Size];
 };
 
-};
+}
 
 using YT::Array;

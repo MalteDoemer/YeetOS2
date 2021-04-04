@@ -28,18 +28,22 @@
 /* We need to use std here because the compiler needs it */
 namespace std {
 
+/* Initializer List */
 template<class T>
 class initializer_list {
 public:
     using ValueType = T;
-    using Refrence = const T&;
-    using ConstRefrence = const T&;
     using SizeType = __SIZE_TYPE__;
-    using Iterator = const T*;
+    using DifferenceType = __PTRDIFF_TYPE__;
+    using Reference = T&;
+    using ConstReference = const T&;
+    using Pointer = T*;
+    using ConstPointer = const T*;
+    using Iterator = T*;
     using ConstIterator = const T*;
 
 private:
-    Iterator m_iter;
+    ConstIterator m_iter;
     SizeType m_size;
 
     constexpr initializer_list(ConstIterator __iter, SizeType __size) :
@@ -60,15 +64,18 @@ public:
 namespace YT {
 
 template<class T>
-constexpr const T* begin(std::initializer_list<T> __list)
+constexpr const T* begin(std::initializer_list<T> list)
 {
-    return __list.begin();
+    return list.begin();
 }
 
 template<class T>
-constexpr const T* end(std::initializer_list<T> __list)
+constexpr const T* end(std::initializer_list<T> list)
 {
-    return __list.end();
+    return list.end();
 }
 
 }
+
+using YT::begin;
+using YT::end;

@@ -37,17 +37,7 @@ namespace Kernel {
 
 ASM_LINKAGE void kernel_main()
 {
-    Array<int, 5> arr;
-
     Arch::initialize();
-
-    for (auto itr = arr.begin(); itr != arr.end(); ++itr) {
-        *itr = 36;
-    }
-
-    for (auto& i : arr) {
-        i = 0;
-    }
 }
 
 }

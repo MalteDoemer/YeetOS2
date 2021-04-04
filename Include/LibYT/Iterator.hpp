@@ -35,10 +35,12 @@ struct IteratorTraits {
     using ValueType = Iter::ValueType;
     using SizeType = Iter::SizeType;
     using DifferenceType = Iter::DifferenceType;
-    using PointerType = Iter::PointerType;
-    using ReferenceType = Iter::ReferenceType;
-    using ConstPointerType = Iter::ConstPointerType;
-    using ConstReferenceType = Iter::ConstReferenceType;
+
+    using Pointer = Iter::Pointer;
+    using Reference = Iter::Reference;
+
+    using ConstPointer = Iter::ConstPointer;
+    using ConstReference = Iter::ConstReference;
 };
 
 template<class T>
@@ -46,10 +48,10 @@ struct IteratorTraits<T*> {
     using ValueType = T;
     using SizeType = size_t;
     using DifferenceType = ptrdiff_t;
-    using PointerType = T*;
-    using ReferenceType = T&;
-    using ConstPointerType = const T*;
-    using ConstReferenceType = const T&;
+    using Pointer = T*;
+    using Reference = T&;
+    using ConstPointer = const T*;
+    using ConstReference = const T&;
 };
 
 #if 0
@@ -118,27 +120,27 @@ concept ContainerType = requires (T a, typename T::DifferenceType n){
 #endif
 
 template<class Container>
-class Iterator {
+class SimpleIterator {
 
 public:
     using ValueType = Container::ValueType;
     using SizeType = Container::SizeType;
     using DifferenceType = Container::DifferenceType;
-    using PointerType = Container::PointerType;
-    using ReferenceType = Container::ReferenceType;
-    using ConstPointerType = Container::ConstPointerType;
-    using ConstReferenceType = Container::ConstReferenceType;
+    using Pointer = Container::Pointer;
+    using Reference = Container::Reference;
+    using ConstPointer = Container::ConstPointer;
+    using ConstReference = Container::ConstReference;
 
 public:
-    constexpr Iterator(Container& container) : 
+    constexpr SimpleIterator(Container& container) : 
         m_container(container), m_index(0) {}
 
-    constexpr Iterator(Container& container, SizeType index) : 
+    constexpr SimpleIterator(Container& container, SizeType index) : 
         m_container(container), m_index(index) {}
 
-    constexpr Iterator(const Iterator& other) = default;
+    constexpr SimpleIterator(const SimpleIterator& other) = default;
 
-    constexpr Iterator& operator=(const Iterator& other){
+    constexpr SimpleIterator& operator=(const SimpleIterator& other){
         m_index = other.m_index;
         m_container = other.m_container;
         return *this;
@@ -147,33 +149,33 @@ public:
 public:
     constexpr SizeType index(){ return m_index; }
 
-    constexpr Iterator operator+(DifferenceType delta) const { return Iterator {m_container, m_index + delta }; }
-    constexpr Iterator operator-(DifferenceType delta) const { return Iterator {m_container, m_index - delta }; }
+    constexpr SimpleIterator operator+(DifferenceType delta) const { return SimpleIterator {m_container, m_index + delta }; }
+    constexpr SimpleIterator operator-(DifferenceType delta) const { return SimpleIterator {m_container, m_index - delta }; }
 
-    constexpr Iterator operator+=(DifferenceType delta) const { m_index += delta; return *this; }
-    constexpr Iterator operator-=(DifferenceType delta) const { m_index -= delta; return *this; }    
+    constexpr SimpleIterator operator+=(DifferenceType delta) const { m_index += delta; return *this; }
+    constexpr SimpleIterator operator-=(DifferenceType delta) const { m_index -= delta; return *this; }    
 
-    constexpr Iterator operator++() { ++m_index; return *this; }
-    constexpr Iterator operator++(int) { return Iterator { m_container, m_index++ }; }
+    constexpr SimpleIterator operator++() { ++m_index; return *this; }
+    constexpr SimpleIterator operator++(int) { return SimpleIterator { m_container, m_index++ }; }
 
-    constexpr Iterator operator--() { --m_index; return *this; }
-    constexpr Iterator operator--(int) { return Iterator { m_container, m_index-- }; }
+    constexpr SimpleIterator operator--() { --m_index; return *this; }
+    constexpr SimpleIterator operator--(int) { return SimpleIterator { m_container, m_index-- }; }
 
-    constexpr bool operator==(Iterator other) const { return m_index == other.m_index; }
-    constexpr bool operator!=(Iterator other) const { return m_index != other.m_index; }
-    constexpr bool operator<=(Iterator other) const { return m_index <= other.m_index; }
-    constexpr bool operator>=(Iterator other) const { return m_index >= other.m_index; }
-    constexpr bool operator<(Iterator other) const { return m_index < other.m_index; }
-    constexpr bool operator>(Iterator other) const { return m_index > other.m_index; }
+    constexpr bool operator==(SimpleIterator other) const { return m_index == other.m_index; }
+    constexpr bool operator!=(SimpleIterator other) const { return m_index != other.m_index; }
+    constexpr bool operator<=(SimpleIterator other) const { return m_index <= other.m_index; }
+    constexpr bool operator>=(SimpleIterator other) const { return m_index >= other.m_index; }
+    constexpr bool operator<(SimpleIterator other) const { return m_index < other.m_index; }
+    constexpr bool operator>(SimpleIterator other) const { return m_index > other.m_index; }
 
-    constexpr ReferenceType operator*() { return m_container.at(m_index); }
-    constexpr ConstReferenceType operator*() const { return m_container.at(m_index); }
+    constexpr Reference operator*() { return m_container.at(m_index); }
+    constexpr ConstReference operator*() const { return m_container.at(m_index); }
 
-    constexpr ReferenceType operator[](DifferenceType index) { return m_container.at(index); }
-    constexpr ConstReferenceType operator[](DifferenceType index) const { return m_container.at(index); }
+    constexpr Reference operator[](DifferenceType index) { return m_container.at(index); }
+    constexpr ConstReference operator[](DifferenceType index) const { return m_container.at(index); }
 
-    constexpr PointerType operator->() { return &m_container.at(m_index); }
-    constexpr ConstPointerType operator->() const { return &m_container.at(m_index); }
+    constexpr Pointer operator->() { return &m_container.at(m_index); }
+    constexpr ConstPointer operator->() const { return &m_container.at(m_index); }
 
 
 private:
@@ -184,4 +186,4 @@ private:
 }
 
 using YT::IteratorTraits;
-using YT::Iterator;
+using YT::SimpleIterator;
