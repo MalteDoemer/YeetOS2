@@ -33,15 +33,21 @@
 #include "Kernel/Kernel.hpp"
 #include "Kernel/CPU.hpp"
 
+namespace Kernel {
+
 ASM_LINKAGE void kernel_main()
 {
     Array<int, 5> arr;
 
-    for (auto itr = arr.begin(); itr != arr.end(); ++itr){
+    Arch::initialize();
+
+    for (auto itr = arr.begin(); itr != arr.end(); ++itr) {
         *itr = 36;
     }
 
     for (auto& i : arr) {
         i = 0;
     }
+}
+
 }

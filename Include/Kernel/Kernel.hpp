@@ -37,6 +37,12 @@
 
 #define SYMBOL_VALUE(x) ({ extern char x; (FlatPtr)&x; })
 
+namespace Kernel {
+
+ASM_LINKAGE void kernel_main();
+
+}
+
 #if ARCH == x86
 #include "Arch/x86/Arch.hpp"
 #else

@@ -23,6 +23,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace Kernel {
+
 void __verify_failed(const char* expr, const char* function, const char* file, int line)
 {
     // TODO: implement verify_failed
@@ -33,4 +35,6 @@ void __verify_not_reached_failed(const char* function, const char* file, int lin
 {
     // TODO: implement verify_not_reached_failed
     while (1) {}
+}
+
 }

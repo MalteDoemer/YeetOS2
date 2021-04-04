@@ -25,10 +25,14 @@
 
 #include "Kernel/Kernel.hpp"
 
-int init_arch()
+namespace Kernel::Arch {
+
+int initialize()
 {
     volatile Uint16* vram = (volatile Uint16*)(0xB8000 + KERNEL_BASE);
     vram[0] = 0x1F20;
 
     return 0;
+}
+
 }

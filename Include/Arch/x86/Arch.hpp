@@ -28,4 +28,8 @@
 #define __x86__
 #define KERNEL_BASE 0xC0000000
 
-int init_arch();
+namespace Kernel::Arch {
+
+int initialize();
+
+}

@@ -25,7 +25,7 @@
 
 #pragma once
 
-namespace CPU {
+namespace Kernel::CPU {
 
 void halt();
 void enable_ints();

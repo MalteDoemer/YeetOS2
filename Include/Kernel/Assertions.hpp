@@ -25,6 +25,9 @@
 
 #pragma once
 
+
+namespace Kernel {
+
 #ifndef NBEBUG
 
 [[noreturn]] void __verify_failed(const char* expr, const char* function, const char* file, int line);
@@ -44,3 +47,5 @@
 #define VERIFY_NOT_REACHED CPU::crash();
 
 #endif
+
+}
