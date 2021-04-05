@@ -52,6 +52,9 @@ clean:
 # to compensate typos XD
 clena: clean
 
+disasm:
+	scripts/disasm.sh
+
 format:
 	scripts/format.sh
 
