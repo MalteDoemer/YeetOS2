@@ -43,7 +43,7 @@ public:
     using ConstIterator = const T*;
 
 private:
-    ConstIterator m_iter;
+    Iterator m_iter;
     SizeType m_size;
 
     constexpr initializer_list(ConstIterator __iter, SizeType __size) :
@@ -53,11 +53,13 @@ public:
     constexpr initializer_list() :
         m_iter(0), m_size(0) {}
 
-    constexpr SizeType size() const { return m_size; }
+    constexpr SizeType count() const { return m_size; }
 
-    constexpr ConstIterator begin() { return m_iter; }
+    constexpr Iterator begin() { return m_iter; }
+    constexpr ConstIterator begin() const { return m_iter; }
 
-    constexpr ConstIterator end() { return begin() + size(); }
+    constexpr Iterator end() { return begin() + count(); }
+    constexpr ConstIterator end() const { return begin() + count(); }
 };
 }
 

@@ -29,33 +29,95 @@
 #include "Platform.hpp"
 #include "Concepts.hpp"
 
-template<class T, IntegralType SizeType = size_t>
+template<class T>
 class Span {
-private:
-    T* m_data { nullptr };
-    SizeType m_size { 0 };
 
 public:
-    using Span = Span<T, SizeType>;
+    using ValueType = T;
+    using SizeType = size_t;
+    using DifferenceType = ptrdiff_t;
+    using Reference = T&;
+    using ConstReference = const T&;
+    using Pointer = T*;
+    using ConstPointer = const T*;
+    using Iterator = T*;
+    using ConstIterator = const T*;
 
-    ALWAYS_INLINE constexpr Span() = default;
+public:
+    constexpr Span() = default;
 
-    ALWAYS_INLINE constexpr Span(T* data, SizeType size) :
+    constexpr Span(Pointer data, SizeType size) :
         m_data(data), m_size(size) {}
 
     template<SizeType size>
-    ALWAYS_INLINE constexpr Span(T (&data)[size]) :
+    constexpr Span(T (&data)[size]) :
         m_data(data), m_size(size) {}
 
-    ALWAYS_INLINE constexpr Span(const Span& other) :
+    constexpr Span(const Span& other) :
         m_data(other.m_data), m_size(other.m_size) {}
 
-    ALWAYS_INLINE constexpr const T* data() const { return m_data; }
-    ALWAYS_INLINE constexpr T* data() { return m_data; }
+    constexpr Span& operator=(const Span& other)
+    {
+        m_data = other.m_data;
+        m_size = other.m_size;
+    }
 
-    ALWAYS_INLINE constexpr SizeType size() const { return m_size; }
-    ALWAYS_INLINE constexpr bool is_null() const { return m_data == nullptr; }
-    ALWAYS_INLINE constexpr bool is_empty() const { return m_size == 0; }
+    constexpr operator Span<const T>() const
+    {
+        return { data(), count() };
+    }
 
-    ~Span();
+    constexpr SizeType count() const { return m_size; }
+    constexpr bool is_null() const { return m_data == nullptr; }
+    constexpr bool is_empty() const { return m_size == 0; }
+
+    constexpr const T* data() const { return m_data; }
+    constexpr T* data() { return m_data; }
+
+    constexpr Iterator begin() { return data(); }
+    constexpr ConstIterator begin() const { return data(); }
+
+    constexpr Iterator end() { return data() + count(); }
+    constexpr ConstIterator end() const { return data() + count(); }
+
+    constexpr Reference at(DifferenceType index)
+    {
+        VERIFY(index < count());
+        return m_data[index];
+    }
+    constexpr ConstReference at(DifferenceType index) const
+    {
+        VERIFY(index < count());
+        return m_data[index];
+    }
+
+    constexpr Reference front() { return at(0); }
+    constexpr ConstReference front() const { return at(0); }
+
+    constexpr Reference back() { return at(count() - 1); }
+    constexpr ConstReference back() const { return at(count() - 1); }
+
+    constexpr Reference operator[](DifferenceType index) { return at(index); }
+    constexpr ConstReference operator[](DifferenceType index) const { return at(index); }
+
+    [[nodiscard]] constexpr Span subspan(SizeType start, SizeType length) const
+    {
+        VERIFY(start + length <= count());
+        return Span { m_data + start, length };
+    }
+
+    [[nodiscard]] constexpr Span subspan(SizeType start) const
+    {
+        VERIFY(start <= count());
+        return Span { m_data + start, count() - start };
+    }
+
+    [[nodiscard]] constexpr Span trim(SizeType end) const
+    {
+        return Span { m_data, min(end, count()) };        
+    }
+
+private:
+    T* m_data;
+    SizeType m_size;
 };
