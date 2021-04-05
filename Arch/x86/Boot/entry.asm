@@ -70,6 +70,10 @@ section .text
 ;extern multiboot_sig
 extern kernel_main
 
+global do_it
+do_it:
+    ret
+
 up:
     ; delete the identety  mapped entry
     mov dword [boot_page_dir + KERNEL_BASE], 0
