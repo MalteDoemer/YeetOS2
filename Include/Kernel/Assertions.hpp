@@ -35,9 +35,9 @@ namespace Kernel {
 
 #define VERIFY(x) \
     if (!(x))     \
-    __verify_failed(#x, __PRETTY_FUNCTION__, __FILE__, __LINE__)
+    Kernel::__verify_failed(#x, __PRETTY_FUNCTION__, __FILE__, __LINE__)
 
-#define VERIFY_NOT_REACHED(x) __verify_not_reached_failed(__PRETTY_FUNCTION__, __FILE__, __LINE__)
+#define VERIFY_NOT_REACHED(x) Kernel::__verify_not_reached_failed(__PRETTY_FUNCTION__, __FILE__, __LINE__)
 
 #else
 

@@ -1,6 +1,7 @@
 
 OBJECTS=\
 Main.o \
+Assertions.o \
 
 
 Kernel.a: $(OBJECTS)
