@@ -25,3 +25,136 @@
 
 #pragma once
 
+#include "Types.hpp"
+#include "StdLibExtras.hpp"
+
+namespace YT {
+
+template<class T>
+class UniquePtr {
+
+public:
+
+    constexpr UniquePtr() :
+        m_ptr(nullptr) {}
+
+    constexpr explicit UniquePtr(T* ptr) :
+        m_ptr(ptr) {}
+
+    constexpr UniquePtr(UniquePtr&& ptr) :
+        m_ptr(ptr.release_ptr()) {}
+
+    template<class U>
+    constexpr UniquePtr(UniquePtr<U>&& ptr) :
+        m_ptr(ptr.release_ptr()) {}
+
+    constexpr UniquePtr& operator=(UniquePtr&& other)
+    {
+        UniquePtr ptr(move(other));
+        swap(ptr);
+        return *this;
+    }
+
+    template<class U>
+    constexpr UniquePtr& operator=(UniquePtr<U>&& other)
+    {
+        UniquePtr ptr(move(other));
+        swap(ptr);
+        return *this;
+    }
+
+    constexpr UniquePtr& operator=(T* ptr)
+    {
+        if (m_ptr != ptr)
+            delete m_ptr;
+        m_ptr = ptr;
+        return *this;
+    }
+
+    constexpr UniquePtr& operator=(std::nullptr_t)
+    {
+        clear();
+        return *this;
+    }
+
+    ~UniquePtr() { clear(); }
+
+public:
+    UniquePtr(const UniquePtr&) = delete;
+
+    template<class U>
+    UniquePtr(const UniquePtr<U>&) = delete;
+
+    UniquePtr& operator=(const UniquePtr&) = delete;
+
+    template<class U>
+    UniquePtr& operator=(const UniquePtr<U>&) = delete;
+
+public:
+    constexpr void swap(UniquePtr& other)
+    {
+        YT::swap(m_ptr, other.m_ptr);
+    }
+
+    template<class U>
+    constexpr void swap(UniquePtr<U>& other)
+    {
+        YT::swap(m_ptr, other.m_ptr);
+    }
+
+    constexpr void clear()
+    {
+        delete m_ptr;
+        m_ptr = nullptr;
+    }
+
+    [[nodiscard]] constexpr T* release_ptr()
+    {
+        T* ptr = m_ptr;
+        m_ptr = nullptr;
+        return ptr;
+    }
+
+public:
+    constexpr T* ptr() { return m_ptr; }
+    constexpr const T* ptr() const { return m_ptr; }
+
+    constexpr T* operator->() { return m_ptr; }
+    constexpr const T* operator->() const { return m_ptr; }
+
+    constexpr T& operator*() { return *m_ptr; }
+    constexpr const T& operator*() const { return *m_ptr; }
+
+    constexpr operator T*() { return m_ptr; }
+    constexpr operator const T*() const { return m_ptr; }
+
+    constexpr operator bool() const { return !!m_ptr; }
+    constexpr bool operator!() const { return !m_ptr; }
+
+private:
+    T* m_ptr;
+};
+
+template<class T>
+void swap(UniquePtr<T> ptr1, UniquePtr<T> ptr2){
+    ptr1.swap(ptr2);
+}
+
+
+template<class T, class U>
+void swap(UniquePtr<T> ptr1, UniquePtr<U> ptr2){
+    ptr1.swap(ptr2);
+}
+
+
+template<class T, class... Args>
+UniquePtr<T> make_unique(Args&&... args)
+{
+    return UniquePtr<T>(new T(forward<Args>(args)...));
+}
+
+}
+
+using YT::UniquePtr;
+using YT::make_unique;
+using YT::swap;
