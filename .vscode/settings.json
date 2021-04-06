@@ -5,5 +5,8 @@
         "*.h": "c",
         "*.asm": "nasm",
     },
-    "git.decorations.enabled": true
+
+    "problems.decorations.enabled": false,
+    "git.decorations.enabled": true,
+    "C_Cpp.errorSquiggles": "Enabled"
 }

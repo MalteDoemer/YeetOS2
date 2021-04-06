@@ -25,14 +25,30 @@
 
 #include "Kernel/Kernel.hpp"
 
+typedef void (*CtorFunc)();
+
+extern "C" CtorFunc ctors_start;
+extern "C" CtorFunc ctors_end;
+
 namespace Kernel::Arch {
 
-int initialize()
+void call_ctors()
+{
+    if (&ctors_start == &ctors_end)
+        return;
+
+    CtorFunc* ctor = &ctors_end;
+
+    do {
+        ctor--;
+        (*ctor)();
+    } while (ctor > &ctors_start);
+}
+
+void initialize()
 {
     volatile Uint16* vram = (volatile Uint16*)(0xB8000 + KERNEL_BASE);
     vram[0] = 0x1F20;
-
-    return 0;
 }
 
 }

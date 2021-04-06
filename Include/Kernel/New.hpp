@@ -25,12 +25,16 @@
 
 #pragma once
 
-#define __x86__
-#define KERNEL_BASE 0xC0000000
+#include "Types.hpp"
 
-namespace Kernel::Arch {
-
-void call_ctors();
-void initialize();
-
+inline void* operator new(size_t, void* __p)
+{
+    return __p;
 }
+inline void* operator new[](size_t, void* __p)
+{
+    return __p;
+}
+
+inline void operator delete(void*, void*) {}
+inline void operator delete[](void*, void*) {}

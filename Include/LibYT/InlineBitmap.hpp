@@ -37,8 +37,16 @@ public:
     using ImplType = T;
     using SizeType = size_t;
     using DifferenceType = ptrdiff_t;
-    using Iterator = const SimpleIterator<InlineBitmap>;
-    using ConstIterator = const SimpleIterator<InlineBitmap>;
+
+    using Pointer = bool;
+    using Reference = bool;
+    using ConstPointer = bool;
+    using ConstReference = bool;
+
+    using Iterator = SimpleIterator<const InlineBitmap>;
+    using ConstIterator = SimpleIterator<const InlineBitmap>;
+
+    constexpr static auto bits_per_entry = sizeof(ImplType) * 8;
 
 public:
     constexpr InlineBitmap() = default;
@@ -51,24 +59,26 @@ public:
     constexpr Iterator end() { return Iterator { *this, num_bits }; }
     constexpr ConstIterator end() const { return ConstIterator { *this, num_bits }; }
 
+    constexpr ValueType at(SizeType index) const { return get_bit(index); }
+
     constexpr ValueType get_bit(SizeType index) const
     {
         VERIFY(index < num_bits);
-        return (m_bits[index / sizeof(ImplType)] & (1u << (index % sizeof(ImplType)))) != 0;
+        return (m_bits[index / bits_per_entry] & (1u << (index % bits_per_entry))) != 0;
     }
 
     constexpr ValueType set_bit(SizeType index)
     {
         VERIFY(index < num_bits);
-        return m_bits[index / sizeof(ImplType)] |= (1u << (index % sizeof(ImplType)));
+        return m_bits[index / bits_per_entry] |= (1u << (index % bits_per_entry));
     }
 
     constexpr ValueType clear_bit(SizeType index)
     {
         VERIFY(index < num_bits);
-        return m_bits[index / sizeof(ImplType)] &= ~(1u << (index % sizeof(ImplType)));
+        return m_bits[index / bits_per_entry] &= ~(1u << (index % bits_per_entry));
     }
 
 private:
-    ImplType m_bits[num_bits / sizeof(ImplType)] { 0 };
+    ImplType m_bits[num_bits / bits_per_entry] { 0 };
 };

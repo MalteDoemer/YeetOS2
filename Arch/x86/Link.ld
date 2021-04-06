@@ -10,10 +10,13 @@ SECTIONS {
       _code = . - 0xC0000000;
       *(.text)
 
+
       . = ALIGN(8);
       ctors_start = .;
-      *(.ctors)
+      *(EXCLUDE_FILE(*Kheap.o).ctors)
       ctors_end = .;
+
+
 
       *(.rodata*)
    }
@@ -23,19 +26,15 @@ SECTIONS {
    }
 
    .bss ALIGN (4K) (NOLOAD) : AT(ADDR(.bss) - 0xC0000000) {
-
       _bss_start = . - 0xC0000000;
       *(COMMON)
       *(.bss)
       _bss_end = . - 0xC0000000;
-
-   
-      . = ALIGN(4K);
-
-      *(.page_structs)
-      *(.heap)
    }
 
+   .heap_memory ALIGN (4M) (NOLOAD) : AT(ADDR(.heap_memory) - 0xC0000000) {
+      *(.heap_memory)
+   }
 
    _kernel_end_virt = .;
    _kernel_end_phys = . - 0xC0000000;

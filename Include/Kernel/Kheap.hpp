@@ -25,12 +25,11 @@
 
 #pragma once
 
-#define __x86__
-#define KERNEL_BASE 0xC0000000
+#include "Types.hpp"
 
-namespace Kernel::Arch {
-
-void call_ctors();
-void initialize();
-
+namespace Kernel::Kheap {
+    void initialize();
+    void* alloc_eternal(size_t size, size_t alignment);
+    void* allocate(size_t size);
+    void deallocate(void* ptr);
 }

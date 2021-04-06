@@ -23,20 +23,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Array.hpp"
 #include "Assertions.hpp"
-#include "Atomic.hpp"
-#include "InitializerList.hpp"
-#include "Concepts.hpp"
-#include "Iterator.hpp"
-
+#include "StdLibExtras.hpp"
 #include "Kernel/Kernel.hpp"
-#include "Kernel/CPU.hpp"
+#include "Kernel/Kheap.hpp"
 
 namespace Kernel {
 
+ASM_LINKAGE void do_it(int* i);
+
 ASM_LINKAGE void kernel_main()
 {
+    Kheap::initialize();
+    Arch::call_ctors();
     Arch::initialize();
 }
 

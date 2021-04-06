@@ -23,14 +23,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
+#include "Types.hpp"
+#include "Kernel/Kernel.hpp"
+#include "Kernel/Kheap.hpp"
 
-#define __x86__
-#define KERNEL_BASE 0xC0000000
+void* operator new(size_t size)
+{
+    return Kernel::Kheap::allocate(size);
+}
 
-namespace Kernel::Arch {
+void* operator new[](size_t size)
+{
+    return Kernel::Kheap::allocate(size);
+}
 
-void call_ctors();
-void initialize();
+void operator delete(void* ptr)
+{
+    Kernel::Kheap::deallocate(ptr);
+}
 
+void operator delete[](void* ptr)
+{
+    Kernel::Kheap::deallocate(ptr);
 }

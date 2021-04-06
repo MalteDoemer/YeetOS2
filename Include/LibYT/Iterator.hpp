@@ -32,15 +32,15 @@ namespace YT {
 
 template<class Iter>
 struct IteratorTraits {
-    using ValueType = Iter::ValueType;
-    using SizeType = Iter::SizeType;
-    using DifferenceType = Iter::DifferenceType;
+    using ValueType = typename Iter::ValueType;
+    using SizeType = typename Iter::SizeType;
+    using DifferenceType = typename Iter::DifferenceType;
 
-    using Pointer = Iter::Pointer;
-    using Reference = Iter::Reference;
+    using Pointer = typename Iter::Pointer;
+    using Reference = typename Iter::Reference;
 
-    using ConstPointer = Iter::ConstPointer;
-    using ConstReference = Iter::ConstReference;
+    using ConstPointer = typename Iter::ConstPointer;
+    using ConstReference = typename Iter::ConstReference;
 };
 
 template<class T>
@@ -123,13 +123,13 @@ template<class Container>
 class SimpleIterator {
 
 public:
-    using ValueType = Container::ValueType;
-    using SizeType = Container::SizeType;
-    using DifferenceType = Container::DifferenceType;
-    using Pointer = Container::Pointer;
-    using Reference = Container::Reference;
-    using ConstPointer = Container::ConstPointer;
-    using ConstReference = Container::ConstReference;
+    using ValueType = typename Container::ValueType;
+    using SizeType = typename Container::SizeType;
+    using DifferenceType = typename Container::DifferenceType;
+    using Pointer = typename Container::Pointer;
+    using Reference = typename Container::Reference;
+    using ConstPointer = typename Container::ConstPointer;
+    using ConstReference = typename Container::ConstReference;
 
 public:
     constexpr SimpleIterator(Container& container) : 

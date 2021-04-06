@@ -27,11 +27,24 @@
 
 #pragma once
 
-#include <Assertions.hpp>
+#include "Types.hpp"
+#include "Assertions.hpp"
 
-constexpr unsigned round_up_to_power_of_two(unsigned value, unsigned power_of_two)
+constexpr Uint32 round_up_to_power_of_two(Uint32 value, Uint32 power_of_two)
 {
     return ((value - 1) & ~(power_of_two - 1)) + power_of_two;
+}
+
+constexpr Uint32 round_up_to_next_power_of_to(Uint32 value)
+{
+    value--;
+    value |= value >> 1;
+    value |= value >> 2;
+    value |= value >> 4;
+    value |= value >> 8;
+    value |= value >> 16;
+    value++;
+    return value;
 }
 
 namespace std {
