@@ -25,7 +25,7 @@
 
 #include "Arch/x86/Asm.hpp"
 
-namespace CPU {
+namespace Kernel::CPU {
 
 void halt()
 {
