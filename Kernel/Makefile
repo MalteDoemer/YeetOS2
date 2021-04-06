@@ -1,7 +1,8 @@
 
 OBJECTS=\
 Main.o \
-Assertions.o \
+Kmalloc.o \
+Panic.o \
 
 
 Kernel.a: $(OBJECTS)
