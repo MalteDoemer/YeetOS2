@@ -607,9 +607,8 @@ template<typename To>
 static void convert(To);
 
 template<typename From, typename To>
-static auto test(From&&, To&&) -> decltype(convert<To>(declval<From>()), declval<TrueType>());
-
-static auto test(...) -> FalseType;
+auto test(From&&, To&&) -> decltype(convert<To>(declval<From>()), declval<TrueType>());
+auto test(...) -> FalseType;
 
 }
 
