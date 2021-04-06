@@ -26,18 +26,13 @@
 #pragma once
 
 #include "Types.hpp"
+#include "Platform.hpp"
 
-#define ASM_LINKAGE extern "C"
-#define C_LINKAGE extern "C"
+#define ALIGN(x, n) ((x + (n)-1) & ~((n)-1))
 
-#define PACKED __attribute__((packed))
-#define PACKED_AND_ALIGNED(x) __attribute__((packed, aligned(x)))
-#define ALIGNED(x) __attribute__((aligned(x)))
-#define SECTION(x) __attribute__((section(x)))
-
-#define SYMBOL_VALUE(x) ({ extern char x; (FlatPtr)&x; })
 
 namespace Kernel {
+
 
 ASM_LINKAGE void kernel_main();
 

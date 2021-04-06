@@ -25,6 +25,12 @@
 
 #pragma once
 
+#undef ASM_LINKAGE
+#define ASM_LINKAGE extern "C"
+
+#undef C_LINKAGE
+#define C_LINKAGE extern "C"
+
 #undef ALWAYS_INLINE
 #define ALWAYS_INLINE [[gnu::always_inline]] inline
 
@@ -33,3 +39,18 @@
 
 #undef FLATTEN
 #define FLATTEN_INLINE [[gnu::flatten]]
+
+#undef PACKED
+#define PACKED [[gnu::packed]]
+
+#undef ALGINED
+#define ALIGNED(x) [[gnu::aligned(x)]]
+
+#undef SECTION
+#define SECTION(x) [[gnu::section(x)]]
+
+#undef NORETURN
+#define NORETURN [[noreturn]]
+
+#undef SYMBOL_VALUE
+#define SYMBOL_VALUE(x) ({ extern char x; (FlatPtr)&x; })
