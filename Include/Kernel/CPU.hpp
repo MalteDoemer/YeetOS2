@@ -28,8 +28,5 @@
 namespace Kernel::CPU {
 
 void halt();
-void enable_ints();
-void disable_ints();
-void crash();
 
 }

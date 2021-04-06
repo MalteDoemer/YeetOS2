@@ -31,22 +31,4 @@ void halt()
 {
     hlt();
 }
-
-void enable_ints()
-{
-    sti();
-}
-
-void disable_ints()
-{
-    cli();
-}
-
-void crash()
-{
-    while (1) {
-        asm volatile("ud2");
-    }
-}
-
 }
