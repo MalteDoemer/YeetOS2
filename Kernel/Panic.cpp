@@ -23,18 +23,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "varargs.h"
+
+#include "Kernel/CPU.hpp"
+
 namespace Kernel {
 
-void __verify_failed(const char* expr, const char* function, const char* file, int line)
+void panic(const char* reason, ...)
 {
-    // TODO: implement verify_failed
-    while (1) {}
-}
+    // TODO implement panic
 
-void __verify_not_reached_failed(const char* function, const char* file, int line)
-{
-    // TODO: implement verify_not_reached_failed
-    while (1) {}
+    while (1) CPU::halt();
 }
 
 }

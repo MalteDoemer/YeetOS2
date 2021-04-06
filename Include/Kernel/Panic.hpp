@@ -25,25 +25,9 @@
 
 #pragma once
 
-#include "Kernel/Panic.hpp"
+#include "Platform.hpp"
 
-#define STRINGIFY_HELPER(x) #x
-#define STRINGIFY(x) STRINGIFY_HELPER(x)
-
-#ifndef NBEBUG
-
-#define VERIFY(x)                  \
-    if (__builtin_expect(!(x), 0)) \
-    Kernel::panic("VERIFY FAILED: " #x "\n%s\n" __FILE__ ":" STRINGIFY(__LINE__), __PRETTY_FUNCTION__)
-
-#define VERIFY_NOT_REACHED(x) Kernel::panic("VERIFY_NOT_REACHED FAILED: \n%s\n" __FILE__ ":" STRINGIFY(__LINE__), __PRETTY_FUNCTION__)
-
-#else
-
-#define VERIFY
-#define VERIFY_NOT_REACHED Kernel::panic("VERIFY_NOT_REACHED FAILED: \n%s\n" __FILE__ ":" STRINGIFY(__LINE__), __PRETTY_FUNCTION__)
-
-#endif
-
-#undef STRINGIFY_HELPER
-#undef STRINGIFY
+namespace Kernel
+{
+    NORETURN void panic(const char* reason, ...);
+}
