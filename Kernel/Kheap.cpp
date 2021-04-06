@@ -23,11 +23,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "Platform.hpp"
+#include "Assertions.hpp"
 
 #include "Kernel/New.hpp"
+#include "Kernel/Panic.hpp"
 #include "Kernel/Kernel.hpp"
 #include "Kernel/Kheap.hpp"
-#include "Kernel/SlabAllocator.hpp"
 
 namespace Kernel::Kheap {
 
@@ -37,35 +38,13 @@ static Uint8 eternal_memory[4 * MiB];
 static FlatPtr eternal_ptr = (FlatPtr)&eternal_memory;
 static constexpr FlatPtr eternal_end = (FlatPtr)&eternal_memory + sizeof(eternal_memory);
 
-static SlabAllocator<8, 512> slab_8;
-static SlabAllocator<16, 512> slab_16;
-static SlabAllocator<32, 512> slab_32;
-static SlabAllocator<64, 512> slab_64;
-static SlabAllocator<128, 512> slab_128;
-static SlabAllocator<256, 512> slab_256;
-static SlabAllocator<512, 512> slab_512;
-static SlabAllocator<1024, 512> slab_1024;
-static SlabAllocator<2048, 512> slab_2048;
-static SlabAllocator<4096, 512> slab_4096;
-
 void initialize()
 {
     // call the constructors with placement new since
     // the kheap is initialized before all other
     // constructors are called
 
-#ifndef VSCODE_IS_STUPID
-    new (&slab_8) SlabAllocator<8, 512>();
-    new (&slab_16) SlabAllocator<16, 512>();
-    new (&slab_32) SlabAllocator<32, 512>();
-    new (&slab_64) SlabAllocator<64, 512>();
-    new (&slab_128) SlabAllocator<128, 512>();
-    new (&slab_256) SlabAllocator<256, 512>();
-    new (&slab_512) SlabAllocator<512, 512>();
-    new (&slab_1024) SlabAllocator<1024, 512>();
-    new (&slab_2048) SlabAllocator<2048, 512>();
-    new (&slab_4096) SlabAllocator<4096, 512>();
-#endif
+
 }
 
 void* alloc_eternal(size_t size, size_t alignment)
@@ -82,61 +61,11 @@ void* alloc_eternal(size_t size, size_t alignment)
 
 void* allocate(size_t size)
 {
-    size = ALIGN(size, MIN_SLAB_SIZE);
-    size = round_up_to_next_power_of_to(size);
-
-    switch (size) {
-    case 8:
-        return slab_8.allocate();
-    case 16:
-        return slab_16.allocate();
-    case 32:
-        return slab_32.allocate();
-    case 64:
-        return slab_64.allocate();
-    case 128:
-        return slab_128.allocate();
-    case 256:
-        return slab_256.allocate();
-    case 512:
-        return slab_512.allocate();
-    case 1024:
-        return slab_1024.allocate();
-    case 2048:
-        return slab_2048.allocate();
-    case 4096:
-        return slab_4096.allocate();
-    }
-
-    // the kernel should never try to allocate more than 1 page
     VERIFY_NOT_REACHED();
 }
 
 void deallocate(void* ptr)
 {
-
-    if (slab_8.owns_ptr(ptr)) {
-        slab_8.deallocate(ptr);
-    } else if (slab_16.owns_ptr(ptr)) {
-        slab_16.deallocate(ptr);
-    } else if (slab_32.owns_ptr(ptr)) {
-        slab_32.deallocate(ptr);
-    } else if (slab_64.owns_ptr(ptr)) {
-        slab_64.deallocate(ptr);
-    } else if (slab_128.owns_ptr(ptr)) {
-        slab_128.deallocate(ptr);
-    } else if (slab_256.owns_ptr(ptr)) {
-        slab_256.deallocate(ptr);
-    } else if (slab_512.owns_ptr(ptr)) {
-        slab_512.deallocate(ptr);
-    } else if (slab_1024.owns_ptr(ptr)) {
-        slab_1024.deallocate(ptr);
-    } else if (slab_2048.owns_ptr(ptr)) {
-        slab_2048.deallocate(ptr);
-    } else if (slab_4096.owns_ptr(ptr)) {
-        slab_4096.deallocate(ptr);
-    }
-
     VERIFY_NOT_REACHED();
 }
 
