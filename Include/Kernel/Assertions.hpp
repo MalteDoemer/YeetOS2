@@ -33,7 +33,7 @@
 #ifndef NBEBUG
 
 #define VERIFY(x)                  \
-    if (__builtin_expect(!(x), 0)) \
+    if (!(x)) [[unlikely]] \
     Kernel::panic("VERIFY FAILED: " #x "\n%s\n" __FILE__ ":" STRINGIFY(__LINE__), __PRETTY_FUNCTION__)
 
 #define VERIFY_NOT_REACHED(x) Kernel::panic("VERIFY_NOT_REACHED FAILED: \n%s\n" __FILE__ ":" STRINGIFY(__LINE__), __PRETTY_FUNCTION__)
@@ -44,6 +44,3 @@
 #define VERIFY_NOT_REACHED Kernel::panic("VERIFY_NOT_REACHED FAILED: \n%s\n" __FILE__ ":" STRINGIFY(__LINE__), __PRETTY_FUNCTION__)
 
 #endif
-
-#undef STRINGIFY_HELPER
-#undef STRINGIFY
