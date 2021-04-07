@@ -8,5 +8,5 @@
 
     "problems.decorations.enabled": false,
     "git.decorations.enabled": true,
-    "C_Cpp.errorSquiggles": "Enabled"
+    "C_Cpp.errorSquiggles": "Disabled"
 }
