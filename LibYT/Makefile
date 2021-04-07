@@ -1,6 +1,6 @@
 
 OBJECTS=\
-fake.o \
+
 
 LibYT.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)

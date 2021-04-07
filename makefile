@@ -40,7 +40,7 @@ CXX_FLAGS := $(CXX_FLAGS) $(DEFINES) $(INCDIRS)
 
 
 YeetOS: subdirs
-	$(LD) -T $(LD_SCRIPT) $(LD_FLAGS) $(ARCHIVES) -o $@ -v
+	$(LD) -T $(LD_SCRIPT) $(LD_FLAGS) --whole-archive $(ARCHIVES) -o $@
 
 subdirs:
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i; done
