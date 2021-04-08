@@ -38,7 +38,7 @@
 #define NEVER_INLINE [[gnu::noinline]]
 
 #undef FLATTEN
-#define FLATTEN_INLINE [[gnu::flatten]]
+#define FLATTEN [[gnu::flatten]]
 
 #undef PACKED
 #define PACKED [[gnu::packed]]
