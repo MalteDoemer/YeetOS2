@@ -28,6 +28,7 @@
 #include "Kernel/New.hpp"
 #include "Kernel/Panic.hpp"
 #include "Kernel/Kernel.hpp"
+#include "Kernel/Heap.hpp"
 #include "Kernel/Kheap.hpp"
 
 namespace Kernel::Kheap {
@@ -38,13 +39,16 @@ static Uint8 eternal_memory[4 * MiB];
 static FlatPtr eternal_ptr = (FlatPtr)&eternal_memory;
 static constexpr FlatPtr eternal_end = (FlatPtr)&eternal_memory + sizeof(eternal_memory);
 
+// default constructor should never be run
+Heap global_heap;
+
 void initialize()
 {
     // call the constructors with placement new since
     // the kheap is initialized before all other
     // constructors are called
 
-
+    new (&global_heap) Heap(alloc_eternal(1 * MiB, 1), 1 * MiB);
 }
 
 void* alloc_eternal(size_t size, size_t alignment)
@@ -59,14 +63,39 @@ void* alloc_eternal(size_t size, size_t alignment)
     return (void*)ret;
 }
 
-void* allocate(size_t size)
+FLATTEN void* allocate(size_t size)
 {
-    VERIFY_NOT_REACHED();
+    return global_heap.allocate(size);
 }
 
-void deallocate(void* ptr)
+FLATTEN void* reallocate(void* ptr, size_t size)
 {
-    VERIFY_NOT_REACHED();
+    return global_heap.reallocate(ptr, size);
 }
 
+FLATTEN void deallocate(void* ptr)
+{
+    global_heap.deallocate(ptr);
+}
+
+}
+
+FLATTEN void* operator new(size_t size)
+{
+    return Kernel::Kheap::allocate(size);
+}
+
+FLATTEN void* operator new[](size_t size)
+{
+    return Kernel::Kheap::allocate(size);
+}
+
+FLATTEN void operator delete(void* ptr, size_t size)
+{
+    Kernel::Kheap::deallocate(ptr);
+}
+
+FLATTEN void operator delete[](void* ptr, size_t size)
+{
+    Kernel::Kheap::deallocate(ptr);
 }
