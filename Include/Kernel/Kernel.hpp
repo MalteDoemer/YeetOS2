@@ -30,7 +30,7 @@
 
 #define ALIGN(x, n) ((x + (n)-1) & ~((n)-1))
 
-#define DO_NOT_OPTIMIZE_AWAY(x) asm volatile ("" : : ""(x) : "memory");
+#define DO_NOT_OPTIMIZE_AWAY(x) asm volatile ("" : : "m"(x) : "memory");
 
 
 namespace Kernel {
