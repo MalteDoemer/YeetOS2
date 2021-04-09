@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "Kernel/SerialDebug.hpp"
 #include "Kernel/KernelTests.hpp"
 
 namespace Kernel::Tests {
@@ -40,7 +41,7 @@ void run_all_tests()
     TestResult result;
 
     if (&test_funcs_start == &test_funcs_end) {
-        // TODO: print some information that no tests were executed
+        Serial::println("[Kernel Tests]: Warning: no test available!");
         return;
     }
 
