@@ -23,35 +23,73 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Assertions.hpp"
-#include "StdLibExtras.hpp"
+#include "Arch/x86/Asm.hpp"
 
 #include "Kernel/Kernel.hpp"
-#include "Kernel/Kheap.hpp"
-#include "Kernel/Heap.hpp"
 #include "Kernel/SerialDebug.hpp"
-#include "Kernel/KernelTests.hpp"
 
-namespace Kernel {
+#define COM1 0x3F8
 
-ASM_LINKAGE void do_it(int*);
+#define DATA 0
+#define IER 1
+#define FIFO_CTRL 2
+#define LINE_CTRL 3
+#define MODEM_CTRL 4
+#define LINE_STAT 5
+#define MODEM_STAT 6
+#define SCRATCH 7
 
-ASM_LINKAGE void kernel_main()
+namespace Kernel::Serial {
+
+static inline bool is_transmit_empty()
 {
-    Kheap::initialize();
-    Arch::call_ctors();
-    Arch::initialize();
-    Serial::initialize();
+    return inb(COM1 + LINE_STAT) & 0x20;
+}
 
-    Serial::println();
-    Serial::println("+-----------------------------------+");
-    Serial::println("| Welcome to the debug spam output! |");
-    Serial::println("+-----------------------------------+");
-    Serial::println();
+void initialize()
+{
+    /* disable all serial interrupts */
+    outb(COM1 + IER, 0x00);
 
-#ifdef __KERNEL_TESTS__
-    Kernel::Tests::run_all_tests();
-#endif
+    /* set divisor to 1 */
+    outb(COM1 + LINE_CTRL, 0x80);
+    outb(COM1 + 0, 0x01);
+    outb(COM1 + 1, 0x00);
+
+    /* set 8N1 */
+    outb(COM1 + LINE_CTRL, 0x03);
+
+    /* enable FIFO */
+    outb(COM1 + FIFO_CTRL, 0xC7);
+
+    /* set OUT1, OUT2, RTS and DSR to inactive */
+    outb(COM1 + MODEM_CTRL, 0x0F);
+}
+
+void putchar(char c)
+{
+    while (!is_transmit_empty()) {}
+    outb(COM1 + DATA, c);
+}
+
+void print(const char* msg)
+{
+    for (; *msg; msg++) {
+        putchar(*msg);
+    }
+}
+
+void println()
+{
+    putchar('\n');
+}
+
+void println(const char* msg)
+{
+    for (; *msg; msg++) {
+        putchar(*msg);
+    }
+    putchar('\n');
 }
 
 }

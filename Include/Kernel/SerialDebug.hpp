@@ -23,35 +23,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Assertions.hpp"
-#include "StdLibExtras.hpp"
+#pragma once
 
-#include "Kernel/Kernel.hpp"
-#include "Kernel/Kheap.hpp"
-#include "Kernel/Heap.hpp"
-#include "Kernel/SerialDebug.hpp"
-#include "Kernel/KernelTests.hpp"
+namespace Kernel::Serial {
 
-namespace Kernel {
-
-ASM_LINKAGE void do_it(int*);
-
-ASM_LINKAGE void kernel_main()
-{
-    Kheap::initialize();
-    Arch::call_ctors();
-    Arch::initialize();
-    Serial::initialize();
-
-    Serial::println();
-    Serial::println("+-----------------------------------+");
-    Serial::println("| Welcome to the debug spam output! |");
-    Serial::println("+-----------------------------------+");
-    Serial::println();
-
-#ifdef __KERNEL_TESTS__
-    Kernel::Tests::run_all_tests();
-#endif
-}
+void initialize();
+void putchar(char c);
+void print(const char* msg);
+void println();
+void println(const char* msg);
 
 }
