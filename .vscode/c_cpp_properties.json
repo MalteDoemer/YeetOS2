@@ -8,8 +8,7 @@
             ],
             "defines": [
                 "__KERNEL__",
-                "__DEBUG",
-                "_DEBUG"
+                "__KERNEL_TESTS__",
             ],
 
             "forcedInclude": [

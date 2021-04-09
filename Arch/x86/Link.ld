@@ -9,14 +9,21 @@ SECTIONS {
    .text : AT(ADDR(.text) - 0xC0000000) {
       _code = . - 0xC0000000;
       *(.text)
+   }
 
-
+   .rodata : AT(ADDR(.rodata) - 0xC0000000) {
       . = ALIGN(8);
       ctors_start = .;
       *(EXCLUDE_FILE(*Kheap.o).ctors)
       ctors_end = .;
 
+      test_funcs_start = .;
+      *(.kernel_test_funcs)
+      test_funcs_end = .;
 
+      test_names_start = .;
+      *(.kernel_test_names)
+      test_names_end = .;
 
       *(.rodata*)
    }

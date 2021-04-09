@@ -23,28 +23,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Assertions.hpp"
-#include "StdLibExtras.hpp"
-
-#include "Kernel/Kernel.hpp"
-#include "Kernel/Kheap.hpp"
-#include "Kernel/Heap.hpp"
-
-#include "Kernel/KernelTests.hpp"
-
-namespace Kernel {
-
-ASM_LINKAGE void do_it(int*);
-
-ASM_LINKAGE void kernel_main()
-{
-    Kheap::initialize();
-    Arch::call_ctors();
-    Arch::initialize();
+#pragma once
 
 #ifdef __KERNEL_TESTS__
-    Kernel::Tests::run_all_tests();
-#endif
-}
+
+#include "Platform.hpp"
+#include "Kernel/Kernel.hpp"
+
+#define TEST_FUNCTION(func)    \
+    SECTION(".kernel_test_funcs")    \
+    bool (*__##func##_ptr)() = func; \
+    SECTION(".kernel_test_names")    \
+    const char* __##func##_name = #func;
+
+namespace Kernel::Tests {
+
+struct TestResult {
+    Int32 num_tests_run { 0 };
+    Int32 num_tests_passed { 0 };
+    Int32 num_tests_failed { 0 };
+};
+
+void run_all_tests();
 
 }
+
+#endif

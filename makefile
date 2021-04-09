@@ -14,9 +14,15 @@ LibYT/LibYT.a \
 Arch/$(ARCH)/Kernel/Kernel.a \
 Arch/$(ARCH)/Boot/Boot.a \
 
-LD_SCRIPT = Arch/$(ARCH)/Link.ld
-
 SUBDIRS= Kernel LibYT Arch/$(ARCH)/Kernel Arch/$(ARCH)/Boot
+
+ifdef KERNEL_TESTS
+ARCHIVES := Kernel/Tests/KernelTests.a $(ARCHIVES)
+SUBDIRS := Kernel/Tests $(SUBDIRS)
+endif
+
+
+LD_SCRIPT = Arch/$(ARCH)/Link.ld
 
 # should define $(CC) $(LD) $(AS) $(AR) 
 # and respectively $(C_FLAGS) $(LD_FLAGS) $(AS_FLAGS)
@@ -26,8 +32,10 @@ DEFINES := __KERNEL__ $(DEFINES)
 
 ifdef DEBUG
 DEFINES := _DEBUG __DEBUG $(DEFINES)
-#else
-#DEFINES := NDEBUG $(DEFINES)
+endif
+
+ifdef KERNEL_TESTS
+DEFINES := __KERNEL_TESTS__ $(DEFINES)
 endif
 
 INCDIRS := $(TOPDIR)/Include $(TOPDIR)/Include/LibYT $(INCDIRS)

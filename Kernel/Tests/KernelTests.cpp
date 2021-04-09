@@ -23,28 +23,43 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Assertions.hpp"
-#include "StdLibExtras.hpp"
-
-#include "Kernel/Kernel.hpp"
-#include "Kernel/Kheap.hpp"
-#include "Kernel/Heap.hpp"
-
 #include "Kernel/KernelTests.hpp"
 
-namespace Kernel {
+namespace Kernel::Tests {
 
-ASM_LINKAGE void do_it(int*);
+typedef bool (*TestFunc)();
 
-ASM_LINKAGE void kernel_main()
+extern "C" TestFunc test_funcs_start;
+extern "C" TestFunc test_funcs_end;
+
+extern "C" const char* test_names_start;
+extern "C" const char* test_names_end;
+
+void run_all_tests()
 {
-    Kheap::initialize();
-    Arch::call_ctors();
-    Arch::initialize();
+    TestResult result;
 
-#ifdef __KERNEL_TESTS__
-    Kernel::Tests::run_all_tests();
-#endif
+    if (&test_funcs_start == &test_funcs_end) {
+        // TODO: print some information that no tests were executed
+        return;
+    }
+
+    TestFunc* test_func = &test_funcs_end;
+    const char** test_name = &test_names_end;
+
+    do {
+        test_func--;
+        test_name--;
+
+        // TODO: print information on test currently run
+
+        if ((*test_func)()) {
+            result.num_tests_passed++;
+        } else {
+            result.num_tests_failed++;
+        }
+        result.num_tests_run++;
+    } while (test_func > &test_funcs_start);
 }
 
 }

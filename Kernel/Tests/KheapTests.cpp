@@ -23,28 +23,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Assertions.hpp"
-#include "StdLibExtras.hpp"
-
-#include "Kernel/Kernel.hpp"
-#include "Kernel/Kheap.hpp"
-#include "Kernel/Heap.hpp"
-
 #include "Kernel/KernelTests.hpp"
 
-namespace Kernel {
-
-ASM_LINKAGE void do_it(int*);
-
-ASM_LINKAGE void kernel_main()
+bool SimpleKheapTest()
 {
-    Kheap::initialize();
-    Arch::call_ctors();
-    Arch::initialize();
-
-#ifdef __KERNEL_TESTS__
-    Kernel::Tests::run_all_tests();
-#endif
+    return true;
 }
 
-}
+TEST_FUNCTION(SimpleKheapTest);
