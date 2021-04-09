@@ -112,6 +112,11 @@ public:
         main_block->set_prev_free(nullptr);
         size_t bucket = get_bucket_index(main_block->get_size());
         m_buckets[bucket] = main_block;
+
+#ifndef NDEBUG
+        m_total_free = main_block->get_size();
+        m_total_used = 0;
+#endif
     }
 
     void* allocate(size_t size)
@@ -165,7 +170,10 @@ public:
 
                     block->set_state(HeapBlock::State::Used);
                     block->get_next()->set_prev_state(HeapBlock::State::Used);
-
+#ifndef NDEBUG
+                    m_total_free -= block->get_size();
+                    m_total_used += block->get_size();
+#endif
                     return block->data();
                 }
             }
@@ -176,7 +184,8 @@ public:
 
     void* reallocate(void* ptr, size_t size)
     {
-        return nullptr;
+        VERIFY_NOT_REACHED();
+        // return nullptr;
     }
 
     void deallocate(void* ptr)
@@ -213,7 +222,7 @@ public:
             /* Merge block into prev_block */
             prev_block->set_size(prev_block->get_size() + block->get_size() + HeapBlock::size());
             next_block->set_prev_size(prev_block->get_size());
-            
+
             block = prev_block;
         }
 
@@ -237,6 +246,11 @@ public:
         /* Add the the recently freed block to the free list */
         size_t bucket = get_bucket_index(block->get_size());
         add_to_free_list(bucket, block);
+
+#ifndef NDEBUG
+        m_total_free += block->get_size();
+        m_total_used -= block->get_size();
+#endif
     }
 
 private:
@@ -248,7 +262,7 @@ private:
 
         size_t bucket = log2 - first_bucket_log2;
 
-        if (bucket > num_buckets)
+        if (bucket >= num_buckets)
             return num_buckets - 1;
 
         return bucket;
@@ -298,4 +312,9 @@ private:
     FlatPtr m_start { 0 };
     FlatPtr m_end { 0 };
     HeapBlock* m_buckets[num_buckets] { nullptr };
+
+#ifndef NDEBUG
+    size_t m_total_used { 0 };
+    size_t m_total_free { 0 };
+#endif
 };

@@ -26,11 +26,17 @@
 #pragma once
 
 #include "Types.hpp"
+#include "Kernel/Heap.hpp"
 
 namespace Kernel::Kheap {
-    void initialize();
-    void* alloc_eternal(size_t size, size_t alignment);
-    void* allocate(size_t size);
-    void* reallocate(void* ptr, size_t size);
-    void deallocate(void* ptr);
+void initialize();
+void* alloc_eternal(size_t size, size_t alignment);
+void* allocate(size_t size);
+void* reallocate(void* ptr, size_t size);
+void deallocate(void* ptr);
+
+#ifdef __KERNEL_TESTS__
+Heap& get_kheap();
+#endif
+
 }

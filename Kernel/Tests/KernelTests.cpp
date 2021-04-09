@@ -45,14 +45,12 @@ void run_all_tests()
         return;
     }
 
-    TestFunc* test_func = &test_funcs_end;
-    const char** test_name = &test_names_end;
+    TestFunc* test_func = &test_funcs_start;
+    const char** test_name = &test_names_start;
 
     do {
-        test_func--;
-        test_name--;
-
-        // TODO: print information on test currently run
+        Serial::print("Running test: ");
+        Serial::println(*test_name);
 
         if ((*test_func)()) {
             result.num_tests_passed++;
@@ -60,7 +58,12 @@ void run_all_tests()
             result.num_tests_failed++;
         }
         result.num_tests_run++;
-    } while (test_func > &test_funcs_start);
+
+        test_func++;
+        test_name++;
+    } while (test_func < &test_funcs_end);
+
+    Serial::println("\nFinished running tests.\n");
 }
 
 }

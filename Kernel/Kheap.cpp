@@ -24,8 +24,8 @@
  */
 #include "Platform.hpp"
 #include "Assertions.hpp"
+#include "New.hpp"
 
-#include "Kernel/New.hpp"
 #include "Kernel/Panic.hpp"
 #include "Kernel/Kernel.hpp"
 #include "Kernel/Heap.hpp"
@@ -99,3 +99,15 @@ FLATTEN void operator delete[](void* ptr, size_t size)
 {
     Kernel::Kheap::deallocate(ptr);
 }
+
+#ifdef __KERNEL_TESTS__
+
+namespace Kernel::Kheap {
+
+Heap& get_kheap()
+{
+    return global_heap;
+}
+
+}
+#endif
