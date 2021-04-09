@@ -4,7 +4,7 @@ Very good Operating System :)
 
 ## Authors
 
-* **Malte Dömer** - *Original Author* - [NoLinkHere](127.0.0.1)
+* **Malte Dömer** - *Original Author* - [NoLinkHere]()
 
 ## License
 
@@ -12,7 +12,7 @@ This project is licensed under a 2-clause BSD license - see [LICENSE](LICENSE) f
 
 ## Acknowledgments
 
-* [SerenityOS](https://github.com/SerenityOS/serenity) for inspiration and some code 
+* [SerenityOS](https://github.com/SerenityOS/serenity) for inspiration and some code:
     - [Atomic.hpp](Include/LibYT/Atomic.hpp)
     - [HashFunctions.hpp](Include/LibYT/HashFunctions.hpp)
     - [NumericLimits.hpp](Include/LibYT/NumericLimits.hpp)
