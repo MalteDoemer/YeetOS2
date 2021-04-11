@@ -26,17 +26,17 @@
 #pragma once
 
 #include "Types.hpp"
+#include "Concepts.hpp"
 #include "Platform.hpp"
 
-
-template<size_t num_info_bits>
+template<size_t num_info_bits, IntegralType T = size_t>
 struct PACKED SizeWithInfo {
 
-    size_t info : num_info_bits;
-    size_t size : (__SIZE_WIDTH__ - num_info_bits);
+    T info : num_info_bits;
+    T size : (__SIZE_WIDTH__ - num_info_bits);
 
-    ALWAYS_INLINE constexpr SizeWithInfo(size_t size) :
+    ALWAYS_INLINE constexpr SizeWithInfo(T size) :
         info(0), size(size >> num_info_bits) {}
 
-    ALWAYS_INLINE constexpr operator size_t() const { return size << num_info_bits; }
+    ALWAYS_INLINE constexpr operator T() const { return size << num_info_bits; }
 };
