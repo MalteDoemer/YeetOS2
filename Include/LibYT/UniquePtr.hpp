@@ -26,6 +26,7 @@
 #pragma once
 
 #include "Types.hpp"
+#include "Utility.hpp"
 #include "StdLibExtras.hpp"
 
 namespace YT {

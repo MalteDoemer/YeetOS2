@@ -30,37 +30,6 @@
 #include "Types.hpp"
 #include "Assertions.hpp"
 
-constexpr Uint32 round_up_to_power_of_two(Uint32 value, Uint32 power_of_two)
-{
-    return ((value - 1) & ~(power_of_two - 1)) + power_of_two;
-}
-
-constexpr Uint32 round_up_to_next_power_of_to(Uint32 value)
-{
-    value--;
-    value |= value >> 1;
-    value |= value >> 2;
-    value |= value >> 4;
-    value |= value >> 8;
-    value |= value >> 16;
-    value++;
-    return value;
-}
-
-namespace std {
-
-// NOTE: This is in the "std" namespace since some compiler features rely on it.
-
-template<typename T>
-constexpr T&& move(T& arg)
-{
-    return static_cast<T&&>(arg);
-}
-
-}
-
-using std::move;
-
 namespace YT {
 
 template<typename T>
@@ -70,47 +39,6 @@ template<typename T, typename SizeType = decltype(sizeof(T)), SizeType N>
 constexpr SizeType array_size(T (&)[N])
 {
     return N;
-}
-
-template<typename T>
-constexpr T min(const T& a, const T& b)
-{
-    return b < a ? b : a;
-}
-
-template<typename T>
-constexpr T max(const T& a, const T& b)
-{
-    return a < b ? b : a;
-}
-
-template<typename T>
-constexpr T clamp(const T& value, const T& min, const T& max)
-{
-    VERIFY(max >= min);
-    if (value > max)
-        return max;
-    if (value < min)
-        return min;
-    return value;
-}
-
-template<typename T, typename U>
-constexpr T ceil_div(T a, U b)
-{
-    static_assert(sizeof(T) == sizeof(U));
-    T result = a / b;
-    if ((a % b) != 0)
-        ++result;
-    return result;
-}
-
-template<typename T, typename U>
-inline void swap(T& a, U& b)
-{
-    U tmp = move((U&)a);
-    a = (T &&) move(b);
-    b = move(tmp);
 }
 
 template<bool B, class T = void>
@@ -633,8 +561,6 @@ struct IsConvertible : decltype(Detail::IsConvertible::test(declval<From>(), dec
 
 using YT::AddConst;
 using YT::array_size;
-using YT::ceil_div;
-using YT::clamp;
 using YT::Conditional;
 using YT::declval;
 using YT::DependentFalse;
@@ -664,9 +590,6 @@ using YT::MakeIndexSequence;
 using YT::MakeIntegerSequence;
 using YT::MakeSigned;
 using YT::MakeUnsigned;
-using YT::max;
-using YT::min;
 using YT::RemoveConst;
-using YT::swap;
 using YT::UnderlyingType;
 using YT::Void;
