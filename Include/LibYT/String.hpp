@@ -102,7 +102,16 @@ public:
     {
         m_data = m_inline_buffer;
         set_count(0);
-    };
+    }
+
+    ALWAYS_INLINE constexpr explicit BasicString(ConstPointer cstring)
+    {
+        
+    }
+
+    ALWAYS_INLINE constexpr BasicString(ConstPointer buffer, SizeType num)
+    {
+    }
 
     ALWAYS_INLINE constexpr static SizeType max_size() { return NumericLimits<SizeType>::max(); }
 
@@ -112,6 +121,7 @@ public:
 
     ALWAYS_INLINE constexpr Pointer data() { return m_data; }
     ALWAYS_INLINE constexpr ConstPointer data() const { return m_data; }
+    ALWAYS_INLINE constexpr ConstPointer cstr() const { return m_data; }
 
     ALWAYS_INLINE constexpr Reference at(SizeType pos) { return data()[pos]; }
     ALWAYS_INLINE constexpr ConstReference at(SizeType pos) const { return data()[pos]; }

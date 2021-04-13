@@ -158,9 +158,11 @@ constexpr bool compare(T* a, T* b, size_t count)
 
 }
 
+using YT::assign;
 using YT::ceil_div;
 using YT::clamp;
 using YT::compare;
+using YT::copy;
 using YT::max;
 using YT::min;
 using YT::move;
