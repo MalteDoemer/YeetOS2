@@ -15,7 +15,6 @@ LibC/LibC.a \
 Arch/$(ARCH)/Kernel/Kernel.a \
 Arch/$(ARCH)/Boot/Boot.a \
 Arch/$(ARCH)/LibYT/LibYT.a \
-Arch/$(ARCH)/LibC/LibC.a \
 $(ARCHIVES)
 
 SUBDIRS:=\
@@ -25,7 +24,6 @@ LibC \
 Arch/$(ARCH)/Kernel \
 Arch/$(ARCH)/Boot \
 Arch/$(ARCH)/LibYT \
-Arch/$(ARCH)/LibC \
 $(SUBDIRS)
 
 ifdef KERNEL_TESTS
@@ -53,7 +51,6 @@ endif
 INCDIRS :=\
 $(TOPDIR)/Include \
 $(TOPDIR)/Include/LibYT \
-$(TOPDIR)/Include/LibC \
 $(INCDIRS)
 
 DEFINES := $(patsubst %,-D%,$(DEFINES))
