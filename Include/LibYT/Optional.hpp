@@ -34,33 +34,18 @@
 
 namespace YT {
 
-template<class T>
-class alignas(T) Optional {
+template<class T> class alignas(T) Optional {
 
 public:
     ALWAYS_INLINE Optional() = default;
 
-    ALWAYS_INLINE Optional(const T& value) :
-        m_has_value(true)
-    {
-        new (&m_storage) T(value);
-    }
+    ALWAYS_INLINE Optional(const T& value) : m_has_value(true) { new (&m_storage) T(value); }
 
-    template<class U>
-    ALWAYS_INLINE Optional(const U& value) :
-        m_has_value(true)
-    {
-        new (&m_storage) T(value);
-    }
+    template<class U> ALWAYS_INLINE Optional(const U& value) : m_has_value(true) { new (&m_storage) T(value); }
 
-    ALWAYS_INLINE Optional(T&& value) :
-        m_has_value(true)
-    {
-        new (&m_storage) T(move(value));
-    }
+    ALWAYS_INLINE Optional(T&& value) : m_has_value(true) { new (&m_storage) T(move(value)); }
 
-    ALWAYS_INLINE Optional(Optional&& other) :
-        m_has_value(other.m_has_value)
+    ALWAYS_INLINE Optional(Optional&& other) : m_has_value(other.m_has_value)
     {
         if (other.has_value()) {
             new (&m_storage) T(other.release_value());
@@ -68,8 +53,7 @@ public:
         }
     }
 
-    ALWAYS_INLINE Optional(const Optional& other) :
-        m_has_value(other.m_has_value)
+    ALWAYS_INLINE Optional(const Optional& other) : m_has_value(other.m_has_value)
     {
         if (m_has_value) {
             new (&m_storage) T(other.value());
@@ -99,16 +83,12 @@ public:
         return *this;
     }
 
-    template<class O>
-    ALWAYS_INLINE bool operator==(const Optional<O>& other) const
+    template<class O> ALWAYS_INLINE bool operator==(const Optional<O>& other) const
     {
         return has_value() == other.has_value() && (!has_value() || value() == other.value());
     }
 
-    ALWAYS_INLINE ~Optional()
-    {
-        clear();
-    }
+    ALWAYS_INLINE ~Optional() { clear(); }
 
     ALWAYS_INLINE void clear()
     {
@@ -118,8 +98,7 @@ public:
         }
     }
 
-    template<class... Parameters>
-    ALWAYS_INLINE void emplace(Parameters&&... parameters)
+    template<class... Parameters> ALWAYS_INLINE void emplace(Parameters&&... parameters)
     {
         clear();
         m_has_value = true;

@@ -34,8 +34,7 @@ namespace std {
 
 // NOTE: This is in the "std" namespace since some compiler features rely on it.
 
-template<typename T>
-constexpr T&& move(T& arg)
+template<typename T> constexpr T&& move(T& arg)
 {
     return static_cast<T&&>(arg);
 }
@@ -58,20 +57,17 @@ constexpr Uint32 round_up_to_next_power_of_two(Uint32 value)
     return value;
 }
 
-template<typename T>
-constexpr T min(const T& a, const T& b)
+template<typename T> constexpr T min(const T& a, const T& b)
 {
     return b < a ? b : a;
 }
 
-template<typename T>
-constexpr T max(const T& a, const T& b)
+template<typename T> constexpr T max(const T& a, const T& b)
 {
     return a < b ? b : a;
 }
 
-template<typename T>
-constexpr T clamp(const T& value, const T& min, const T& max)
+template<typename T> constexpr T clamp(const T& value, const T& min, const T& max)
 {
     VERIFY(max >= min);
     if (value > max)
@@ -81,8 +77,7 @@ constexpr T clamp(const T& value, const T& min, const T& max)
     return value;
 }
 
-template<typename T, typename U>
-constexpr T ceil_div(T a, U b)
+template<typename T, typename U> constexpr T ceil_div(T a, U b)
 {
     static_assert(sizeof(T) == sizeof(U));
     T result = a / b;
@@ -91,28 +86,23 @@ constexpr T ceil_div(T a, U b)
     return result;
 }
 
-template<typename T, typename U>
-constexpr void swap(T& a, U& b)
+template<typename T, typename U> constexpr void swap(T& a, U& b)
 {
     U tmp = move((U&)a);
     a = (T &&) move(b);
     b = move(tmp);
 }
 
-template<typename T>
-constexpr void copy(T* dest, T* src, size_t count)
+template<typename T> constexpr void copy(T* dest, T* src, size_t count)
 {
     if constexpr (is_trivial<T>()) {
         __builtin_memcpy(dest, src, count * sizeof(T));
     } else {
-        while (count--) {
-            new (dest++) T(*src++);
-        }
+        while (count--) { new (dest++) T(*src++); }
     }
 }
 
-template<typename T>
-constexpr void move(T* dest, T* src, size_t count)
+template<typename T> constexpr void move(T* dest, T* src, size_t count)
 {
     if constexpr (is_trivial<T>()) {
         __builtin_memmove(dest, src, count * sizeof(T));
@@ -121,28 +111,20 @@ constexpr void move(T* dest, T* src, size_t count)
             dest = dest + count - 1;
             src = src + count - 1;
 
-            while (count--) {
-                new (dest--) T(move(*src--));
-            }
+            while (count--) { new (dest--) T(move(*src--)); }
         } else {
 
-            while (count--) {
-                new (dest++) T(move(*src++));
-            }
+            while (count--) { new (dest++) T(move(*src++)); }
         }
     }
 }
 
-template<typename T>
-constexpr void assign(T* dest, const T& value, size_t count)
+template<typename T> constexpr void assign(T* dest, const T& value, size_t count)
 {
-    while (count--) {
-        *dest++ = value;
-    }
+    while (count--) { *dest++ = value; }
 }
 
-template<typename T>
-constexpr bool compare(T* a, T* b, size_t count)
+template<typename T> constexpr bool compare(T* a, T* b, size_t count)
 {
     if constexpr (is_trivial<T>()) {
         return !__builtin_memcmp(a, b, count * sizeof(T));

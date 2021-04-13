@@ -4,8 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/Include",
-                "${workspaceFolder}/Include/LibYT",
-                "${workspaceFolder}/Include/LibC"
+                "${workspaceFolder}/Include/LibYT"
             ],
             "defines": [
                 "__KERNEL__",

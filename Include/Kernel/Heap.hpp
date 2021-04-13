@@ -1,25 +1,25 @@
 /*
  * Copyright 2021 Malte Dömer
- * 
- * Redistribution and use in source and binary forms, with or without 
+ *
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
- * 
- * 2. Redistributions in binary form must reproduce the above copyright notice, 
- *    this list of conditions and the following disclaimer in the documentation 
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE 
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
@@ -43,8 +43,14 @@ struct PACKED HeapBlock {
 
     ALWAYS_INLINE void* data() { return m_data; }
 
-    ALWAYS_INLINE HeapBlock* get_prev() const { return reinterpret_cast<HeapBlock*>(reinterpret_cast<FlatPtr>(this) - prev_size - size()); }
-    ALWAYS_INLINE HeapBlock* get_next() const { return reinterpret_cast<HeapBlock*>(reinterpret_cast<FlatPtr>(this) + this_size + size()); }
+    ALWAYS_INLINE HeapBlock* get_prev() const
+    {
+        return reinterpret_cast<HeapBlock*>(reinterpret_cast<FlatPtr>(this) - prev_size - size());
+    }
+    ALWAYS_INLINE HeapBlock* get_next() const
+    {
+        return reinterpret_cast<HeapBlock*>(reinterpret_cast<FlatPtr>(this) + this_size + size());
+    }
 
     ALWAYS_INLINE HeapBlock* get_next_free() const { return next_free; }
     ALWAYS_INLINE void set_next_free(HeapBlock* next) { next_free = next; }
@@ -82,13 +88,9 @@ public:
     constexpr static size_t min_alloc_size = 16;
     constexpr static size_t first_bucket_log2 = 4;
 
-    Heap()
-    {
-        VERIFY_NOT_REACHED();
-    }
+    Heap() { VERIFY_NOT_REACHED(); }
 
-    Heap(void* memory, size_t size) :
-        m_start((FlatPtr)memory), m_end((FlatPtr)memory + size)
+    Heap(void* memory, size_t size) : m_start((FlatPtr)memory), m_end((FlatPtr)memory + size)
     {
 
         HeapBlock* first_block = reinterpret_cast<HeapBlock*>(m_start);
@@ -121,8 +123,8 @@ public:
 
     void* allocate(size_t size)
     {
-        if (size == 0) [[unlikely]]
-            return nullptr;
+        if (size == 0)
+            [[unlikely]] return nullptr;
 
         size = ALIGN(size, min_alloc_size);
 
@@ -149,7 +151,8 @@ public:
                         +--------+-----------+-------------+ */
 
                         HeapBlock* next_block = block->get_next();
-                        HeapBlock* new_block = reinterpret_cast<HeapBlock*>(reinterpret_cast<FlatPtr>(block) + size + HeapBlock::size());
+                        HeapBlock* new_block
+                            = reinterpret_cast<HeapBlock*>(reinterpret_cast<FlatPtr>(block) + size + HeapBlock::size());
 
                         new_block->set_size(block->get_size() - size - HeapBlock::size());
                         new_block->set_state(HeapBlock::State::Free);

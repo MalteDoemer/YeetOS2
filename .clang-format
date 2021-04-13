@@ -1,12 +1,15 @@
 Language: Cpp
 BasedOnStyle: WebKit
+
+ColumnLimit: 120
 SpaceAfterTemplateKeyword: false
-AlignEscapedNewlines: true
-AlignTrailingComments: true
 AccessModifierOffset: -4
 SortIncludes: false
 SpaceInEmptyBlock: false
 NamespaceIndentation: None
+
+AlignEscapedNewlines: Right
+AlignTrailingComments: true
 
 BreakBeforeInheritanceComma: true
 
