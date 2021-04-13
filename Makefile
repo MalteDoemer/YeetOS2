@@ -11,7 +11,6 @@ MAKE=make --no-print-directory
 ARCHIVES:=\
 Kernel/Kernel.a \
 LibYT/LibYT.a \
-LibC/LibC.a \
 Arch/$(ARCH)/Kernel/Kernel.a \
 Arch/$(ARCH)/Boot/Boot.a \
 Arch/$(ARCH)/LibYT/LibYT.a \
@@ -20,7 +19,6 @@ $(ARCHIVES)
 SUBDIRS:=\
 Kernel \
 LibYT \
-LibC \
 Arch/$(ARCH)/Kernel \
 Arch/$(ARCH)/Boot \
 Arch/$(ARCH)/LibYT \
