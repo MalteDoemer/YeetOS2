@@ -23,7 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "Platform.hpp"
-#include "Assertions.hpp"
+#include "Verify.hpp"
 #include "New.hpp"
 
 #include "Kernel/Panic.hpp"

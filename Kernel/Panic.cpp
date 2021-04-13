@@ -23,16 +23,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "stdarg.h"
 
 #include "Kernel/CPU.hpp"
+#include "Kernel/SerialDebug.hpp"
 
 namespace Kernel {
 
-void panic(const char* reason, ...)
+void panic(const char* reason)
 {
-    // TODO implement panic
-
+    Serial::println(reason);
     while (1) CPU::halt();
 }
 

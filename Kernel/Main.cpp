@@ -26,7 +26,7 @@
 #include "New.hpp"
 #include "String.hpp"
 #include "UniquePtr.hpp"
-#include "Assertions.hpp"
+#include "Verify.hpp"
 #include "StdLibExtras.hpp"
 
 #include "Kernel/Kernel.hpp"
@@ -52,7 +52,7 @@ ASM_LINKAGE void kernel_main()
     Serial::println("+-----------------------------------+");
     Serial::println();
 
-
+    VERIFY(true == false);
 
 
 #ifdef __KERNEL_TESTS__

@@ -23,26 +23,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
-
-#include "Kernel/Panic.hpp"
-
-#define STRINGIFY_HELPER(x) #x
-#define STRINGIFY(x) STRINGIFY_HELPER(x)
-
 #ifndef NDEBUG
 
-#define VERIFY(x)                                                                                                      \
-    if (!(x))                                                                                                          \
-    [[unlikely]] Kernel::panic("VERIFY FAILED: " #x "\n%s\n" __FILE__ ":" STRINGIFY(__LINE__), __PRETTY_FUNCTION__)
+#ifdef __KERNEL__
 
-#define VERIFY_NOT_REACHED(x)                                                                                          \
-    Kernel::panic("VERIFY_NOT_REACHED FAILED: \n%s\n" __FILE__ ":" STRINGIFY(__LINE__), __PRETTY_FUNCTION__)
+#include "Kernel/Panic.hpp"
+#include "Kernel/SerialDebug.hpp"
+
+[[noreturn]] void __verify_fail(const char* msg)
+{
+    Kernel::panic(msg);
+}
 
 #else
-
-#define VERIFY
-#define VERIFY_NOT_REACHED                                                                                             \
-    Kernel::panic("VERIFY_NOT_REACHED FAILED: \n%s\n" __FILE__ ":" STRINGIFY(__LINE__), __PRETTY_FUNCTION__)
+#error "userspace not supported!"
+#endif
 
 #endif

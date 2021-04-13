@@ -39,12 +39,17 @@
 #define __STRINGIFY_HELPER(x) #x
 #define __STRINGIFY(x) __STRINGIFY_HELPER(x)
 
-extern void __verify_failed(const char* msg) __attribute__((noreturn));
+[[noreturn]] void __verify_fail(const char* msg);
 
 #define VERIFY(x)                                                                                                      \
-    if (!static_cast<bool>(x))                                                                                         \
-    [[unlikely]] __verify_failed(__FILE__ ":" __STRINGIFY(__FILE__) ": verify failed: " #x)
+    if (!static_cast<bool>(x)) [[unlikely]]                                                                            \
+    __verify_fail(__FILE__ ":" __STRINGIFY(__LINE__) ": VERIFY failed: " #x)
+
+#define VERIFY_NOT_REACHED(x) __verify_fail(__FILE__ ":" __STRINGIFY(__LINE__) ": VERIFY_NOT_REACHED failed!")
 
 #else
+
+#define VERIFY(x) static_cast<void>(x)
+#define VERIFY_NOT_REACHED(x)
 
 #endif
