@@ -3,6 +3,7 @@ OBJECTS=\
 Arch.o \
 CPU.o \
 SerialDebug.o \
+RuntimeSupport.o \
 
 Kernel.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)

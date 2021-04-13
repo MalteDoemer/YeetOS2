@@ -40,20 +40,24 @@ static inline void outw(Uint16 port, Uint16 data)
 static inline Uint8 inb(Uint16 port)
 {
     Uint8 ret;
-    asm volatile("inb %1, %0" : "=a"(ret) : "dN"(port));
+    asm volatile("inb %1, %0"
+                 : "=a"(ret)
+                 : "dN"(port));
     return ret;
 }
 
 static inline Uint16 inw(Uint16 port)
 {
     Uint16 ret;
-    asm volatile("inw %1, %0" : "=a"(ret) : "dN"(port));
+    asm volatile("inw %1, %0"
+                 : "=a"(ret)
+                 : "dN"(port));
     return ret;
 }
 
-static inline void stosb(void* buf, Uint16 val, Uint32 count)
+static inline void stosb(void* buf, Uint8 val, Uint32 count)
 {
-    asm("rep stosw" ::"a"(val), "c"(count), "D"(buf));
+    asm("rep stosb" ::"a"(val), "c"(count), "D"(buf));
 }
 
 static inline void stosw(void* buf, Uint16 val, Uint32 count)
@@ -64,6 +68,21 @@ static inline void stosw(void* buf, Uint16 val, Uint32 count)
 static inline void stosd(void* buf, Uint32 val, Uint32 count)
 {
     asm("rep stosl" ::"a"(val), "c"(count), "D"(buf));
+}
+
+static inline void movsb(void* dest, const void* src, Uint32 count)
+{
+    asm("rep movsb" :: "D"(dest), "S"(src), "c"(count));
+}
+
+static inline void movsw(void* dest, const void* src, Uint32 count)
+{
+    asm("rep movsw" :: "D"(dest), "S"(src), "c"(count));
+}
+
+static inline void movsd(void* dest, const void* src, Uint32 count)
+{
+    asm("rep movsl" :: "D"(dest), "S"(src), "c"(count));
 }
 
 static inline void invlpg(FlatPtr addr)
@@ -86,9 +105,18 @@ static inline void sti()
     asm("sti");
 }
 
+static inline void cld()
+{
+    asm("cld");
+}
+
+static inline void setd()
+{
+    asm("std");
+}
+
+
 static inline void hlt()
 {
     asm("hlt");
 }
-
-

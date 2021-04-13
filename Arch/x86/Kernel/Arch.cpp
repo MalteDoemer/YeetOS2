@@ -47,8 +47,6 @@ void call_ctors()
 
 void initialize()
 {
-    volatile Uint16* vram = (volatile Uint16*)(0xB8000 + KERNEL_BASE);
-    vram[0] = 0x1F20;
 }
 
 }
