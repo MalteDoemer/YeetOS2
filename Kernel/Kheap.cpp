@@ -80,22 +80,32 @@ FLATTEN void deallocate(void* ptr)
 
 }
 
-FLATTEN void* operator new(size_t size)
+void* operator new(size_t size)
 {
     return Kernel::Kheap::allocate(size);
 }
 
-FLATTEN void* operator new[](size_t size)
+void* operator new[](size_t size)
 {
     return Kernel::Kheap::allocate(size);
 }
 
-FLATTEN void operator delete(void* ptr, size_t size)
+void operator delete(void* ptr)
 {
     Kernel::Kheap::deallocate(ptr);
 }
 
-FLATTEN void operator delete[](void* ptr, size_t size)
+void operator delete[](void* ptr)
+{
+    Kernel::Kheap::deallocate(ptr);
+}
+
+void operator delete(void* ptr, size_t size)
+{
+    Kernel::Kheap::deallocate(ptr);
+}
+
+void operator delete[](void* ptr, size_t size)
 {
     Kernel::Kheap::deallocate(ptr);
 }

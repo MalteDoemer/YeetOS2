@@ -23,6 +23,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "New.hpp"
+#include "String.hpp"
+#include "UniquePtr.hpp"
 #include "Assertions.hpp"
 #include "StdLibExtras.hpp"
 
@@ -34,7 +37,7 @@
 
 namespace Kernel {
 
-ASM_LINKAGE void do_it(int*);
+ASM_LINKAGE void do_it(int);
 
 ASM_LINKAGE void kernel_main()
 {
@@ -48,6 +51,21 @@ ASM_LINKAGE void kernel_main()
     Serial::println("| Welcome to the debug spam output! |");
     Serial::println("+-----------------------------------+");
     Serial::println();
+
+
+    char* b1 = new char[1024];
+    char* b1 = new char[1024];
+
+    
+
+    // BasicString<char> str;
+    
+    // str.append('f');
+    // str.append('e');
+    // str.append('t');
+    // str.append('t');
+
+    // Serial::println(str.data());
 
 #ifdef __KERNEL_TESTS__
     Kernel::Tests::run_all_tests();

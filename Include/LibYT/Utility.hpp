@@ -46,7 +46,7 @@ namespace YT {
 
 using std::move;
 
-constexpr Uint32 round_up_to_next_power_of_to(Uint32 value)
+constexpr Uint32 round_up_to_next_power_of_two(Uint32 value)
 {
     value--;
     value |= value >> 1;
@@ -105,7 +105,7 @@ constexpr void copy(T* dest, T* src, size_t count)
     if constexpr (is_trivial<T>()) {
         __builtin_memcpy(dest, src, count * sizeof(T));
     } else {
-        while (num--) {
+        while (count--) {
             new (dest++) T(*src++);
         }
     }
@@ -118,20 +118,23 @@ constexpr void move(T* dest, T* src, size_t count)
         __builtin_memmove(dest, src, count * sizeof(T));
     } else {
         if (dest > src) {
-            dest = dest + num - 1;
-            src = src + num - 1;
+            dest = dest + count - 1;
+            src = src + count - 1;
 
-            while (num--) {
+            while (count--) {
                 new (dest--) T(move(*src--));
             }
         } else {
 
-            while (num--) {
+            while (count--) {
                 new (dest++) T(move(*src++));
             }
         }
     }
 }
+
+template<typename T>
+constexpr 
 
 template<typename T>
 constexpr bool compare(T* a, T* b, size_t count)
@@ -156,5 +159,5 @@ using YT::compare;
 using YT::max;
 using YT::min;
 using YT::move;
-using YT::round_up_to_next_power_of_to;
+using YT::round_up_to_next_power_of_two;
 using YT::swap;
