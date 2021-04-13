@@ -134,7 +134,12 @@ constexpr void move(T* dest, T* src, size_t count)
 }
 
 template<typename T>
-constexpr 
+constexpr void assign(T* dest, const T& value, size_t count)
+{
+    while (count--) {
+        *dest++ = value;
+    }
+}
 
 template<typename T>
 constexpr bool compare(T* a, T* b, size_t count)
