@@ -1,8 +1,7 @@
 
 OBJECTS=\
 
-
-LibC.a: $(OBJECTS)
+LibYT.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)
 
 %.o: %.c
@@ -11,7 +10,10 @@ LibC.a: $(OBJECTS)
 %.o: %.cpp
 	$(CXX) $(CXX_FLAGS) -MMD -c -o $@ $<
 
+%.o: %.asm
+	$(AS) $(AS_FLAGS) -o $@ $<
+
 clean:
-	rm -f LibC.a $(OBJECTS) $(OBJECTS:.o=.d)
+	rm -f LibYT.a $(OBJECTS) $(OBJECTS:.o=.d)
 
 -include $(OBJECTS:.o=.d)

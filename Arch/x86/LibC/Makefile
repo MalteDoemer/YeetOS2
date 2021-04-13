@@ -1,7 +1,6 @@
 
 OBJECTS=\
 
-
 LibC.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)
 
@@ -10,6 +9,9 @@ LibC.a: $(OBJECTS)
 
 %.o: %.cpp
 	$(CXX) $(CXX_FLAGS) -MMD -c -o $@ $<
+
+%.o: %.asm
+	$(AS) $(AS_FLAGS) -o $@ $<
 
 clean:
 	rm -f LibC.a $(OBJECTS) $(OBJECTS:.o=.d)
