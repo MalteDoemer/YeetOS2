@@ -23,19 +23,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef NDEBUG
+#pragma once
 
-#ifdef __KERNEL__
+#include "Types.hpp"
 
-#include "Kernel/Panic.hpp"
+extern "C" {
 
-[[noreturn]] void __verify_fail(const char* msg)
-{
-    Kernel::panic(msg);
+void* memcpy(void* dest, const void* src, size_t n);
+void* memmov(void* dest, const void* src, size_t n);
+void* memset(void* dest, int c, size_t n);
+int memcmp(const void* p1, const void* p2, size_t n);
+
+size_t strlen(const char* str);
+size_t strnlen(const char* str, size_t maxlen);
+int strcmp(const char* str1, const char* str2);
+int strncmp(const char* str1, const char* str2, size_t n);
+
+void* malloc(size_t size);
+void* realloc(void* ptr, size_t size);
+void free(void* ptr);
 }
-
-#else
-#error "userspace not supported!"
-#endif
-
-#endif

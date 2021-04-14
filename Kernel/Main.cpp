@@ -43,17 +43,15 @@ ASM_LINKAGE void kernel_main()
 {
     Kheap::initialize();
     Arch::call_ctors();
-    Arch::initialize();
+    
     Serial::initialize();
+    Arch::initialize();
 
     Serial::println();
     Serial::println("+-----------------------------------+");
     Serial::println("| Welcome to the debug spam output! |");
     Serial::println("+-----------------------------------+");
     Serial::println();
-
-    VERIFY(true == false);
-
 
 #ifdef __KERNEL_TESTS__
     Kernel::Tests::run_all_tests();

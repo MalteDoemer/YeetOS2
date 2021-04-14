@@ -23,19 +23,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef NDEBUG
-
 #ifdef __KERNEL__
 
-#include "Kernel/Panic.hpp"
+#include "Kernel/Kheap.hpp"
 
-[[noreturn]] void __verify_fail(const char* msg)
+
+extern "C" void* malloc(size_t size)
 {
-    Kernel::panic(msg);
+    return Kernel::Kheap::allocate(size);
+}
+
+extern "C" void* realloc(void* ptr, size_t size)
+{
+    return Kernel::Kheap::reallocate(ptr, size);
+}
+
+extern "C" void free(void* ptr)
+{
+    Kernel::Kheap::deallocate(ptr);
 }
 
 #else
 #error "userspace not supported!"
-#endif
-
 #endif

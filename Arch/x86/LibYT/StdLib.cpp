@@ -23,19 +23,48 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef NDEBUG
+#include "Types.hpp"
 
-#ifdef __KERNEL__
-
-#include "Kernel/Panic.hpp"
-
-[[noreturn]] void __verify_fail(const char* msg)
+extern "C" void* memcpy(void* dest, const void* src, size_t n)
 {
-    Kernel::panic(msg);
+    asm("rep movsb" : : "S"(src), "D"(dest), "c"(n) : "memory");
+    return dest;
 }
 
-#else
-#error "userspace not supported!"
-#endif
+extern "C" void* memmov(void* dest, const void* src, size_t n)
+{
+    if (dest > src) {
+        size_t dest_end = reinterpret_cast<size_t>(dest) + n - 1;
+        size_t src_end = reinterpret_cast<size_t>(src) + n - 1;
 
-#endif
+        asm("std\n\t"
+            "rep movsb\n\t"
+            "cld\n\t"
+            :
+            : "S"(src_end), "D"(dest_end), "c"(n)
+            : "memory");
+
+    } else {
+        asm("rep movsb" : : "S"(src), "D"(dest), "c"(n) : "memory");
+    }
+
+    return dest;
+}
+
+extern "C" void memset(void* dest, int c, size_t count) 
+{
+    size_t value = c & 0xFF;
+    
+
+
+}
+
+extern "C" int memcmp(const void* p1, const void* p2, size_t n) {}
+
+extern "C" size_t strlen(const char* str) {}
+
+extern "C" size_t strnlen(const char* str, size_t maxlen) {}
+
+extern "C" int strcmp(const char* str1, const char* str2) {}
+
+extern "C" int strncmp(const char* str1, const char* str2, size_t n) {}
