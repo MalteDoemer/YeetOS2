@@ -2,6 +2,7 @@
 OBJECTS=\
 KernelTests.o \
 KheapTests.o \
+StdLibTests.o \
 
 # allow tests to access private members
 C_FLAGS := -fno-access-control $(C_FLAGS)

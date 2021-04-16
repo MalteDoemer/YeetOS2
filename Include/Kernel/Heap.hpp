@@ -116,15 +116,16 @@ public:
         m_buckets[bucket] = main_block;
 
 #ifndef NDEBUG
-        m_total_free = main_block->get_size();
-        m_total_used = 0;
+        m_remaining = main_block->get_size();
+        m_total_alloced = 0;
+        m_total_freed = 0;
 #endif
     }
 
     void* allocate(size_t size)
     {
-        if (size == 0)
-            [[unlikely]] return nullptr;
+        if (size == 0) [[unlikely]]
+            return nullptr;
 
         size = ALIGN(size, min_alloc_size);
 
@@ -174,8 +175,7 @@ public:
                     block->set_state(HeapBlock::State::Used);
                     block->get_next()->set_prev_state(HeapBlock::State::Used);
 #ifndef NDEBUG
-                    m_total_free -= block->get_size();
-                    m_total_used += block->get_size();
+                    m_total_alloced += block->get_size();
 #endif
                     return block->data();
                 }
@@ -211,6 +211,10 @@ public:
 #ifdef VERIFY_HEAP
         VERIFY(block->get_state() != HeapBlock::State::Special);
         VERIFY(block->get_state() != HeapBlock::State::Free);
+#endif
+
+#ifndef NDEBUG
+        m_total_freed += block->get_size();
 #endif
 
         if (block->get_prev_state() == HeapBlock::State::Free) {
@@ -249,11 +253,6 @@ public:
         /* Add the the recently freed block to the free list */
         size_t bucket = get_bucket_index(block->get_size());
         add_to_free_list(bucket, block);
-
-#ifndef NDEBUG
-        m_total_free += block->get_size();
-        m_total_used -= block->get_size();
-#endif
     }
 
 private:
@@ -276,6 +275,10 @@ private:
         HeapBlock* prev_free = block->get_prev_free();
         HeapBlock* next_free = block->get_next_free();
 
+#ifndef NDEBUG
+        m_remaining -= block->get_size();
+#endif
+
         if (prev_free)
             prev_free->set_next_free(next_free);
         else
@@ -288,6 +291,11 @@ private:
     ALWAYS_INLINE void add_to_free_list(size_t bucket, HeapBlock* block)
     {
         HeapBlock* first_node = m_buckets[bucket];
+
+#ifndef NDEBUG
+        m_remaining += block->get_size();
+#endif
+
 
         if (first_node) {
             first_node->set_prev_free(block);
@@ -317,7 +325,8 @@ private:
     HeapBlock* m_buckets[num_buckets] { nullptr };
 
 #ifndef NDEBUG
-    size_t m_total_used { 0 };
-    size_t m_total_free { 0 };
+    size_t m_total_alloced { 0 };
+    size_t m_total_freed { 0 };
+    size_t m_remaining { 0 };
 #endif
 };

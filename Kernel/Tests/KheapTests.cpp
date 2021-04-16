@@ -30,33 +30,27 @@
 
 namespace Kernel::Tests {
 
-bool test_kheap_total_size()
-{
-    Heap& kheap = Kheap::get_kheap();
-
-    size_t expected_heap_size = kheap.m_end - kheap.m_start - 3 * HeapBlock::size();
-    size_t actual_heap_size = kheap.m_total_free + kheap.m_total_used;
-
-    return expected_heap_size == actual_heap_size;
-}
-
 bool test_kheap_size_after_allocation_and_deallocation()
 {
     Heap& kheap = Kheap::get_kheap();
 
     for (size_t i = kheap.min_alloc_size; i < 8 * KiB; i += kheap.min_alloc_size) {
 
-        size_t free_size = kheap.m_total_free;
-        size_t used_size = kheap.m_total_used;
+        size_t remaining = kheap.m_remaining;
+        size_t alloced = kheap.m_total_alloced;
+        size_t freed = kheap.m_total_freed;
 
         void* data = Kheap::allocate(i);
 
-        if (free_size != kheap.m_total_free + i || used_size + i != kheap.m_total_used)
+        if (alloced + i != kheap.m_total_alloced)
             return false;
 
         Kheap::deallocate(data);
 
-        if (free_size != kheap.m_total_free || used_size != kheap.m_total_used)
+        if (freed + i != kheap.m_total_freed)
+            return false;
+
+        if (remaining != kheap.m_remaining)
             return false;
     }
 
@@ -66,7 +60,7 @@ bool test_kheap_size_after_allocation_and_deallocation()
 bool test_kheap_coalescing()
 {
     Heap& kheap = Kheap::get_kheap();
-    size_t free_before_alloc = kheap.m_total_free;
+    size_t remaining_before_alloc = kheap.m_remaining;
 
     constexpr auto num_allocs = 512;
     constexpr auto alloc_size = 1 * KiB;
@@ -85,10 +79,9 @@ bool test_kheap_coalescing()
         Kheap::deallocate(ptrs[i]);
     }
 
-    return free_before_alloc == kheap.m_total_free;
+    return remaining_before_alloc == kheap.m_remaining;
 }
 
-TEST_FUNCTION(test_kheap_total_size);
 TEST_FUNCTION(test_kheap_size_after_allocation_and_deallocation);
 TEST_FUNCTION(test_kheap_coalescing);
 

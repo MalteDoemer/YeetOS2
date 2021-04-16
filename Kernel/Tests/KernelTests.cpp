@@ -49,13 +49,16 @@ void run_all_tests()
     const char** test_name = &test_names_start;
 
     do {
-        Serial::print("Running test: ");
-        Serial::println(*test_name);
+        Serial::print("Running ");
+        Serial::print(*test_name);
+        Serial::print("... ");
 
         if ((*test_func)()) {
             result.num_tests_passed++;
+            Serial::println("passed");
         } else {
             result.num_tests_failed++;
+            Serial::println("failed");
         }
         result.num_tests_run++;
 
