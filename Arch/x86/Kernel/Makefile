@@ -4,7 +4,6 @@ Arch.o \
 CPU.o \
 misc.o \
 SerialDebug.o \
-RuntimeSupport.o \
 
 Kernel.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)
