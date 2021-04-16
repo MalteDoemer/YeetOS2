@@ -37,6 +37,16 @@ using Int16 = __INT16_TYPE__;
 using Int32 = __INT32_TYPE__;
 using Int64 = __INT64_TYPE__;
 
+using u8 = Uint8;
+using u16 = Uint16;
+using u32 = Uint32;
+using u64 = Uint64;
+
+using i8 = Int8;
+using i16 = Int16;
+using i32 = Int32;
+using i64 = Int64;
+
 using size_t = __SIZE_TYPE__;
 using ptrdiff_t = __PTRDIFF_TYPE__;
 
