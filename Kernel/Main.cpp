@@ -57,19 +57,12 @@ ASM_LINKAGE void kernel_main()
     Kernel::Tests::run_all_tests();
 #endif
 
-    String str1 = { 'f', 'e', 't', 't' };
-    String str2 = str1;
+    String s = "This is a very nice string!!!";
 
-    str1.append('.');
-
-    Serial::println(str1.cstr());
-    Serial::println(str2.cstr());
-
-    String str3 = move(str1);
-    Serial::println(str3.cstr());
-
-    str1.append('f');
-    Serial::println(str1.cstr());
+    for (auto& c : s) {
+        Serial::putchar(c);
+        Serial::putchar('\n');
+    }
 }
 
 }

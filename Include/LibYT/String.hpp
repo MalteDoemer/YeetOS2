@@ -200,6 +200,12 @@ public:
         return *this;
     }
 
+    ~BasicString()
+    {
+        if (!is_small())
+            delete[] m_data;
+    }
+
     inline constexpr SizeType count() const { return m_count; }
     inline constexpr bool is_empty() const { return count() == 0; }
     inline constexpr SizeType capacity() { return is_small() ? inline_capacity : m_capcaity; }
@@ -214,14 +220,19 @@ public:
     inline constexpr Reference operator[](SizeType pos) { return at(pos); }
     inline constexpr ConstReference operator[](SizeType pos) const { return at(pos); }
 
+    inline constexpr Iterator begin() { return Iterator(data()); }
+    inline constexpr ConstIterator begin() const { return Iterator(data()); }
+
+    inline constexpr Iterator end() { return Iterator(data() + count()); }
+    inline constexpr ConstIterator end() const { return Iterator(data() + count()); }
+
     inline constexpr void reserve(SizeType new_cap)
     {
         if (new_cap <= capacity())
             return;
 
-        Char* new_data = new Char[new_cap];
-        copy(new_data, m_data, count());
-        new_data[count()] = Char();
+        Char* new_data = new Char[new_cap + 1];
+        copy(new_data, m_data, count() + 1);
 
         if (!is_small())
             delete[] m_data;
@@ -235,12 +246,17 @@ public:
         if (count() == capacity() || is_small())
             return;
 
-        Char* new_data = count() <= inline_capacity ? m_inline_buffer : new Char[count() + 1];
-        copy(new_data, m_data, count());
-        new_data[count()] = Char();
-        delete[] m_data;
+        Char* new_data = nullptr;
 
-        m_capcaity = count();
+        if (count() <= inline_capacity) {
+            new_data = m_inline_buffer;
+        } else {
+            new_data = Char[count() + 1];
+            m_capcaity = count();
+        }
+
+        copy(new_data, m_data, count() + 1);
+        delete[] m_data;
         m_data = new_data;
     }
 
@@ -251,11 +267,44 @@ public:
         set_count(count() + 1);
     }
 
-    inline constexpr void append(const BasicString& other) {}
+    inline constexpr void append(ConstPointer other)
+    {
+        SizeType num = cstring_count(other);
+        reserve(count() + num);
+        copy(data() + count(), other, num);
+        set_count(count() + num);
+    }
 
-    inline constexpr void prepend(Char value) {}
+    inline constexpr void append(ConstPointer other, SizeType num)
+    {
+        reserve(count() + num);
+        copy(data() + count(), other, num);
+        set_count(count() + num);
+    }
 
-    inline constexpr void prepend(const BasicString& other) {}
+    inline constexpr void append(const BasicString& other) 
+    {
+        reserve(count() + other.count());
+        copy(data() + count(), other.data(), other.count());
+        set_count(count() + other.count());
+    }
+
+    inline constexpr void append(const BasicString& other, SizeType num)
+    {
+        VERIFY(num <= other.count());
+        reserve(count() + num);
+        copy(data() + count(), other.data(), num);
+        set_count(count() + num);
+    }
+
+    inline constexpr void clear()
+    {
+        if (!is_small())
+            delete[] m_data;
+
+        m_data = m_inline_buffer;
+        set_count(0);
+    }
 };
 
 using String = BasicString<char>;
