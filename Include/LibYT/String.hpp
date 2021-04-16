@@ -70,6 +70,19 @@ private:
     static_assert(num_elems > 0, "Character Type is to large!");
 
 private:
+    /* like strlen just with our custom character type */
+    static inline constexpr SizeType cstring_count(ConstPointer cstring)
+    {
+        ConstPointer start = cstring;
+        while (*cstring != Char()) { cstring++; }
+        return cstring - start;
+    }
+
+public:
+    /* The (theoretically) maximum size of a String */
+    inline constexpr static SizeType max_size() { return NumericLimits<SizeType>::max(); }
+
+private:
     Pointer m_data;
     SizeType m_count;
 
@@ -78,48 +91,128 @@ private:
         SizeType m_capcaity;
     };
 
+private:
     /* Helper function that sets the count and writes the null terminator */
-    ALWAYS_INLINE constexpr void set_count(SizeType count)
+    inline constexpr void set_count(SizeType count)
     {
         m_count = count;
         m_data[count] = Char();
     }
 
-    ALWAYS_INLINE constexpr bool is_small() const { return m_data == m_inline_buffer; }
+    inline constexpr bool is_small() const { return m_data == m_inline_buffer; }
 
-    ALWAYS_INLINE constexpr void grow_if_needed()
+    inline constexpr void grow_if_needed()
     {
         if (count() == capacity()) {
             reserve(count() * 2);
         }
     }
 
+    inline constexpr void init_capacity(SizeType cap)
+    {
+        if (cap > inline_capacity) {
+            m_data = new Char[cap + 1];
+            m_capcaity = cap;
+        } else {
+            m_data = m_inline_buffer;
+        }
+    }
+
 public:
-    ALWAYS_INLINE constexpr BasicString()
+    inline constexpr BasicString()
     {
         m_data = m_inline_buffer;
         set_count(0);
     }
 
-    ALWAYS_INLINE constexpr explicit BasicString(ConstPointer cstring) {}
+    inline constexpr BasicString(ConstPointer cstring) { assign(cstring); }
 
-    ALWAYS_INLINE constexpr BasicString(ConstPointer buffer, SizeType num) {}
+    inline constexpr BasicString(ConstPointer buffer, SizeType size) { assign(buffer, size); }
 
-    ALWAYS_INLINE constexpr static SizeType max_size() { return NumericLimits<SizeType>::max(); }
+    inline constexpr BasicString(const BasicString& other) { assign(other); }
 
-    ALWAYS_INLINE constexpr SizeType count() const { return m_count; }
-    ALWAYS_INLINE constexpr bool is_empty() const { return count() == 0; }
-    ALWAYS_INLINE constexpr SizeType capacity() { return is_small() ? inline_capacity : m_capcaity; }
+    inline constexpr BasicString(BasicString&& other) { assign(move(other)); }
 
-    ALWAYS_INLINE constexpr Pointer data() { return m_data; }
-    ALWAYS_INLINE constexpr ConstPointer data() const { return m_data; }
-    ALWAYS_INLINE constexpr ConstPointer cstr() const { return m_data; }
+    inline constexpr BasicString(std::initializer_list<Char> list) { assign(list); }
 
-    ALWAYS_INLINE constexpr Reference at(SizeType pos) { return data()[pos]; }
-    ALWAYS_INLINE constexpr ConstReference at(SizeType pos) const { return data()[pos]; }
+    inline constexpr BasicString& operator=(const BasicString& other)
+    {
+        if (&other != this) {
+            assign(other);
+        }
+        return *this;
+    }
 
-    ALWAYS_INLINE constexpr Reference operator[](SizeType pos) { return at(pos); }
-    ALWAYS_INLINE constexpr ConstReference operator[](SizeType pos) const { return at(pos); }
+    inline constexpr BasicString& operator=(BasicString&& other)
+    {
+        if (&other != this) {
+            assign(other);
+        }
+        return *this;
+    }
+
+    inline constexpr BasicString& assign(ConstPointer cstring)
+    {
+        SizeType count = cstring_count(cstring);
+        init_capacity(count);
+        copy(data(), cstring, count);
+        set_count(count);
+        return *this;
+    }
+
+    inline constexpr BasicString& assign(ConstPointer buffer, SizeType count)
+    {
+        init_capacity(count);
+        copy(data(), buffer, count);
+        set_count(count);
+        return *this;
+    }
+
+    inline constexpr BasicString& assign(const BasicString& other)
+    {
+        init_capacity(other.count());
+        copy(m_data, other.data(), other.count());
+        set_count(other.count());
+        return *this;
+    }
+
+    inline constexpr BasicString& assign(BasicString&& other)
+    {
+        if (other.is_small()) {
+            m_data = m_inline_buffer;
+            copy(m_data, other.data(), other.count());
+            set_count(other.count());
+        } else {
+            m_data = other.data();
+            m_count = other.count();
+            m_capcaity = other.capacity();
+        }
+
+        // make other an empty string
+        other.m_data = other.m_inline_buffer;
+        other.set_count(0);
+        return *this;
+    }
+
+    inline constexpr BasicString& assign(std::initializer_list<Char> list)
+    {
+        assign(list.begin(), list.count());
+        return *this;
+    }
+
+    inline constexpr SizeType count() const { return m_count; }
+    inline constexpr bool is_empty() const { return count() == 0; }
+    inline constexpr SizeType capacity() { return is_small() ? inline_capacity : m_capcaity; }
+
+    inline constexpr Pointer data() { return m_data; }
+    inline constexpr ConstPointer data() const { return m_data; }
+    inline constexpr ConstPointer cstr() const { return m_data; }
+
+    inline constexpr Reference at(SizeType pos) { return data()[pos]; }
+    inline constexpr ConstReference at(SizeType pos) const { return data()[pos]; }
+
+    inline constexpr Reference operator[](SizeType pos) { return at(pos); }
+    inline constexpr ConstReference operator[](SizeType pos) const { return at(pos); }
 
     inline constexpr void reserve(SizeType new_cap)
     {
@@ -165,6 +258,11 @@ public:
     inline constexpr void prepend(const BasicString& other) {}
 };
 
+using String = BasicString<char>;
+using WString = BasicString<wchar_t>;
+
 }
 
 using YT::BasicString;
+using YT::String;
+using YT::WString;

@@ -93,7 +93,7 @@ template<typename T, typename U> constexpr void swap(T& a, U& b)
     b = move(tmp);
 }
 
-template<typename T> constexpr void copy(T* dest, T* src, size_t count)
+template<typename T> constexpr void copy(T* dest, const T* src, size_t count)
 {
     if constexpr (is_trivial<T>()) {
         __builtin_memcpy(dest, src, count * sizeof(T));
@@ -102,7 +102,7 @@ template<typename T> constexpr void copy(T* dest, T* src, size_t count)
     }
 }
 
-template<typename T> constexpr void move(T* dest, T* src, size_t count)
+template<typename T> constexpr void move(T* dest, const T* src, size_t count)
 {
     if constexpr (is_trivial<T>()) {
         __builtin_memmove(dest, src, count * sizeof(T));
