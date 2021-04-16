@@ -8,15 +8,17 @@
             "name": "Debug",
             "type": "gdb",
             "request": "attach",
-            "target": "192.168.2.31:9000",
+            "target": "localhost:9000",
             "remote": true,
             "cwd": "${workspaceRoot}",
             "gdbpath": "/usr/bin/gdb",
             "autorun": [
                 "symbol-file YeetOS",
                 "directory Kernel",
-                "directory Arch/x86",
-                "directory LibYT"
+                "directory LibYT",
+                "directory Arch/x86/Boot",
+                "directory Arch/x86/Kernel",
+                "directory Arch/x86/LibYT"
             ]
         }
     ]
