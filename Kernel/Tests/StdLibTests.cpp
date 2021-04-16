@@ -30,22 +30,22 @@
 
 namespace Kernel::Tests {
 
-bool test_memcpy_overrun() 
+bool test_memcpy_overrun()
 {
     char magic_byte = 0xaa;
     size_t test_size = 32;
     size_t total_size = test_size * 4;
-    
-    const char* src = "This is a very good memcyp test------------------------------------------------------------------------------------------------";
+
+    const char* src
+        = "This is a very good memcyp "
+          "test------------------------------------------------------------------------------------------------";
     char* mem = new char[total_size];
 
-    for (size_t i = test_size; i < total_size; i++){
-        mem[i] = magic_byte;
-    }
+    for (size_t i = test_size; i < total_size; i++) { mem[i] = magic_byte; }
 
     memcpy(mem, src, test_size);
 
-    for (size_t i = test_size; i < total_size; i++){
+    for (size_t i = test_size; i < total_size; i++) {
         if (mem[i] != magic_byte)
             return false;
     }
@@ -53,28 +53,27 @@ bool test_memcpy_overrun()
     return true;
 }
 
-bool test_memmov_underrun() 
+bool test_memmov_underrun()
 {
     char magic_byte = 0xaa;
     size_t test_size = 32;
     size_t total_size = test_size * 4;
-    
+
     // src < mem according to the linker script
     // so we need to test for a "underrun"
 
-    const char* data = "------------------------------------------------------------------------------------------------This is a very good memmov test";
+    const char* data = "-----------------------------------------------------------------------------------------------"
+                       "-This is a very good memmov test";
     const char* src = data + total_size - test_size;
 
     char* mem = new char[total_size];
     char* dest = mem + total_size - test_size;
 
-    for (size_t i = 0; i < total_size - test_size; i++){
-        mem[i] = magic_byte;
-    }
+    for (size_t i = 0; i < total_size - test_size; i++) { mem[i] = magic_byte; }
 
     memmov(dest, src, test_size);
 
-    for (size_t i = 0; i < total_size - test_size; i++){
+    for (size_t i = 0; i < total_size - test_size; i++) {
         if (mem[i] != magic_byte)
             return false;
     }
@@ -82,22 +81,83 @@ bool test_memmov_underrun()
     return true;
 }
 
-bool test_memset_overrun() 
+bool test_memset_overrun()
 {
     char magic_byte = 0xaa;
     size_t test_size = 32;
     size_t total_size = test_size * 4;
-    
+
     char* mem = new char[total_size];
 
-    for (size_t i = test_size; i < total_size; i++){
-        mem[i] = magic_byte;
-    }
+    for (size_t i = test_size; i < total_size; i++) { mem[i] = magic_byte; }
 
     memset(mem, '-', test_size);
 
-    for (size_t i = test_size; i < total_size; i++){
+    for (size_t i = test_size; i < total_size; i++) {
         if (mem[i] != magic_byte)
+            return false;
+    }
+
+    return true;
+}
+
+bool test_memcpy_content()
+{
+    const char* data = "Here is some string data to test";
+
+    size_t size = strlen(data);
+    char* mem = new char[size];
+
+    memcpy(mem, data, size);
+
+    for (size_t i = 0; i < size; i++) {
+        if (mem[i] != data[i])
+            return false;
+    }
+    return true;
+}
+
+bool test_memmov_content()
+{
+    const char* data = "Here is some string data to test";
+
+    size_t size = strlen(data);
+    char* mem = new char[size];
+
+    memmov(mem, data, size);
+
+    for (size_t i = 0; i < size; i++) {
+        if (mem[i] != data[i])
+            return false;
+    }
+    return true;
+}
+
+bool test_memset_content()
+{
+    size_t size = 32;
+    char* mem = new char[size];
+
+    memset(mem, 'f', size);
+
+    for (size_t i = 0; i < size; i++) {
+        if (mem[i] != 'f')
+            return false;
+    }
+    return true;
+}
+
+bool test_strlen()
+{
+    size_t max_size = 1024;
+    char* data = new char[max_size + 1];
+    memset(data, 'f', max_size);
+
+    for (size_t i = max_size; i <= max_size && i >= 0; i--){
+        data[i] = '\0';
+        size_t len = strlen(data);
+
+        if (len != i)
             return false;
     }
 
@@ -107,5 +167,11 @@ bool test_memset_overrun()
 TEST_FUNCTION(test_memcpy_overrun);
 TEST_FUNCTION(test_memmov_underrun);
 TEST_FUNCTION(test_memset_overrun);
+
+TEST_FUNCTION(test_memcpy_content);
+TEST_FUNCTION(test_memmov_content);
+TEST_FUNCTION(test_memset_content);
+
+TEST_FUNCTION(test_strlen);
 
 }
