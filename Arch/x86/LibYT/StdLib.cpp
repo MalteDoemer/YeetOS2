@@ -33,9 +33,12 @@ extern "C" void* memcpy(void* dest, const void* src, size_t n)
 
 extern "C" void* memmov(void* dest, const void* src, size_t n)
 {
+    if (n == 0) [[unlikely]]
+        return dest;
+
     if (dest > src) {
-        size_t dest_end = reinterpret_cast<size_t>(dest) + n - 1;
-        size_t src_end = reinterpret_cast<size_t>(src) + n - 1;
+        u32 dest_end = reinterpret_cast<u32>(dest) + n - 1;
+        u32 src_end = reinterpret_cast<u32>(src) + n - 1;
 
         asm("std\n\t"
             "rep movsb\n\t"
@@ -51,20 +54,32 @@ extern "C" void* memmov(void* dest, const void* src, size_t n)
     return dest;
 }
 
-extern "C" void memset(void* dest, int c, size_t count) 
+extern "C" void* memset(void* dest, int c, size_t n)
 {
-    size_t value = c & 0xFF;
-    
+    u32 value = c & 0xFF;
+    value |= (value << 8);
+    value |= (value << 16);
 
+    size_t count = n / 4;
+    asm("rep stosl" : : "D"(dest), "a"(value), "c"(count));
 
+    u8* d = static_cast<u8*>(dest);
+    for (size_t i = count % 4; i < count; i++) { d[i] = (u8)c; }
+
+    return dest;
 }
 
-extern "C" int memcmp(const void* p1, const void* p2, size_t n) {}
+// extern "C" int memcmp(const void* p1, const void* p2, size_t n) {}
 
-extern "C" size_t strlen(const char* str) {}
+extern "C" size_t strlen(const char* str)
+{
+    const char* start = str;
+    while (*str) { str++; }
+    return str - start;
+}
 
-extern "C" size_t strnlen(const char* str, size_t maxlen) {}
+// extern "C" size_t strnlen(const char* str, size_t maxlen) {}
 
-extern "C" int strcmp(const char* str1, const char* str2) {}
+// extern "C" int strcmp(const char* str1, const char* str2) {}
 
-extern "C" int strncmp(const char* str1, const char* str2, size_t n) {}
+// extern "C" int strncmp(const char* str1, const char* str2, size_t n) {}
