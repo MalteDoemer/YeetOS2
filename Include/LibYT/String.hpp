@@ -226,6 +226,22 @@ public:
     inline constexpr Iterator end() { return Iterator(data() + count()); }
     inline constexpr ConstIterator end() const { return Iterator(data() + count()); }
 
+    inline constexpr bool operator==(const BasicString& other)
+    {
+        if (count() != other.count())
+            return false;
+
+        return equals(data(), other.data(), count());
+    }
+
+    inline constexpr bool operator==(ConstPointer cstring)
+    {
+        if (count() != cstring_count(cstring))
+            return false;
+
+        return equals(data(), cstring, count());
+    }
+
     inline constexpr void reserve(SizeType new_cap)
     {
         if (new_cap <= capacity())

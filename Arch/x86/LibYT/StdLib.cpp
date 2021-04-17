@@ -24,14 +24,15 @@
  */
 
 #include "Types.hpp"
+extern "C" {
 
-extern "C" void* memcpy(void* dest, const void* src, size_t n)
+void* memcpy(void* dest, const void* src, size_t n)
 {
     asm("rep movsb" : : "S"(src), "D"(dest), "c"(n) : "memory");
     return dest;
 }
 
-extern "C" void* memmov(void* dest, const void* src, size_t n)
+void* memmov(void* dest, const void* src, size_t n)
 {
     if (n == 0) [[unlikely]]
         return dest;
@@ -54,7 +55,7 @@ extern "C" void* memmov(void* dest, const void* src, size_t n)
     return dest;
 }
 
-extern "C" void* memset(void* dest, int c, size_t n)
+void* memset(void* dest, int c, size_t n)
 {
     u32 value = c & 0xFF;
     value |= (value << 8);
@@ -69,17 +70,29 @@ extern "C" void* memset(void* dest, int c, size_t n)
     return dest;
 }
 
-// extern "C" int memcmp(const void* p1, const void* p2, size_t n) {}
+int memcmp(const void* p1, const void* p2, size_t n)
+{
+    const u8* mem1 = static_cast<const u8*>(p1);
+    const u8* mem2 = static_cast<const u8*>(p2);
 
-extern "C" size_t strlen(const char* str)
+    while (n--) {
+        if (*mem1 != *mem2)
+            return *mem1 - *mem2;
+        mem1++, mem2++;
+    }
+    return 0;
+}
+
+size_t strlen(const char* str)
 {
     const char* start = str;
     while (*str) { str++; }
     return str - start;
 }
 
-// extern "C" size_t strnlen(const char* str, size_t maxlen) {}
+// size_t strnlen(const char* str, size_t maxlen) {}
 
-// extern "C" int strcmp(const char* str1, const char* str2) {}
+// int strcmp(const char* str1, const char* str2) {}
 
-// extern "C" int strncmp(const char* str1, const char* str2, size_t n) {}
+// int strncmp(const char* str1, const char* str2, size_t n) {}
+}

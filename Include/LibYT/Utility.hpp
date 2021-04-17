@@ -124,7 +124,7 @@ template<typename T> constexpr void assign(T* dest, const T& value, size_t count
     while (count--) { *dest++ = value; }
 }
 
-template<typename T> constexpr bool compare(T* a, T* b, size_t count)
+template<typename T> constexpr bool equals(const T* a, const T* b, size_t count)
 {
     if constexpr (is_trivial<T>()) {
         return !__builtin_memcmp(a, b, count * sizeof(T));
@@ -143,7 +143,7 @@ template<typename T> constexpr bool compare(T* a, T* b, size_t count)
 using YT::assign;
 using YT::ceil_div;
 using YT::clamp;
-using YT::compare;
+using YT::equals;
 using YT::copy;
 using YT::max;
 using YT::min;
