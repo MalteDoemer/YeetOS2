@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include "Types.hpp"
+
 namespace Kernel::Serial {
 
 void initialize();
@@ -32,5 +34,7 @@ void putchar(char c);
 void print(const char* msg);
 void println();
 void println(const char* msg);
+void print(size_t num);
+void println(size_t num);
 
 }
