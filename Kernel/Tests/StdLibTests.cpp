@@ -30,7 +30,7 @@
 
 namespace Kernel::Tests {
 
-bool test_memcpy_overrun()
+TEST_CASE(memcpy_overrun)
 {
     char magic_byte = 0xaa;
     size_t test_size = 32;
@@ -46,14 +46,13 @@ bool test_memcpy_overrun()
     memcpy(mem, src, test_size);
 
     for (size_t i = test_size; i < total_size; i++) {
-        if (mem[i] != magic_byte)
-            return false;
+        EXPECT_EQU(mem[i], magic_byte);    
     }
 
     return true;
 }
 
-bool test_memmov_underrun()
+TEST_CASE(memmov_underrun)
 {
     char magic_byte = 0xaa;
     size_t test_size = 32;
@@ -74,14 +73,13 @@ bool test_memmov_underrun()
     memmov(dest, src, test_size);
 
     for (size_t i = 0; i < total_size - test_size; i++) {
-        if (mem[i] != magic_byte)
-            return false;
+        EXPECT_EQU(mem[i], magic_byte);
     }
 
     return true;
 }
 
-bool test_memset_overrun()
+TEST_CASE(memset_overrun)
 {
     char magic_byte = 0xaa;
     size_t test_size = 32;
@@ -94,14 +92,14 @@ bool test_memset_overrun()
     memset(mem, '-', test_size);
 
     for (size_t i = test_size; i < total_size; i++) {
-        if (mem[i] != magic_byte)
-            return false;
+        EXPECT_EQU(mem[i], magic_byte);
     }
 
     return true;
 }
 
-bool test_memcpy_content()
+
+TEST_CASE(memcpy_content)
 {
     const char* data = "Here is some string data to test";
 
@@ -111,13 +109,12 @@ bool test_memcpy_content()
     memcpy(mem, data, size);
 
     for (size_t i = 0; i < size; i++) {
-        if (mem[i] != data[i])
-            return false;
+        EXPECT_EQU(mem[i], data[i]);
     }
     return true;
 }
 
-bool test_memmov_content()
+TEST_CASE(memmov_content)
 {
     const char* data = "Here is some string data to test";
 
@@ -127,13 +124,12 @@ bool test_memmov_content()
     memmov(mem, data, size);
 
     for (size_t i = 0; i < size; i++) {
-        if (mem[i] != data[i])
-            return false;
+        EXPECT_EQU(mem[i], data[i]);
     }
     return true;
 }
 
-bool test_memset_content()
+TEST_CASE(memset_content)
 {
     size_t size = 32;
     char* mem = new char[size];
@@ -141,13 +137,12 @@ bool test_memset_content()
     memset(mem, 'f', size);
 
     for (size_t i = 0; i < size; i++) {
-        if (mem[i] != 'f')
-            return false;
+        EXPECT_EQU(mem[i], 'f');
     }
     return true;
 }
 
-bool test_strlen()
+TEST_CASE(strlen_results)
 {
     size_t max_size = 1024;
     char* data = new char[max_size + 1];
@@ -155,23 +150,10 @@ bool test_strlen()
 
     for (size_t i = max_size; i <= max_size && i >= 0; i--){
         data[i] = '\0';
-        size_t len = strlen(data);
-
-        if (len != i)
-            return false;
+        EXPECT_EQU(strlen(data), i);
     }
 
     return true;
 }
-
-TEST_FUNCTION(test_memcpy_overrun);
-TEST_FUNCTION(test_memmov_underrun);
-TEST_FUNCTION(test_memset_overrun);
-
-TEST_FUNCTION(test_memcpy_content);
-TEST_FUNCTION(test_memmov_content);
-TEST_FUNCTION(test_memset_content);
-
-TEST_FUNCTION(test_strlen);
 
 }

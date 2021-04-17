@@ -49,9 +49,9 @@ void run_all_tests()
     const char** test_name = &test_names_start;
 
     do {
-        Serial::print("running ");
+        Serial::print("running test case ");
         Serial::print(*test_name);
-        Serial::print(" ... ");
+        Serial::println(" ...");
 
         if ((*test_func)()) {
             result.num_tests_passed++;

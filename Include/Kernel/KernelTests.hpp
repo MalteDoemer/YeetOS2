@@ -30,11 +30,35 @@
 #include "Platform.hpp"
 #include "Kernel/Kernel.hpp"
 
-#define TEST_FUNCTION(func)                                                                                            \
+#define TEST_CASE(func)                                                                                                \
+    static bool func();                                                                                                \
     SECTION(".kernel_test_funcs")                                                                                      \
     bool (*__##func##_ptr)() = func;                                                                                   \
     SECTION(".kernel_test_names")                                                                                      \
-    const char* __##func##_name = #func;
+    const char* __##func##_name = #func;                                                                               \
+    static bool func()
+
+#define EXPECT(x)                                                                                                      \
+    do {                                                                                                               \
+        if (!x)                                                                                                        \
+            return false                                                                                               \
+    } while (false)
+
+#define EXPECT_EQU(a, b)                                                                                               \
+    do {                                                                                                               \
+        auto lhs = a;                                                                                                  \
+        auto rhs = b;                                                                                                  \
+        if (lhs != rhs)                                                                                                \
+            return false;                                                                                              \
+    } while (false)
+
+#define EXPECT_NOT_EQU(a, b)                                                                                           \
+    do {                                                                                                               \
+        auto lhs = a;                                                                                                  \
+        auto rhs = b;                                                                                                  \
+        if (lhs == rhs)                                                                                                \
+            return false;                                                                                              \
+    } while (false)
 
 namespace Kernel::Tests {
 
@@ -45,7 +69,6 @@ struct TestResult {
 };
 
 void run_all_tests();
-
 }
 
 #endif

@@ -30,7 +30,7 @@
 
 namespace Kernel::Tests {
 
-bool test_kheap_size_after_allocation_and_deallocation()
+TEST_CASE(kheap_size_after_allocation_and_deallocation)
 {
     Heap& kheap = Kheap::get_kheap();
 
@@ -42,22 +42,18 @@ bool test_kheap_size_after_allocation_and_deallocation()
 
         void* data = Kheap::allocate(i);
 
-        if (alloced + i != kheap.m_total_alloced)
-            return false;
-
+        EXPECT_EQU(alloced + i, kheap.m_total_alloced);
+        
         Kheap::deallocate(data);
 
-        if (freed + i != kheap.m_total_freed)
-            return false;
-
-        if (remaining != kheap.m_remaining)
-            return false;
+        EXPECT_EQU(freed + i, kheap.m_total_freed);
+        EXPECT_EQU(remaining, kheap.m_remaining);
     }
 
     return true;
 }
 
-bool test_kheap_coalescing()
+TEST_CASE(kheap_coalescing)
 {
     Heap& kheap = Kheap::get_kheap();
     size_t remaining_before_alloc = kheap.m_remaining;
@@ -79,10 +75,8 @@ bool test_kheap_coalescing()
         Kheap::deallocate(ptrs[i]);
     }
 
-    return remaining_before_alloc == kheap.m_remaining;
+    EXPECT_EQU(remaining_before_alloc, kheap.m_remaining);
+    return true;
 }
 
-TEST_FUNCTION(test_kheap_size_after_allocation_and_deallocation);
-TEST_FUNCTION(test_kheap_coalescing);
-
-};
+}
