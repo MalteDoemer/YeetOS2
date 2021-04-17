@@ -1,8 +1,8 @@
 #/bin/bash
 
 IMAGE=$(realpath disk.img)
-HDD=/dev/loop1
-PART=/dev/loop7
+HDD=/dev/loop0
+PART=/dev/loop1
 MNT=/mnt/vdisk
 KERNEL=YeetOS
 
