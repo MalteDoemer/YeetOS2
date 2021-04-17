@@ -28,7 +28,9 @@
 #ifdef __KERNEL_TESTS__
 
 #include "Platform.hpp"
+
 #include "Kernel/Kernel.hpp"
+#include "Kernel/SerialDebug.hpp"
 
 #define TEST_CASE(func)                                                                                                \
     static bool func();                                                                                                \
@@ -40,32 +42,56 @@
 
 #define EXPECT(x)                                                                                                      \
     do {                                                                                                               \
-        if (!x)                                                                                                        \
-            return false                                                                                               \
+        if (!x) {                                                                                                      \
+            Serial::print(__PRETTY_FUNCTION__);                                                                        \
+            Serial::println(": expect failed: " #x);                                                                   \
+            return false;                                                                                              \
+        }                                                                                                              \
     } while (false)
 
 #define EXPECT_EQU(a, b)                                                                                               \
     do {                                                                                                               \
         auto lhs = a;                                                                                                  \
         auto rhs = b;                                                                                                  \
-        if (lhs != rhs)                                                                                                \
+        if (lhs != rhs) {                                                                                              \
+            Serial::print(__PRETTY_FUNCTION__);                                                                        \
+            Serial::println(": expect equal failed: " #a "was not equal to" #b);                                       \
             return false;                                                                                              \
+        }                                                                                                              \
     } while (false)
 
 #define EXPECT_NOT_EQU(a, b)                                                                                           \
     do {                                                                                                               \
         auto lhs = a;                                                                                                  \
         auto rhs = b;                                                                                                  \
-        if (lhs == rhs)                                                                                                \
+        if (lhs == rhs) {                                                                                              \
+            Serial::print(__PRETTY_FUNCTION__);                                                                        \
+            Serial::println(": expect not equal failed: " #a "was equal to" #b);                                       \
             return false;                                                                                              \
+        }                                                                                                              \
+    } while (false)
+
+#define EXPECT_ALL_EQU(...)                                                                                            \
+    do {                                                                                                               \
+        auto list = { __VA_ARGS__ };                                                                                   \
+        for (size_t j = 0; j < list.count(); j++)                                                                      \
+            for (size_t i = 0; i < list.count(); i++)                                                                  \
+                if (list[i] != list[j]) {                                                                              \
+                    Serial::print(__PRETTY_FUNCTION__);                                                                \
+                    Serial::print(": expect all equal failed: i=");                                                    \
+                    Serial::print(i);                                                                                  \
+                    Serial::print(" j=");                                                                              \
+                    Serial::println(j);                                                                                \
+                    return false;                                                                                      \
+                }                                                                                                      \
     } while (false)
 
 namespace Kernel::Tests {
 
 struct TestResult {
-    Int32 num_tests_run { 0 };
-    Int32 num_tests_passed { 0 };
-    Int32 num_tests_failed { 0 };
+    i32 num_tests_run { 0 };
+    i32 num_tests_passed { 0 };
+    i32 num_tests_failed { 0 };
 };
 
 void run_all_tests();

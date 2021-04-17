@@ -57,6 +57,9 @@ public:
 
     constexpr Iterator end() { return begin() + count(); }
     constexpr ConstIterator end() const { return begin() + count(); }
+
+    constexpr Reference operator[](SizeType index) { return m_iter[index]; }
+    constexpr ConstReference operator[](SizeType index) const { return m_iter[index]; }
 };
 }
 
