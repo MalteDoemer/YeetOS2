@@ -56,13 +56,6 @@ ASM_LINKAGE void kernel_main()
 #ifdef __KERNEL_TESTS__
     Kernel::Tests::run_all_tests();
 #endif
-
-    String s = "This is a very nice string!!!";
-
-    for (auto& c : s) {
-        Serial::putchar(c);
-        Serial::putchar('\n');
-    }
 }
 
 }

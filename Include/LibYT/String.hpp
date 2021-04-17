@@ -251,7 +251,7 @@ public:
         if (count() <= inline_capacity) {
             new_data = m_inline_buffer;
         } else {
-            new_data = Char[count() + 1];
+            new_data = new Char[count() + 1];
             m_capcaity = count();
         }
 
@@ -282,7 +282,7 @@ public:
         set_count(count() + num);
     }
 
-    inline constexpr void append(const BasicString& other) 
+    inline constexpr void append(const BasicString& other)
     {
         reserve(count() + other.count());
         copy(data() + count(), other.data(), other.count());
