@@ -42,7 +42,8 @@
 
 #define EXPECT(x)                                                                                                      \
     do {                                                                                                               \
-        if (!x) {                                                                                                      \
+        auto c = x;                                                                                                    \
+        if (!c) {                                                                                                      \
             Serial::print(__PRETTY_FUNCTION__);                                                                        \
             Serial::println(": expect failed: " #x);                                                                   \
             return false;                                                                                              \
@@ -55,7 +56,7 @@
         auto rhs = b;                                                                                                  \
         if (lhs != rhs) {                                                                                              \
             Serial::print(__PRETTY_FUNCTION__);                                                                        \
-            Serial::println(": expect equal failed: " #a "was not equal to" #b);                                       \
+            Serial::println(": expect equal failed: " #a " was not equal to " #b);                                       \
             return false;                                                                                              \
         }                                                                                                              \
     } while (false)

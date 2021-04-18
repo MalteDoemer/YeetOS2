@@ -77,9 +77,9 @@ void run_all_tests()
     Serial::println();
 
     if (result.num_tests_failed == 0) {
-        Serial::println("all tests passed successfully.");
+        Serial::println("All tests passed successfully.");
     } else {
-        Serial::println("test execution failed.");
+        Serial::println("Test execution failed.");
     }
 
 }
