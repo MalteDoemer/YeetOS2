@@ -4,7 +4,7 @@ StdLib.o \
 Utility.o \
 
 LibYT.a: $(OBJECTS)
-	$(AR) -rcs -o $@ $(OBJECTS)
+	$(AR) -rcs $@ $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<

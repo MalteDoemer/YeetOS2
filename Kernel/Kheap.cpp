@@ -37,7 +37,7 @@ SECTION(".heap_memory")
 static Uint8 eternal_memory[4 * MiB];
 
 static FlatPtr eternal_ptr = (FlatPtr)&eternal_memory;
-static constexpr FlatPtr eternal_end = (FlatPtr)&eternal_memory + sizeof(eternal_memory);
+static FlatPtr eternal_end = (FlatPtr)&eternal_memory + sizeof(eternal_memory);
 
 // default constructor of global_heap should never run
 static Heap global_heap;

@@ -95,7 +95,7 @@ template<typename T, typename U> constexpr void swap(T& a, U& b)
 
 template<typename T> constexpr void copy(T* dest, const T* src, size_t count)
 {
-    if constexpr (is_trivial<T>()) {
+    if constexpr (IsTrivial<T>::value) {
         __builtin_memcpy(dest, src, count * sizeof(T));
     } else {
         while (count--) { new (dest++) T(*src++); }
@@ -104,7 +104,7 @@ template<typename T> constexpr void copy(T* dest, const T* src, size_t count)
 
 template<typename T> constexpr void move(T* dest, const T* src, size_t count)
 {
-    if constexpr (is_trivial<T>()) {
+    if constexpr (IsTrivial<T>::value) {
         __builtin_memmove(dest, src, count * sizeof(T));
     } else {
         if (dest > src) {
@@ -128,7 +128,7 @@ void assign_64(u64* dest, const u64& value, size_t count);
 
 template<typename T> constexpr void assign(T* dest, const T& value, size_t count)
 {
-    if constexpr (is_trivial<T>()) {
+    if constexpr (IsTrivial<T>::value) {
 
         if constexpr (sizeof(T) == 1) {
             Detail::assign_8(reinterpret_cast<u8*>(dest), static_cast<const u8&>(value), count);
@@ -149,7 +149,7 @@ template<typename T> constexpr void assign(T* dest, const T& value, size_t count
 
 template<typename T> constexpr bool equals(const T* a, const T* b, size_t count)
 {
-    if constexpr (is_trivial<T>()) {
+    if constexpr (IsTrivial<T>::value) {
         return !__builtin_memcmp(a, b, count * sizeof(T));
     } else {
         for (size_t i = 0; i < count; i++) {

@@ -313,7 +313,7 @@ private:
         return (block_size - size) >= threshold;
     }
 
-    ALWAYS_INLINE constexpr bool is_heap_ptr(void* ptr)
+    ALWAYS_INLINE bool is_heap_ptr(void* ptr)
     {
         FlatPtr fptr = reinterpret_cast<FlatPtr>(ptr);
         return fptr >= m_start && fptr <= m_end;

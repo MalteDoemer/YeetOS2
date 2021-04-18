@@ -1,3 +1,3 @@
-target remote 192.168.2.31:9000
+target remote localhost:9000
 symbol-file YeetOS
 break kernel_main

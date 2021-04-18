@@ -28,8 +28,9 @@
 
 typedef void (*CtorFunc)();
 
-extern "C" CtorFunc ctors_start;
-extern "C" CtorFunc ctors_end;
+/* these are symbols defined by the linker script not to be confused */
+extern void ctors_start();
+extern void ctors_end();
 
 ASM_LINKAGE bool sse_init();
 
@@ -37,15 +38,21 @@ namespace Kernel::Arch {
 
 void call_ctors()
 {
-    if (&ctors_start == &ctors_end)
-        return;
+    /* Ehhmm clang tried to optimize this comparison further down.
+       Now I need to do this void* stuff in order to prevent it.   */
+    void* addr1 = (void*)ctors_start;
+    void* addr2 = (void*)ctors_start;
 
-    CtorFunc* ctor = &ctors_end;
+    if (addr1 == addr2) {
+        return;
+    }
+
+    CtorFunc* ctor = (CtorFunc*)addr1;
 
     do {
         ctor--;
         (*ctor)();
-    } while (ctor > &ctors_start);
+    } while (ctor > (CtorFunc*)addr2);
 }
 
 void initialize()

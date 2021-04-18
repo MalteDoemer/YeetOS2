@@ -47,7 +47,8 @@ template<class T> struct PaddingHelper<T, 1> {
 
 }
 
-template<class Char> class BasicString {
+template<class Char> requires IsStandardLayout<Char>::value && (!IsArray<Char>::value) && IsTrivial<Char>::value
+class BasicString {
 
 public:
     using ValueType = Char;
@@ -322,6 +323,12 @@ public:
         set_count(0);
     }
 };
+
+template<class Char>
+inline constexpr bool operator==(const Char* lhs, const BasicString<Char> rhs)
+{
+    return rhs == lhs;
+}
 
 using String = BasicString<char>;
 using WString = BasicString<wchar_t>;

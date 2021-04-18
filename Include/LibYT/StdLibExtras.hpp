@@ -323,15 +323,21 @@ template<typename T> struct IsClass : public IntegralConstant<bool, __is_class(T
 template<typename Base, typename Derived> struct IsBaseOf : public IntegralConstant<bool, __is_base_of(Base, Derived)> {
 };
 
-template<typename T> constexpr bool is_trivial()
-{
-    return __is_trivial(T);
-}
+template<typename T> struct IsTrivial {
+    static constexpr bool value = __is_trivial(T);
+};
 
-template<typename T> constexpr bool is_trivially_copyable()
-{
-    return __is_trivially_copyable(T);
-}
+template<typename T> struct IsTriviallyCopyable {
+    static constexpr bool value = __is_trivially_copyable(T);
+};
+
+template<typename T> struct IsStandardLayout {
+    static constexpr bool value = __is_standard_layout(T);
+};
+
+template<typename T> struct IsArray {
+    static constexpr bool value = __is_array(T);
+};
 
 template<typename T> struct __IsIntegral : FalseType {
 };
@@ -420,7 +426,7 @@ namespace Detail::IsConvertible {
 template<typename To> static void convert(To);
 
 template<typename From, typename To>
-auto test(From&&, To &&) -> decltype(convert<To>(declval<From>()), declval<TrueType>());
+auto test(From&&, To&&) -> decltype(convert<To>(declval<From>()), declval<TrueType>());
 auto test(...) -> FalseType;
 
 }
@@ -429,7 +435,7 @@ template<typename From, typename To>
 struct IsConvertible : decltype(Detail::IsConvertible::test(declval<From>(), declval<To>())) {
 };
 
-constexpr bool is_constant_evaluated() 
+constexpr bool is_constant_evaluated()
 {
     return __builtin_is_constant_evaluated();
 }
@@ -446,8 +452,6 @@ using YT::forward;
 using YT::IdentityType;
 using YT::IndexSequence;
 using YT::IntegerSequence;
-using YT::is_trivial;
-using YT::is_trivially_copyable;
 using YT::IsArithmetic;
 using YT::IsBaseOf;
 using YT::IsClass;
@@ -460,6 +464,10 @@ using YT::IsIntegral;
 using YT::IsNullPointer;
 using YT::IsSame;
 using YT::IsSigned;
+using YT::IsStandardLayout;
+using YT::IsTrivial;
+using YT::IsTriviallyCopyable;
+using YT::IsArray;
 using YT::IsUnion;
 using YT::IsUnsigned;
 using YT::IsVoid;

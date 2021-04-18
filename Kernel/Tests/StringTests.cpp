@@ -78,6 +78,11 @@ TEST_CASE(string_data)
     return true;
 }
 
+TEST_CASE(string_capacity)
+{
+    
+}
+
 TEST_CASE(string_construction)
 {
     const char* data = "test test";

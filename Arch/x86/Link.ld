@@ -1,3 +1,5 @@
+ENTRY(schwul)
+
 SECTIONS {
    . = 0x100000;
 

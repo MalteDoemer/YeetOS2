@@ -10,7 +10,7 @@ C_FLAGS := -fno-access-control $(C_FLAGS)
 CXX_FLAGS := -fno-access-control $(CXX_FLAGS)
 
 KernelTests.a: $(OBJECTS)
-	$(AR) -rcs -o $@ $(OBJECTS)
+	$(AR) -rcs $@ $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<

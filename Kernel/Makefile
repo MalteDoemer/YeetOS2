@@ -6,7 +6,7 @@ Panic.o \
 
 
 Kernel.a: $(OBJECTS)
-	$(AR) -rcs -o $@ $(OBJECTS)
+	$(AR) -rcs $@ $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<

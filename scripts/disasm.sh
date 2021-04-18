@@ -1,3 +1,3 @@
 #/bin/bash
 
-i686-elf-objdump -M intel -C -d YeetOS 
+i686-elf-objdump -M intel -C -D YeetOS 

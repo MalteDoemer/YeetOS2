@@ -30,8 +30,6 @@ SUBDIRS := Kernel/Tests $(SUBDIRS)
 endif
 
 
-LD_SCRIPT = Arch/$(ARCH)/Link.ld
-
 # should define $(CC) $(LD) $(AS) $(AR) 
 # and respectively $(C_FLAGS) $(LD_FLAGS) $(AS_FLAGS)
 include Arch/$(ARCH)/make.config
@@ -59,7 +57,7 @@ CXX_FLAGS := $(CXX_FLAGS) $(DEFINES) $(INCDIRS)
 
 
 YeetOS: subdirs
-	$(LD) -T $(LD_SCRIPT) $(LD_FLAGS) --whole-archive $(ARCHIVES) -o $@
+	$(LD) $(LD_FLAGS) $(ARCHIVES) -o $@
 
 subdirs:
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i; done

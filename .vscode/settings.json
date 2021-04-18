@@ -12,7 +12,8 @@
         "sstream": "cpp",
         "streambuf": "cpp",
         "system_error": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "type_traits": "cpp"
     },
 
     "problems.decorations.enabled": false,
