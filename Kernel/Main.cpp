@@ -58,4 +58,11 @@ ASM_LINKAGE void kernel_main()
 #endif
 }
 
+char* test_assign()
+{
+    char* bufferus = new char[1024];
+    assign(bufferus, 'f', 1024);
+    return bufferus;
+}
+
 }

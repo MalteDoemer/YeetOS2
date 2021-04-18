@@ -119,9 +119,32 @@ template<typename T> constexpr void move(T* dest, const T* src, size_t count)
     }
 }
 
+namespace Detail {
+void assign_8(u8* dest, const u8& value, size_t count);
+void assign_16(u16* dest, const u16& value, size_t count);
+void assign_32(u32* dest, const u32& value, size_t count);
+void assign_64(u64* dest, const u64& value, size_t count);
+}
+
 template<typename T> constexpr void assign(T* dest, const T& value, size_t count)
 {
-    while (count--) { *dest++ = value; }
+    if constexpr (is_trivial<T>()) {
+
+        if constexpr (sizeof(T) == 1) {
+            Detail::assign_8(reinterpret_cast<u8*>(dest), static_cast<const u8&>(value), count);
+        } else if constexpr (sizeof(T) == 2) {
+            Detail::assign_16(reinterpret_cast<u16*>(dest), static_cast<const u16&>(value), count);
+        } else if constexpr (sizeof(T) == 4) {
+            Detail::assign_32(reinterpret_cast<u32*>(dest), static_cast<const u32&>(value), count);
+        } else if constexpr (sizeof(T) == 8) {
+            Detail::assign_64(reinterpret_cast<u64*>(dest), static_cast<const u64&>(value), count);
+        } else {
+            while (count--) { *dest++ = value; }
+        }
+
+    } else {
+        while (count--) { *dest++ = value; }
+    }
 }
 
 template<typename T> constexpr bool equals(const T* a, const T* b, size_t count)
@@ -143,8 +166,8 @@ template<typename T> constexpr bool equals(const T* a, const T* b, size_t count)
 using YT::assign;
 using YT::ceil_div;
 using YT::clamp;
-using YT::equals;
 using YT::copy;
+using YT::equals;
 using YT::max;
 using YT::min;
 using YT::move;

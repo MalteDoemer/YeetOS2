@@ -1,6 +1,7 @@
 
 OBJECTS=\
 StdLib.o \
+Utility.o \
 
 LibYT.a: $(OBJECTS)
 	$(AR) -rcs -o $@ $(OBJECTS)

@@ -23,68 +23,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef __KERNEL__
+#include "Types.hpp"
 
-#include "Kernel/Kheap.hpp"
-
-extern "C" {
-
-void* malloc(size_t size)
+namespace YT::Detail {
+void assign_8(u8* dest, const u8& value, size_t count)
 {
-    return Kernel::Kheap::allocate(size);
+    asm("rep stosb" : : "D"(dest), "a"(value), "c"(count));
 }
 
-void* realloc(void* ptr, size_t size)
+void assign_16(u16* dest, const u16& value, size_t count)
 {
-    return Kernel::Kheap::reallocate(ptr, size);
+    asm("rep stosw" : : "D"(dest), "a"(value), "c"(count));
 }
 
-void free(void* ptr)
+void assign_32(u32* dest, const u32& value, size_t count)
 {
-    Kernel::Kheap::deallocate(ptr);
+    asm("rep stosl" : : "D"(dest), "a"(value), "c"(count));
 }
 
-size_t strlen(const char* str)
+void assign_64(u64* dest, const u64& value, size_t count)
 {
-    const char* start = str;
-    while (*str) { str++; }
-    return str - start;
+    while (count--) { *dest++ = value; }
 }
 
-size_t strnlen(const char* str, size_t maxlen)
-{
-    size_t counter = maxlen;
-    while (*str && counter) { counter--, str++; }
-    return maxlen - counter;
 }
-
-int strcmp(const char* str1, const char* str2)
-{
-    for (;; str1++, str2++) {
-        if (*str1 != *str2)
-            break;
-
-        if (*str1 == '\0' || *str2 == '\0')
-            break;
-    }
-
-    return *str1 - *str2;
-}
-
-int strncmp(const char* str1, const char* str2, size_t n)
-{
-    for (; n--; str1++, str2++) {
-        if (*str1 != *str2)
-            return *str1 - *str2;
-
-        if (*str1 == '\0' || *str2 == '\0')
-            return *str1 - *str2;
-    }
-
-    return 0;
-}
-}
-
-#else
-#error "userspace not supported!"
-#endif

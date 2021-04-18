@@ -429,6 +429,11 @@ template<typename From, typename To>
 struct IsConvertible : decltype(Detail::IsConvertible::test(declval<From>(), declval<To>())) {
 };
 
+constexpr bool is_constant_evaluated() 
+{
+    return __builtin_is_constant_evaluated();
+}
+
 }
 
 using YT::AddConst;
