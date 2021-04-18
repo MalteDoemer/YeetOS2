@@ -44,6 +44,40 @@ TEST_CASE(string_default_ctor)
     return true;
 }
 
+TEST_CASE(string_length)
+{
+    const char* data1 = "";
+    const char* data2 = "123";
+    const char* data3 = "123456789101112131415161718192021222324252627282930213134353637383940";
+
+    String str1 = data1;
+    String str2 = data2;
+    String str3 = data3;
+
+    EXPECT_EQU(str1.count(), strlen(data1));
+    EXPECT_EQU(str2.count(), strlen(data2));
+    EXPECT_EQU(str3.count(), strlen(data3));
+
+    return true;
+}
+
+TEST_CASE(string_data)
+{
+    const char* data1 = "";
+    const char* data2 = "123";
+    const char* data3 = "123456789101112131415161718192021222324252627282930213134353637383940";
+
+    String str1 = data1;
+    String str2 = data2;
+    String str3 = data3;
+
+    EXPECT_EQU(strcmp(str1.data(), data1), 0);
+    EXPECT_EQU(strcmp(str2.data(), data2), 0);
+    EXPECT_EQU(strcmp(str3.data(), data3), 0);
+
+    return true;
+}
+
 TEST_CASE(string_construction)
 {
     const char* data = "test test";

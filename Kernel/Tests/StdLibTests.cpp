@@ -45,10 +45,9 @@ TEST_CASE(memcpy_overrun)
 
     memcpy(mem, src, test_size);
 
-    for (size_t i = test_size; i < total_size; i++) {
-        EXPECT_EQU(mem[i], magic_byte);    
-    }
+    for (size_t i = test_size; i < total_size; i++) { EXPECT_EQU(mem[i], magic_byte); }
 
+    delete[] mem;
     return true;
 }
 
@@ -72,10 +71,9 @@ TEST_CASE(memmov_underrun)
 
     memmov(dest, src, test_size);
 
-    for (size_t i = 0; i < total_size - test_size; i++) {
-        EXPECT_EQU(mem[i], magic_byte);
-    }
+    for (size_t i = 0; i < total_size - test_size; i++) { EXPECT_EQU(mem[i], magic_byte); }
 
+    delete[] mem;
     return true;
 }
 
@@ -91,13 +89,11 @@ TEST_CASE(memset_overrun)
 
     memset(mem, '-', test_size);
 
-    for (size_t i = test_size; i < total_size; i++) {
-        EXPECT_EQU(mem[i], magic_byte);
-    }
+    for (size_t i = test_size; i < total_size; i++) { EXPECT_EQU(mem[i], magic_byte); }
 
+    delete[] mem;
     return true;
 }
-
 
 TEST_CASE(memcpy_content)
 {
@@ -108,9 +104,9 @@ TEST_CASE(memcpy_content)
 
     memcpy(mem, data, size);
 
-    for (size_t i = 0; i < size; i++) {
-        EXPECT_EQU(mem[i], data[i]);
-    }
+    for (size_t i = 0; i < size; i++) { EXPECT_EQU(mem[i], data[i]); }
+
+    delete[] mem;
     return true;
 }
 
@@ -123,9 +119,9 @@ TEST_CASE(memmov_content)
 
     memmov(mem, data, size);
 
-    for (size_t i = 0; i < size; i++) {
-        EXPECT_EQU(mem[i], data[i]);
-    }
+    for (size_t i = 0; i < size; i++) { EXPECT_EQU(mem[i], data[i]); }
+
+    delete[] mem;
     return true;
 }
 
@@ -136,9 +132,9 @@ TEST_CASE(memset_content)
 
     memset(mem, 'f', size);
 
-    for (size_t i = 0; i < size; i++) {
-        EXPECT_EQU(mem[i], 'f');
-    }
+    for (size_t i = 0; i < size; i++) { EXPECT_EQU(mem[i], 'f'); }
+
+    delete[] mem;
     return true;
 }
 
@@ -148,10 +144,65 @@ TEST_CASE(strlen_results)
     char* data = new char[max_size + 1];
     memset(data, 'f', max_size);
 
-    for (size_t i = max_size; i <= max_size && i >= 0; i--){
+    for (size_t i = max_size; i <= max_size && i >= 0; i--) {
         data[i] = '\0';
         EXPECT_EQU(strlen(data), i);
     }
+
+    delete[] data;
+    return true;
+}
+
+TEST_CASE(strnlen_resulsts)
+{
+    size_t max_size = 1024;
+    char* data = new char[max_size + 1];
+    memset(data, 'f', max_size);
+
+    for (size_t i = max_size; i <= max_size && i >= 0; i--) {
+        data[i] = '\0';
+        EXPECT_EQU(strnlen(data, max_size), i);
+
+        if (i > 0)
+            EXPECT_EQU(strnlen(data, i - 1), i - 1);
+    }
+
+    delete[] data;
+    return true;
+}
+
+TEST_CASE(strcmp_results)
+{
+    const char* str1 = "haha";
+    const char* str2 = "aha";
+    const char* str3 = "hehe";
+    const char* str4 = "hahahahaha";
+
+    EXPECT(strcmp(str1, str2) > 0);
+    EXPECT(strcmp(str2, str3) < 0);
+    EXPECT(strcmp(str1, str4) < 0);
+    EXPECT_EQU(strcmp("", ""), 0);
+    EXPECT_EQU(strcmp(str2, "aha"), 0);
+    EXPECT_EQU(strcmp(str4, str4), 0);
+
+    return true;
+}
+
+TEST_CASE(strncmp_results)
+{
+
+    const char droids[7][6] = { "R2-D2", "C3-PO", "R2-A6", "R3-S6", "R2-KT", "R7-A6", "R2-A3" };
+
+    size_t r2_count = 0;
+    for (size_t i = 0; i < 7; i++) {
+        if (strncmp(droids[i], "R2-XX", 3) == 0)
+            r2_count++;
+    }
+
+    EXPECT_EQU(r2_count, 4ul);
+
+    EXPECT_EQU(strncmp("lol", "lololol", 3), 0);
+    EXPECT(strncmp("heyy", "heyhey", 4) > 0);
 
     return true;
 }
