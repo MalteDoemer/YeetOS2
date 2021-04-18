@@ -4,6 +4,15 @@
         "*.config": "makefile",
         "*.h": "c",
         "*.asm": "nasm",
+        "*.Z80": "asm-collection",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "sstream": "cpp",
+        "streambuf": "cpp",
+        "system_error": "cpp",
+        "array": "cpp"
     },
 
     "problems.decorations.enabled": false,
