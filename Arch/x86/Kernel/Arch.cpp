@@ -40,19 +40,19 @@ void call_ctors()
 {
     /* Ehhmm clang tried to optimize this comparison further down.
        Now I need to do this void* stuff in order to prevent it.   */
-    void* addr1 = (void*)ctors_start;
-    void* addr2 = (void*)ctors_start;
+    void* start = (void*)ctors_start;
+    void* end = (void*)ctors_end;
 
-    if (addr1 == addr2) {
+    if (start == end) {
         return;
     }
 
-    CtorFunc* ctor = (CtorFunc*)addr1;
+    CtorFunc* ctor = (CtorFunc*)end;
 
     do {
         ctor--;
         (*ctor)();
-    } while (ctor > (CtorFunc*)addr2);
+    } while (ctor > (CtorFunc*)start);
 }
 
 void initialize()

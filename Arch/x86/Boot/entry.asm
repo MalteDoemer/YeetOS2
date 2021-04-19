@@ -4,7 +4,7 @@ extern _code
 extern _bss_start
 extern _bss_end
 
-global schwul
+global start
 
 section .mboot
 
@@ -30,7 +30,7 @@ mboot_header:
     dd _code
     dd _bss_start
     dd _bss_end
-    dd schwul
+    dd start
 
 align 4*1024,db 0xFF
 
@@ -41,7 +41,7 @@ boot_page_dir:
     dd 0x00400083
     times (1024 - (KERNEL_BASE >> 22) - 2) dd 0
 
-schwul:
+start:
     cli
     cld
 
@@ -74,6 +74,9 @@ global do_it
 do_it:
     push ebp
     mov ebp, esp
+
+    mov eax, [ebp + 8]
+    mov dword [eax], 36
 
     mov esp, ebp
     pop ebp

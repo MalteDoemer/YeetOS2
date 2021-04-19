@@ -1,4 +1,4 @@
-ENTRY(schwul)
+ENTRY(start)
 
 SECTIONS {
    . = 0x100000;
@@ -16,7 +16,8 @@ SECTIONS {
    .rodata : AT(ADDR(.rodata) - 0xC0000000) {
       . = ALIGN(8);
       ctors_start = .;
-      *(EXCLUDE_FILE(*Kheap.o).ctors)
+      *(.init_array)
+      *(.ctors)
       ctors_end = .;
 
       *(.rodata*)
