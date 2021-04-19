@@ -1,8 +1,8 @@
 bits 32
 
-extern _code
-extern _bss_start
-extern _bss_end
+extern load_start
+extern load_end
+extern bss_end
 
 global start
 
@@ -11,8 +11,9 @@ section .mboot
 ; Multiboot stuff
 MBOOT_PAGE_ALIGN	equ 1
 MBOOT_MEM_INFO		equ 2
+MBOOT_USE_ADDRS     equ 1 << 16
 MBOOT_HEADER_MAGIC	equ 0x1BADB002
-MBOOT_HEADER_FLAGS	equ MBOOT_PAGE_ALIGN | MBOOT_MEM_INFO
+MBOOT_HEADER_FLAGS	equ MBOOT_PAGE_ALIGN | MBOOT_MEM_INFO | MBOOT_USE_ADDRS
 MBOOT_CHECKSUM		equ -(MBOOT_HEADER_MAGIC + MBOOT_HEADER_FLAGS)
 
 ; The virtual address of the kernel
@@ -27,9 +28,9 @@ mboot_header:
     dd MBOOT_CHECKSUM
 
     dd mboot_header
-    dd _code
-    dd _bss_start
-    dd _bss_end
+    dd load_start
+    dd load_end
+    dd bss_end
     dd start
 
 align 4*1024,db 0xFF
@@ -116,6 +117,3 @@ section .bss
 kernel_stack:
 resb 1024 * 4
 kernel_stack_top:
-
-global lol
-lol: resb 4

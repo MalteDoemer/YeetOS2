@@ -46,7 +46,6 @@ struct GlobalTest {
     GlobalTest() {  do_it(&i); }
 };
 
-GlobalTest global;
 
 
 ASM_LINKAGE void kernel_main()
@@ -61,8 +60,6 @@ ASM_LINKAGE void kernel_main()
     Serial::println("| Welcome to the debug spam output! |");
     Serial::println("+-----------------------------------+");
     Serial::println();
-
-    Serial::println(i);
 
 #ifdef __KERNEL_TESTS__
     Kernel::Tests::run_all_tests();

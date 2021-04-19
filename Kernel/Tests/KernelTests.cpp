@@ -35,7 +35,7 @@ struct Test {
 
 static constexpr size_t test_max = 1024;
 
-static size_t test_num = 0;
+static size_t test_num;
 static Test tests[test_max];
 
 void add_test_case(TestFunc func, const char* name)

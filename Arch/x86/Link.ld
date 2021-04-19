@@ -4,34 +4,32 @@ SECTIONS {
    . = 0x100000;
 
    .mboot : {
+      load_start = .;
       *(.mboot)
    }
    . += 0xC0000000;
 
    .text : AT(ADDR(.text) - 0xC0000000) {
-      _code = . - 0xC0000000;
       *(.text*)
    }
 
-   .rodata : AT(ADDR(.rodata) - 0xC0000000) {
-      . = ALIGN(8);
+   .rodata ALIGN(4K) : AT(ADDR(.rodata) - 0xC0000000) {
       ctors_start = .;
       *(.init_array)
       *(.ctors)
       ctors_end = .;
-
       *(.rodata*)
    }
 
    .data ALIGN (4K) : AT(ADDR(.data) - 0xC0000000) {
-      *(.data)
+      *(.data*)
+      load_end = . - 0xC0000000;
    }
 
    .bss ALIGN (4K) (NOLOAD) : AT(ADDR(.bss) - 0xC0000000) {
-      _bss_start = . - 0xC0000000;
       *(COMMON)
       *(.bss*)
-      _bss_end = . - 0xC0000000;
+      bss_end = . - 0xC0000000;
    }
 
    .heap_memory ALIGN (4M) (NOLOAD) : AT(ADDR(.heap_memory) - 0xC0000000) {
