@@ -29,8 +29,8 @@
 typedef void (*CtorFunc)();
 
 /* these are symbols defined by the linker script not to be confused */
-extern void ctors_start();
-extern void ctors_end();
+extern "C" void ctors_start();
+extern "C" void ctors_end();
 
 ASM_LINKAGE bool sse_init();
 

@@ -1,3 +1,3 @@
 #/bin/bash
 
-i686-elf-objdump -M intel -C -D YeetOS 
+llvm-objdump --disassemble --arch-name=x86 --x86-asm-syntax=intel --symbolize-operands --print-imm-hex --demangle YeetOS
