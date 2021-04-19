@@ -27,6 +27,7 @@
 #include "String.hpp"
 #include "StdLib.hpp"
 #include "StdLibExtras.hpp"
+#include "InitializerList.hpp"
 
 #include "Kernel/KernelTests.hpp"
 
@@ -80,7 +81,7 @@ TEST_CASE(string_data)
 
 TEST_CASE(string_capacity)
 {
-    
+    return true;
 }
 
 TEST_CASE(string_construction)

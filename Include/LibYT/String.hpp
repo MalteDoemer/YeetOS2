@@ -227,7 +227,7 @@ public:
     inline constexpr Iterator end() { return Iterator(data() + count()); }
     inline constexpr ConstIterator end() const { return Iterator(data() + count()); }
 
-    inline constexpr bool operator==(const BasicString& other)
+    inline constexpr bool operator==(const BasicString& other) const
     {
         if (count() != other.count())
             return false;
