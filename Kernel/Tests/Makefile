@@ -9,10 +9,10 @@ StringTests.o \
 C_FLAGS := -fno-access-control $(C_FLAGS)
 CXX_FLAGS := -fno-access-control $(CXX_FLAGS)
 
-# KernelTests.a: $(OBJECTS)
-# 	$(LD) -r -o $@ $(OBJECTS)
+KernelTests.a: $(OBJECTS)
+	$(AR) -r $@ $(OBJECTS)
 
-all: $(OBJECTS)
+# all: $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<

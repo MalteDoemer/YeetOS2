@@ -27,15 +27,13 @@
 
 #ifdef __KERNEL_TESTS__
 
-#include "Platform.hpp"
-
 #include "Kernel/Kernel.hpp"
 #include "Kernel/SerialDebug.hpp"
 
 #define TEST_CASE(func)                                                                                                \
-    static bool func() __attribute__((used));                                                                          \
-    __attribute__((section(".kernel_test_funcs"), used)) bool (*__##func##_ptr)() = func;                              \
-    __attribute__((section(".kernel_test_funcs"), used)) const char* __##func##_name = #func;                          \
+    static bool func() __attribute__((used, optnone)); /* FIXME: don't use optnone here */                             \
+    static void __##func##_init() __attribute__((constructor, used));                                                  \
+    static void __##func##_init() { Kernel::Tests::add_test_case(func, #func); }                                       \
     static bool func()
 
 #define EXPECT(x)                                                                                                      \
@@ -87,13 +85,17 @@
 
 namespace Kernel::Tests {
 
+typedef bool (*TestFunc)();
+
 struct TestResult {
     i32 num_tests_run { 0 };
     i32 num_tests_passed { 0 };
     i32 num_tests_failed { 0 };
 };
 
+void add_test_case(TestFunc func, const char* name);
 void run_all_tests();
+
 }
 
 #endif

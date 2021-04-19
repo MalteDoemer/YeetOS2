@@ -28,37 +28,36 @@
 
 namespace Kernel::Tests {
 
-typedef bool (*TestFunc)();
+struct Test {
+    TestFunc func;
+    const char* name;
+};
 
-/* These are all symbols defined by the linker script */
-extern "C" void num_test_funcs();
+static constexpr size_t test_max = 1024;
 
-extern "C" TestFunc test_funcs_start;
-extern "C" TestFunc test_funcs_end;
+static size_t test_num = 0;
+static Test tests[test_max];
 
-extern "C" const char* test_names_start;
-extern "C" const char* test_names_end;
+void add_test_case(TestFunc func, const char* name)
+{
+    if (test_num >= test_max)
+        return;
+
+    tests[test_num].func = func;
+    tests[test_num].name = name;
+    test_num++;
+}
 
 void run_all_tests()
 {
     TestResult result;
 
-    /* num_tests must be volatile, because clang tries to optimize it away */
-    volatile size_t num_tests = (volatile size_t)num_test_funcs;
-    if (num_tests == 0) {
-        Serial::println("[Kernel Tests]: Warning: no test available!");
-        return;
-    }
-
-    TestFunc* test_func = &test_funcs_start;
-    const char** test_name = &test_names_start;
-
-    do {
+    for (size_t i = 0; i < test_num; i++) {
         Serial::print("running test case ");
-        Serial::print(*test_name);
+        Serial::print(tests[i].name);
         Serial::println(" ...");
 
-        if ((*test_func)()) {
+        if (tests[i].func()) {
             result.num_tests_passed++;
             Serial::println("passed");
         } else {
@@ -68,10 +67,7 @@ void run_all_tests()
 
         Serial::println();
         result.num_tests_run++;
-
-        test_func++;
-        test_name++;
-    } while (test_func < &test_funcs_end);
+    }
 
     Serial::print("total tests: ");
     Serial::println(result.num_tests_run);

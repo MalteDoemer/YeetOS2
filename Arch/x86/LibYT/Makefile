@@ -3,10 +3,10 @@ OBJECTS=\
 StdLib.o \
 Utility.o \
 
-# LibYT.a: $(OBJECTS)
-# 	$(LD) -r -o $@ $(OBJECTS)
+LibYT.a: $(OBJECTS)
+	$(AR) -r $@ $(OBJECTS)
 
-all: $(OBJECTS)
+# all: $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<

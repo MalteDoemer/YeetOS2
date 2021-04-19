@@ -8,13 +8,13 @@ ARCH=x86
 TOPDIR	:= $(abspath .)
 MAKE=make --no-print-directory
 
-# ARCHIVES:=\
-# Kernel/Kernel.a \
-# LibYT/LibYT.a \
-# Arch/$(ARCH)/Kernel/Kernel.a \
-# Arch/$(ARCH)/Boot/Boot.a \
-# Arch/$(ARCH)/LibYT/LibYT.a \
-# $(ARCHIVES)
+ARCHIVES:=\
+Kernel/Kernel.a \
+LibYT/LibYT.a \
+Arch/$(ARCH)/Kernel/Kernel.a \
+Arch/$(ARCH)/Boot/Boot.a \
+Arch/$(ARCH)/LibYT/LibYT.a \
+$(ARCHIVES)
 
 SUBDIRS:=\
 Kernel \
@@ -57,7 +57,7 @@ CXX_FLAGS := $(CXX_FLAGS) $(DEFINES) $(INCDIRS)
 
 
 YeetOS: subdirs
-	$(LD) $(LD_FLAGS) $(shell find . -name "*.o") -o $@
+	$(LD) $(LD_FLAGS) $(ARCHIVES) -o $@
 
 subdirs:
 	set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i; done

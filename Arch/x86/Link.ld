@@ -19,16 +19,6 @@ SECTIONS {
       *(EXCLUDE_FILE(*Kheap.o).ctors)
       ctors_end = .;
 
-      test_funcs_start = .;
-      *(.kernel_test_funcs)
-      test_funcs_end = .;
-
-      num_test_funcs = (test_funcs_end - test_funcs_start) / 4;
-
-      test_names_start = .;
-      *(.kernel_test_names)
-      test_names_end = .;
-
       *(.rodata*)
    }
 
