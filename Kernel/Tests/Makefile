@@ -1,6 +1,7 @@
 
 OBJECTS=\
 KernelTests.o \
+GerneralTests.o \
 KheapTests.o \
 StdLibTests.o \
 StringTests.o \
