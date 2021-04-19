@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include "Types.hpp"
+
 /* We need to use std here because the compiler needs it */
 namespace std {
 
@@ -32,8 +34,8 @@ namespace std {
 template<class T> class initializer_list {
 public:
     using ValueType = T;
-    using SizeType = __SIZE_TYPE__;
-    using DifferenceType = __PTRDIFF_TYPE__;
+    using SizeType = size_t;
+    using DifferenceType = ptrdiff_t;
     using Reference = T&;
     using ConstReference = const T&;
     using Pointer = T*;
@@ -42,24 +44,20 @@ public:
     using ConstIterator = const T*;
 
 private:
-    Iterator m_iter;
+    ConstPointer m_data;
     SizeType m_size;
 
-    constexpr initializer_list(ConstIterator __iter, SizeType __size) : m_iter(__iter), m_size(__size) {}
 
 public:
-    constexpr initializer_list() : m_iter(0), m_size(0) {}
+    constexpr initializer_list(ConstPointer data, SizeType size) : m_data(data), m_size(size) {}
+    constexpr initializer_list() : m_data(nullptr), m_size(0) {}
 
     constexpr SizeType count() const { return m_size; }
 
-    constexpr Iterator begin() { return m_iter; }
-    constexpr ConstIterator begin() const { return m_iter; }
-
-    constexpr Iterator end() { return begin() + count(); }
+    constexpr ConstPointer data() const { return m_data; }
+    constexpr ConstIterator begin() const { return m_data; }
     constexpr ConstIterator end() const { return begin() + count(); }
-
-    constexpr Reference operator[](SizeType index) { return m_iter[index]; }
-    constexpr ConstReference operator[](SizeType index) const { return m_iter[index]; }
+    constexpr ConstReference operator[](SizeType index) const { return m_data[index]; }
 };
 }
 
