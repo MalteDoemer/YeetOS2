@@ -71,6 +71,19 @@ int strcmp(const char* str1, const char* str2)
     return *str1 - *str2;
 }
 
+int memcmp(const void* p1, const void* p2, size_t n)
+{
+    const u8* mem1 = static_cast<const u8*>(p1);
+    const u8* mem2 = static_cast<const u8*>(p2);
+
+    while (n--) {
+        if (*mem1 != *mem2)
+            return *mem1 - *mem2;
+        mem1++, mem2++;
+    }
+    return 0;
+}
+
 int strncmp(const char* str1, const char* str2, size_t n)
 {
     for (; n--; str1++, str2++) {
