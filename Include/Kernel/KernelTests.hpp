@@ -33,11 +33,9 @@
 #include "Kernel/SerialDebug.hpp"
 
 #define TEST_CASE(func)                                                                                                \
-    static bool func();                                                                                                \
-    SECTION(".kernel_test_funcs")                                                                                      \
-    bool (*__##func##_ptr)() = func;                                                                                   \
-    SECTION(".kernel_test_names")                                                                                      \
-    const char* __##func##_name = #func;                                                                               \
+    static bool func() __attribute__((used));                                                                          \
+    __attribute__((section(".kernel_test_funcs"), used)) bool (*__##func##_ptr)() = func;                              \
+    __attribute__((section(".kernel_test_funcs"), used)) const char* __##func##_name = #func;                          \
     static bool func()
 
 #define EXPECT(x)                                                                                                      \
@@ -56,7 +54,7 @@
         auto rhs = b;                                                                                                  \
         if (lhs != rhs) {                                                                                              \
             Serial::print(__PRETTY_FUNCTION__);                                                                        \
-            Serial::println(": expect equal failed: " #a " was not equal to " #b);                                       \
+            Serial::println(": expect equal failed: " #a " was not equal to " #b);                                     \
             return false;                                                                                              \
         }                                                                                                              \
     } while (false)

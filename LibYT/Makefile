@@ -3,8 +3,10 @@ OBJECTS=\
 Verify.o \
 StdLib.o \
 
-LibYT.a: $(OBJECTS)
-	$(AR) -rcs $@ $(OBJECTS)
+# LibYT.a: $(OBJECTS)
+# 	$(LD) -r -o $@ $(OBJECTS)
+
+all: $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<

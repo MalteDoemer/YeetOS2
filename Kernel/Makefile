@@ -5,8 +5,10 @@ Kheap.o \
 Panic.o \
 
 
-Kernel.a: $(OBJECTS)
-	$(AR) -rcs $@ $(OBJECTS)
+# Kernel.a: $(OBJECTS)
+# 	$(LD) -r -o $@ $(OBJECTS)
+
+all: $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<

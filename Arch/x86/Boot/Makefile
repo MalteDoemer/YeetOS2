@@ -2,8 +2,10 @@
 OBJECTS=\
 entry.o \
 
-Boot.a: $(OBJECTS)
-	$(AR) -rcs $@ $(OBJECTS)
+# Boot.a: $(OBJECTS)
+# 	$(LD) -r -o $@ $(OBJECTS)
+
+all: $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<

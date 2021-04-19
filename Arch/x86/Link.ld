@@ -10,7 +10,7 @@ SECTIONS {
 
    .text : AT(ADDR(.text) - 0xC0000000) {
       _code = . - 0xC0000000;
-      *(.text)
+      *(.text*)
    }
 
    .rodata : AT(ADDR(.rodata) - 0xC0000000) {
@@ -22,6 +22,8 @@ SECTIONS {
       test_funcs_start = .;
       *(.kernel_test_funcs)
       test_funcs_end = .;
+
+      num_test_funcs = (test_funcs_end - test_funcs_start) / 4;
 
       test_names_start = .;
       *(.kernel_test_names)
@@ -37,7 +39,7 @@ SECTIONS {
    .bss ALIGN (4K) (NOLOAD) : AT(ADDR(.bss) - 0xC0000000) {
       _bss_start = . - 0xC0000000;
       *(COMMON)
-      *(.bss)
+      *(.bss*)
       _bss_end = . - 0xC0000000;
    }
 

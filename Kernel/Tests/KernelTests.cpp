@@ -30,6 +30,9 @@ namespace Kernel::Tests {
 
 typedef bool (*TestFunc)();
 
+/* These are all symbols defined by the linker script */
+extern "C" void num_test_funcs();
+
 extern "C" TestFunc test_funcs_start;
 extern "C" TestFunc test_funcs_end;
 
@@ -40,7 +43,9 @@ void run_all_tests()
 {
     TestResult result;
 
-    if (&test_funcs_start == &test_funcs_end) {
+    /* num_tests must be volatile, because clang tries to optimize it away */
+    volatile size_t num_tests = (volatile size_t)num_test_funcs;
+    if (num_tests == 0) {
         Serial::println("[Kernel Tests]: Warning: no test available!");
         return;
     }
@@ -68,7 +73,7 @@ void run_all_tests()
         test_name++;
     } while (test_func < &test_funcs_end);
 
-    Serial::print("total tests: "); 
+    Serial::print("total tests: ");
     Serial::println(result.num_tests_run);
     Serial::print("passed: ");
     Serial::println(result.num_tests_passed);
@@ -81,7 +86,6 @@ void run_all_tests()
     } else {
         Serial::println("Test execution failed.");
     }
-
 }
 
 }

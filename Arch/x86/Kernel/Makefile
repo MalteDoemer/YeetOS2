@@ -5,8 +5,10 @@ CPU.o \
 misc.o \
 SerialDebug.o \
 
-Kernel.a: $(OBJECTS)
-	$(AR) -rcs $@ $(OBJECTS)
+# Kernel.a: $(OBJECTS)
+# 	$(LD) -r -o $@ $(OBJECTS)
+
+all: $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(C_FLAGS) -MMD -c -o $@ $<

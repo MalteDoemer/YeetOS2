@@ -109,6 +109,10 @@ init:
 
 section .bss
 
+
 kernel_stack:
 resb 1024 * 4
 kernel_stack_top:
+
+global lol
+lol: resb 4
