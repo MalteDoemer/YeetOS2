@@ -74,16 +74,17 @@ void putchar(char c)
 
 void print(const char* msg)
 {
-    for (; *msg; msg++) { putchar(*msg); }
+    for (; *msg; msg++) {
+        putchar(*msg);
+    }
 }
 
 void print(size_t num)
 {
-    if (num == 0){
+    if (num == 0) {
         putchar('0');
         return;
     }
-    
 
     char buffer[20];
     size_t count = 0;
@@ -94,7 +95,9 @@ void print(size_t num)
         count++;
     }
 
-    while (count--) { putchar(buffer[count]); }
+    while (count--) {
+        putchar(buffer[count]);
+    }
 }
 
 void println(size_t num)
@@ -110,7 +113,9 @@ void println()
 
 void println(const char* msg)
 {
-    for (; *msg; msg++) { putchar(*msg); }
+    for (; *msg; msg++) {
+        putchar(*msg);
+    }
     putchar('\n');
 }
 

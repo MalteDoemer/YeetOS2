@@ -30,13 +30,17 @@
 
 namespace YT {
 
-template<class T> concept ArithmeticType = IsArithmetic<T>::value;
+template<class T>
+concept ArithmeticType = IsArithmetic<T>::value;
 
-template<class T> concept ConstType = IsConst<T>::value;
+template<class T>
+concept ConstType = IsConst<T>::value;
 
-template<class T> concept EnumType = IsEnum<T>::value;
+template<class T>
+concept EnumType = IsEnum<T>::value;
 
-template<class T> concept FloatingPointType = IsFloatingPoint<T>::value;
+template<class T>
+concept FloatingPointType = IsFloatingPoint<T>::value;
 template<class T>
 
 concept FundamentalType = IsFundamental<T>::value;
@@ -53,50 +57,31 @@ template<class T>
 
 concept UnionType = IsUnion<T>::value;
 
-template<class T> concept UnsigendType = IsUnsigned<T>::value;
+template<class T>
+concept UnsigendType = IsUnsigned<T>::value;
 
-template<class T, class U> concept SameAs = IsSame<T, U>::value;
+template<class T, class U>
+concept SameAs = IsSame<T, U>::value;
 
-template<class From, class To> concept ConvertibleTo = IsConvertible<From, To>::value;
+template<class From, class To>
+concept ConvertibleTo = IsConvertible<From, To>::value;
 
-template<class T> concept EqualityCompareable = requires(T a, T b)
+template<class T>
+concept EqualityCompareable = requires(T a, T b)
 {
-    {
-        a == b
-    }
-    ->ConvertibleTo<bool>;
-    {
-        a != b
-    }
-    ->ConvertibleTo<bool>;
+    { a == b } -> ConvertibleTo<bool>;
+    { a != b } -> ConvertibleTo<bool>;
 };
 
-template<class T> concept Compareable = requires(T a, T b)
+template<class T>
+concept Compareable = requires(T a, T b)
 {
-    {
-        a == b
-    }
-    ->ConvertibleTo<bool>;
-    {
-        a != b
-    }
-    ->ConvertibleTo<bool>;
-    {
-        a <= b
-    }
-    ->ConvertibleTo<bool>;
-    {
-        a >= b
-    }
-    ->ConvertibleTo<bool>;
-    {
-        a < b
-    }
-    ->ConvertibleTo<bool>;
-    {
-        a > b
-    }
-    ->ConvertibleTo<bool>;
+    { a == b } -> ConvertibleTo<bool>;
+    { a != b } -> ConvertibleTo<bool>;
+    { a <= b } -> ConvertibleTo<bool>;
+    { a >= b } -> ConvertibleTo<bool>;
+    { a < b } -> ConvertibleTo<bool>;
+    { a > b } -> ConvertibleTo<bool>;
 };
 
 }

@@ -43,7 +43,9 @@ void assign_32(u32* dest, const u32& value, size_t count)
 
 void assign_64(u64* dest, const u64& value, size_t count)
 {
-    while (count--) { *dest++ = value; }
+    while (count--) {
+        *dest++ = value;
+    }
 }
 
 }

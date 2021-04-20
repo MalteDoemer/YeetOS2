@@ -47,14 +47,18 @@ void free(void* ptr)
 size_t strlen(const char* str)
 {
     const char* start = str;
-    while (*str) { str++; }
+    while (*str) {
+        str++;
+    }
     return str - start;
 }
 
 size_t strnlen(const char* str, size_t maxlen)
 {
     size_t counter = maxlen;
-    while (*str && counter) { counter--, str++; }
+    while (*str && counter) {
+        counter--, str++;
+    }
     return maxlen - counter;
 }
 

@@ -23,6 +23,6 @@ BraceWrapping:
 
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortBlocksOnASingleLine: Empty
-AllowShortLoopsOnASingleLine: true
+AllowShortLoopsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Inline
 

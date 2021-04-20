@@ -47,8 +47,8 @@ template<class T> struct PaddingHelper<T, 1> {
 
 }
 
-template<class Char> requires IsStandardLayout<Char>::value && (!IsArray<Char>::value) && IsTrivial<Char>::value
-class BasicString {
+template<class Char>
+requires IsStandardLayout<Char>::value &&(!IsArray<Char>::value) && IsTrivial<Char>::value class BasicString {
 
 public:
     using ValueType = Char;
@@ -75,7 +75,9 @@ private:
     static inline constexpr SizeType cstring_count(ConstPointer cstring)
     {
         ConstPointer start = cstring;
-        while (*cstring != Char()) { cstring++; }
+        while (*cstring != Char()) {
+            cstring++;
+        }
         return cstring - start;
     }
 

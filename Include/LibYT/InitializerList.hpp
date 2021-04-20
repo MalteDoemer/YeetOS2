@@ -47,7 +47,6 @@ private:
     ConstPointer m_data;
     SizeType m_size;
 
-
 public:
     constexpr initializer_list(ConstPointer data, SizeType size) : m_data(data), m_size(size) {}
     constexpr initializer_list() : m_data(nullptr), m_size(0) {}

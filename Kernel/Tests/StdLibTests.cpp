@@ -41,11 +41,15 @@ TEST_CASE(memcpy_overrun)
           "test------------------------------------------------------------------------------------------------";
     char* mem = new char[total_size];
 
-    for (size_t i = test_size; i < total_size; i++) { mem[i] = magic_byte; }
+    for (size_t i = test_size; i < total_size; i++) {
+        mem[i] = magic_byte;
+    }
 
     memcpy(mem, src, test_size);
 
-    for (size_t i = test_size; i < total_size; i++) { EXPECT_EQU(mem[i], magic_byte); }
+    for (size_t i = test_size; i < total_size; i++) {
+        EXPECT_EQU(mem[i], magic_byte);
+    }
 
     delete[] mem;
     return true;
@@ -67,11 +71,15 @@ TEST_CASE(memmov_underrun)
     char* mem = new char[total_size];
     char* dest = mem + total_size - test_size;
 
-    for (size_t i = 0; i < total_size - test_size; i++) { mem[i] = magic_byte; }
+    for (size_t i = 0; i < total_size - test_size; i++) {
+        mem[i] = magic_byte;
+    }
 
     memmov(dest, src, test_size);
 
-    for (size_t i = 0; i < total_size - test_size; i++) { EXPECT_EQU(mem[i], magic_byte); }
+    for (size_t i = 0; i < total_size - test_size; i++) {
+        EXPECT_EQU(mem[i], magic_byte);
+    }
 
     delete[] mem;
     return true;
@@ -85,11 +93,15 @@ TEST_CASE(memset_overrun)
 
     char* mem = new char[total_size];
 
-    for (size_t i = test_size; i < total_size; i++) { mem[i] = magic_byte; }
+    for (size_t i = test_size; i < total_size; i++) {
+        mem[i] = magic_byte;
+    }
 
     memset(mem, '-', test_size);
 
-    for (size_t i = test_size; i < total_size; i++) { EXPECT_EQU(mem[i], magic_byte); }
+    for (size_t i = test_size; i < total_size; i++) {
+        EXPECT_EQU(mem[i], magic_byte);
+    }
 
     delete[] mem;
     return true;
@@ -104,7 +116,9 @@ TEST_CASE(memcpy_content)
 
     memcpy(mem, data, size);
 
-    for (size_t i = 0; i < size; i++) { EXPECT_EQU(mem[i], data[i]); }
+    for (size_t i = 0; i < size; i++) {
+        EXPECT_EQU(mem[i], data[i]);
+    }
 
     delete[] mem;
     return true;
@@ -119,7 +133,9 @@ TEST_CASE(memmov_content)
 
     memmov(mem, data, size);
 
-    for (size_t i = 0; i < size; i++) { EXPECT_EQU(mem[i], data[i]); }
+    for (size_t i = 0; i < size; i++) {
+        EXPECT_EQU(mem[i], data[i]);
+    }
 
     delete[] mem;
     return true;
@@ -132,7 +148,9 @@ TEST_CASE(memset_content)
 
     memset(mem, 'f', size);
 
-    for (size_t i = 0; i < size; i++) { EXPECT_EQU(mem[i], 'f'); }
+    for (size_t i = 0; i < size; i++) {
+        EXPECT_EQU(mem[i], 'f');
+    }
 
     delete[] mem;
     return true;

@@ -28,8 +28,8 @@
 #include "UniquePtr.hpp"
 #include "Verify.hpp"
 #include "StdLib.hpp"
-#include "Function.hpp"
 #include "StdLibExtras.hpp"
+#include "GenericFormatter.hpp"
 
 #include "Kernel/Kernel.hpp"
 #include "Kernel/Kheap.hpp"
@@ -39,15 +39,30 @@
 
 namespace Kernel {
 
+struct FormatTester : public GenericFormatter {
+
+    static void serial_out_func(char c, char* buf, size_t index, size_t maxlen) { Serial::putchar(c); }
+
+    FormatTester()
+    {
+        m_out_func = serial_out_func;
+        m_index = 0;
+        m_buffer = nullptr;
+        m_maxlen = (size_t)-1;
+    }
+
+    void test()
+    {
+        write_integer<int, 16>(36, 10, -1, (FormatOptions)(Prefix | ZeroPad));
+        write_string("\n", -1, -1);
+        write_string("hello", 10, -1);
+        write_string("\n", -1, -1);
+    }
+};
+
 ASM_LINKAGE void do_it(int*);
 
 int i = 0;
-
-struct GlobalTest {
-    GlobalTest() {  do_it(&i); }
-};
-
-
 
 ASM_LINKAGE void kernel_main()
 {
@@ -65,6 +80,9 @@ ASM_LINKAGE void kernel_main()
 #ifdef __KERNEL_TESTS__
     Kernel::Tests::run_all_tests();
 #endif
+
+    FormatTester t;
+    t.test();
 }
 
 char* test_assign()

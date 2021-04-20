@@ -163,7 +163,9 @@ protected:
             precision--;
         }
 
-        while (i) { m_out_func(local_buffer[--i], m_buffer, m_index++, m_maxlen); }
+        while (i) {
+            m_out_func(local_buffer[--i], m_buffer, m_index++, m_maxlen);
+        }
 
         while (width > 0) {
             m_out_func(' ', m_buffer, m_index++, m_maxlen);
@@ -188,10 +190,14 @@ protected:
         if (has_width) {
             width -= len;
 
-            while (width-- > 0) { m_out_func(' ', m_buffer, m_index++, m_maxlen); }
+            while (width-- > 0) {
+                m_out_func(' ', m_buffer, m_index++, m_maxlen);
+            }
         }
 
-        while (len--) { m_out_func(*str++, m_buffer, m_index++, m_maxlen); }
+        while (len--) {
+            m_out_func(*str++, m_buffer, m_index++, m_maxlen);
+        }
     }
 
 protected:

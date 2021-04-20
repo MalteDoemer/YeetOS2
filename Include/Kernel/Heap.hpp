@@ -296,7 +296,6 @@ private:
         m_remaining += block->get_size();
 #endif
 
-
         if (first_node) {
             first_node->set_prev_free(block);
         }
