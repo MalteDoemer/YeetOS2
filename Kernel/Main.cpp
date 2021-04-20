@@ -28,6 +28,7 @@
 #include "UniquePtr.hpp"
 #include "Verify.hpp"
 #include "StdLib.hpp"
+#include "Function.hpp"
 #include "StdLibExtras.hpp"
 
 #include "Kernel/Kernel.hpp"

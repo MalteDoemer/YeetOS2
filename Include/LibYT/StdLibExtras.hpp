@@ -95,7 +95,7 @@ template<class T> struct __IsPointerHelper<T*> : TrueType {
 template<class T> struct IsPointer : __IsPointerHelper<typename RemoveCV<T>::Type> {
 };
 
-template<class> struct IsFunction : FalseType {
+template<class T> struct IsFunction : FalseType {
 };
 
 template<class Ret, class... Args> struct IsFunction<Ret(Args...)> : TrueType {

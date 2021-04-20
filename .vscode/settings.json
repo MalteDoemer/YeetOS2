@@ -13,7 +13,12 @@
         "streambuf": "cpp",
         "system_error": "cpp",
         "array": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "atomic": "cpp",
+        "functional": "cpp",
+        "random": "cpp",
+        "numeric": "cpp",
+        "cmath": "cpp"
     },
 
     "problems.decorations.enabled": false,
