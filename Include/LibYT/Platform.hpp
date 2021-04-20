@@ -53,11 +53,6 @@
 #define NORETURN [[noreturn]]
 
 #undef SYMBOL_VALUE
-#define SYMBOL_VALUE(x)                                                                                                \
-    ({                                                                                                                 \
-        extern char x;                                                                                                 \
-        (FlatPtr) & x;                                                                                                 \
-    })
 
 constexpr auto is_little_endian = __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__;
 constexpr auto is_bit_endian = __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__;
