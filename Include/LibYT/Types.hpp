@@ -48,6 +48,7 @@ using i32 = Int32;
 using i64 = Int64;
 
 using size_t = __SIZE_TYPE__;
+using uintptr_t = __UINTPTR_TYPE__;
 using ptrdiff_t = __PTRDIFF_TYPE__;
 
 namespace std {

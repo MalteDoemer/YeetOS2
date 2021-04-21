@@ -28,6 +28,7 @@
 #include "Types.hpp"
 #include "Platform.hpp"
 #include "Concepts.hpp"
+#include "StdLib.hpp"
 
 namespace YT {
 
@@ -173,13 +174,15 @@ protected:
         }
     }
 
-    template<FloatingPointType T> void write_float(T value, int width, int precision) { VERIFY_NOT_REACHED(); }
-
-    void write_string(const char* str, int width, int precision)
+    template<FloatingPointType T> 
+    void write_float(T value, int width, int precision, FormatOptions opts)
     {
+        VERIFY_NOT_REACHED();
+    }
 
+    void write_string(const char* str, int width, int precision, FormatOptions opts)
+    {
         size_t len;
-        bool has_width = width > 0;
 
         if (precision > 0) {
             len = strnlen(str, precision);
@@ -187,16 +190,41 @@ protected:
             len = strlen(str);
         }
 
-        if (has_width) {
-            width -= len;
+        width -= len;
 
-            while (width-- > 0) {
+        if (!(opts & Left)) {
+            while (width > 0) {
                 m_out_func(' ', m_buffer, m_index++, m_maxlen);
+                width--;
             }
         }
 
         while (len--) {
             m_out_func(*str++, m_buffer, m_index++, m_maxlen);
+        }
+
+        while (width > 0) {
+            m_out_func(' ', m_buffer, m_index++, m_maxlen);
+            width--;
+        }
+    }
+
+    void write_char(char c, int width, int precision, FormatOptions opts)
+    {
+        if (!(opts & Left))
+        {
+            while (width > 0) {
+                m_out_func(' ', m_buffer, m_index++, m_maxlen);
+                width--;
+            }
+
+            m_out_func(c, m_buffer, m_index++, m_maxlen);
+
+            while (width > 0) {
+                m_out_func(' ', m_buffer, m_index++, m_maxlen);
+                width--;
+            }
+
         }
     }
 

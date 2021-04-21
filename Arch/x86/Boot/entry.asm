@@ -76,9 +76,6 @@ do_it:
     push ebp
     mov ebp, esp
 
-    mov eax, [ebp + 8]
-    mov dword [eax], 36
-
     mov esp, ebp
     pop ebp
     ret

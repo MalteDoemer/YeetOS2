@@ -39,6 +39,10 @@ size_t strnlen(const char* str, size_t maxlen);
 int strcmp(const char* str1, const char* str2);
 int strncmp(const char* str1, const char* str2, size_t n);
 
+int isdigit(int c);
+
+size_t atoi_skip(const char **s);
+
 void* malloc(size_t size);
 void* realloc(void* ptr, size_t size);
 void free(void* ptr);

@@ -53,10 +53,7 @@ void run_all_tests()
     TestResult result;
 
     for (size_t i = 0; i < test_num; i++) {
-        Serial::print("running test case ");
-        Serial::print(tests[i].name);
-        Serial::println(" ...");
-
+        Serial::printf("running test case %s ...\n", tests[i].name);
         if (tests[i].func()) {
             result.num_tests_passed++;
             Serial::println("passed");
@@ -65,17 +62,15 @@ void run_all_tests()
             Serial::println("failed");
         }
 
-        Serial::println();
+        Serial::println("");
         result.num_tests_run++;
     }
 
-    Serial::print("total tests: ");
-    Serial::println(result.num_tests_run);
-    Serial::print("passed: ");
-    Serial::println(result.num_tests_passed);
-    Serial::print("failed: ");
-    Serial::println(result.num_tests_failed);
-    Serial::println();
+
+    Serial::printf("total tests: %d\n", result.num_tests_run);
+    Serial::printf("passed tests: %d\n", result.num_tests_passed);
+    Serial::printf("failed tests: %d\n", result.num_tests_failed);
+    Serial::println("");
 
     if (result.num_tests_failed == 0) {
         Serial::println("All tests passed successfully.");

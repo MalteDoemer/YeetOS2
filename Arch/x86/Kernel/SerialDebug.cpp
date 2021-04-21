@@ -23,6 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "stdarg.h"
+
+#include "PrintfFormatter.hpp"
+
 #include "Arch/x86/Asm.hpp"
 
 #include "Kernel/Kernel.hpp"
@@ -72,51 +76,40 @@ void putchar(char c)
     outb(COM1 + DATA, c);
 }
 
-void print(const char* msg)
+int print(const char* msg)
 {
+    int res = 0;
     for (; *msg; msg++) {
+        res++;
         putchar(*msg);
     }
+    return res;
 }
 
-void print(size_t num)
+int println(const char* msg)
 {
-    if (num == 0) {
-        putchar('0');
-        return;
-    }
-
-    char buffer[20];
-    size_t count = 0;
-
-    while (num) {
-        buffer[count] = num % 10 + '0';
-        num = num / 10;
-        count++;
-    }
-
-    while (count--) {
-        putchar(buffer[count]);
-    }
-}
-
-void println(size_t num)
-{
-    print(num);
+    int res = print(msg);
     putchar('\n');
+    return res + 1;
 }
 
-void println()
+static void serial_out_func(char c, char* buf, size_t idx, size_t max)
 {
-    putchar('\n');
+    Serial::putchar(c);
 }
 
-void println(const char* msg)
+
+int printf(const char* fmt, ...)
 {
-    for (; *msg; msg++) {
-        putchar(*msg);
-    }
-    putchar('\n');
+    va_list vargs;
+    va_start(vargs, fmt);
+
+    PrintfFormatter formatter(serial_out_func, nullptr, -1);
+    size_t res = formatter.format(fmt, vargs);
+
+    va_end(vargs);
+
+    return (int)res;
 }
 
 }

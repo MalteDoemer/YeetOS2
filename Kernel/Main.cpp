@@ -29,7 +29,6 @@
 #include "Verify.hpp"
 #include "StdLib.hpp"
 #include "StdLibExtras.hpp"
-#include "GenericFormatter.hpp"
 
 #include "Kernel/Kernel.hpp"
 #include "Kernel/Kheap.hpp"
@@ -46,15 +45,14 @@ ASM_LINKAGE void kernel_main()
     Serial::initialize();
     Arch::initialize();
 
-    Serial::println();
+    Serial::println("");
     Serial::println("+-----------------------------------+");
     Serial::println("| Welcome to the debug spam output! |");
     Serial::println("+-----------------------------------+");
-    Serial::println();
+    Serial::println("");
 
 #ifdef __KERNEL_TESTS__
     Kernel::Tests::run_all_tests();
 #endif
 }
-
 }

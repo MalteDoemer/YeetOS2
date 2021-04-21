@@ -3,6 +3,7 @@ OBJECTS=\
 Arch.o \
 CPU.o \
 misc.o \
+Div.o \
 SerialDebug.o \
 
 Kernel.a: $(OBJECTS)

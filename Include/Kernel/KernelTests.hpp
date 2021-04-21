@@ -40,8 +40,7 @@
     do {                                                                                                               \
         auto c = x;                                                                                                    \
         if (!c) {                                                                                                      \
-            Serial::print(__PRETTY_FUNCTION__);                                                                        \
-            Serial::println(": expect failed: " #x);                                                                   \
+            Serial::printf("%s: expect failed: %s\n", __PRETTY_FUNCTION__, #x);                                        \
             return false;                                                                                              \
         }                                                                                                              \
     } while (false)
@@ -51,8 +50,7 @@
         auto lhs = a;                                                                                                  \
         auto rhs = b;                                                                                                  \
         if (lhs != rhs) {                                                                                              \
-            Serial::print(__PRETTY_FUNCTION__);                                                                        \
-            Serial::println(": expect equal failed: " #a " was not equal to " #b);                                     \
+            Serial::printf("%s: expect equal failed: %s was not equal to %s\n", __PRETTY_FUNCTION__, #a, #b);          \
             return false;                                                                                              \
         }                                                                                                              \
     } while (false)
@@ -62,8 +60,7 @@
         auto lhs = a;                                                                                                  \
         auto rhs = b;                                                                                                  \
         if (lhs == rhs) {                                                                                              \
-            Serial::print(__PRETTY_FUNCTION__);                                                                        \
-            Serial::println(": expect not equal failed: " #a "was equal to" #b);                                       \
+            Serial::printf("%s: expect not equal failed: %s was equal to %s\n", __PRETTY_FUNCTION__, #a, #b);          \
             return false;                                                                                              \
         }                                                                                                              \
     } while (false)
@@ -74,11 +71,7 @@
         for (size_t j = 0; j < list.count(); j++)                                                                      \
             for (size_t i = 0; i < list.count(); i++)                                                                  \
                 if (list[i] != list[j]) {                                                                              \
-                    Serial::print(__PRETTY_FUNCTION__);                                                                \
-                    Serial::print(": expect all equal failed: i=");                                                    \
-                    Serial::print(i);                                                                                  \
-                    Serial::print(" j=");                                                                              \
-                    Serial::println(j);                                                                                \
+                    Serial::printf("%s: expect all equal failed: i=%d j=%d\n", __PRETTY_FUNCTION__, i, j);             \
                     return false;                                                                                      \
                 }                                                                                                      \
     } while (false)

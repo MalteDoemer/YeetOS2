@@ -45,4 +45,10 @@ TEST_CASE(global_constructors)
     return true;
 }
 
+TEST_CASE(division_corectness)
+{
+    // TODO: implement division_corectness test
+    return true;
+}
+
 }
