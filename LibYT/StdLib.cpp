@@ -25,6 +25,7 @@
 
 #ifdef __KERNEL__
 
+#include "Kernel/Panic.hpp"
 #include "Kernel/Kheap.hpp"
 
 extern "C" {
@@ -116,6 +117,11 @@ size_t atoi_skip(const char** s)
     }
 
     return i;
+}
+
+[[noreturn]] void abort()
+{
+    Kernel::panic("abort() was called!");
 }
 
 }
