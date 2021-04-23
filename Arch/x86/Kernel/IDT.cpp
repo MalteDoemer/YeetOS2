@@ -50,9 +50,5 @@ void init_idt()
     load_idt(&idtr);
 }
 
-ASM_LINKAGE void isr_handler(Registers* regs)
-{
-    Serial::printf("Interrupt %#x was called\n", regs->int_num);
-}
 
 }

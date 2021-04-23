@@ -25,39 +25,15 @@
 
 #pragma once
 
+
 #include "Types.hpp"
 #include "Platform.hpp"
 
-namespace Kernel::Arch {
+#include "Arch/x86/Registers.hpp"
 
-struct PACKED ALIGNED(8) IDTEntry {
-    u16 offset_low;
-    u16 selector;
-    u8 zero;
-    u8 attrs;
-    u16 offset_high;
+namespace Arch::Kernel {
 
-    IDTEntry() = default;
-    IDTEntry(u32 offset, u16 selector, u8 attrs)
-    {
-        offset_low = offset & 0xFFFF;
-        offset_high = (offset >> 16) & 0xFFFF;
-
-        this->zero = 0;
-        this->selector = selector;
-        this->attrs = attrs;
-    }
-};
-
-struct PACKED ALIGNED(8) IDTReference {
-    u16 size;
-    u32 offset;
-};
-
-struct PACKED ISRStub {
-    u8 bytes[9];
-};
-
-void init_idt();
+void remap_pic(u32 base);
+void mask_irq(u32 irq_num, bool mask);
 
 }

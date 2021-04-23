@@ -100,5 +100,6 @@ struct PACKED ALIGNED(16) TaskStateSegment {
 };
 
 void init_gdt();
+void set_esp0(u32 esp);
 
 }

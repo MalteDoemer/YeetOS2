@@ -6,7 +6,7 @@ Arch.o \
 CPU.o \
 GDT.o \
 IDT.o \
-Div.o \
+Interrupts.o \
 SerialDebug.o \
 
 Kernel.a: $(OBJECTS)
