@@ -119,9 +119,14 @@ size_t atoi_skip(const char** s)
     return i;
 }
 
-[[noreturn]] void abort()
+void abort()
 {
     Kernel::panic("abort() was called!");
+}
+
+void atexit(void (*func)())
+{
+    /* Nothing to do here, since the kernel will never exit :) */
 }
 
 }
