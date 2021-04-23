@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include "stdarg.h"
+
 #include "Types.hpp"
 
 namespace Kernel::Serial {
@@ -33,6 +35,7 @@ void initialize();
 void putchar(char c);
 int print(const char* msg);
 int println(const char* msg);
+int vprintf(const char* fmt, va_list vargs);
 int printf(const char* fmt, ...);
 
 }

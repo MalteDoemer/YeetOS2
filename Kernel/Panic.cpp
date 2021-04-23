@@ -23,14 +23,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "stdarg.h"
+
 #include "Kernel/CPU.hpp"
 #include "Kernel/SerialDebug.hpp"
 
 namespace Kernel {
 
-void panic(const char* reason)
+void panic(const char* reason, ...)
 {
-    Serial::println(reason);
+    va_list vargs;
+    va_start(vargs, reason);
+
+    Serial::print("Fatal Error: ");
+    Serial::vprintf(reason, vargs);
+    Serial::putchar('\n');
+
+    va_end(vargs);
+
     while (1)
         CPU::halt();
 }

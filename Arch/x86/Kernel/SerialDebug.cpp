@@ -98,6 +98,12 @@ static void serial_out_func(char c, char* buf, size_t idx, size_t max)
     Serial::putchar(c);
 }
 
+int vprintf(const char* fmt, va_list vargs)
+{
+    PrintfFormatter formatter(serial_out_func, nullptr, -1);
+    size_t res = formatter.format(fmt, vargs);
+    return (int)res;
+}
 
 int printf(const char* fmt, ...)
 {

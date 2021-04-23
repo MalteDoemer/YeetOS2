@@ -28,5 +28,5 @@
 #include "Platform.hpp"
 
 namespace Kernel {
-[[noreturn]] void panic(const char* reason);
+[[noreturn]] void panic(const char* reason, ...);
 }
