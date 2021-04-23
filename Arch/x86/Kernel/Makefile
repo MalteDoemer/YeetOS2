@@ -1,9 +1,11 @@
 
 OBJECTS=\
+misc.o \
+isr.o \
 Arch.o \
 CPU.o \
 GDT.o \
-misc.o \
+IDT.o \
 Div.o \
 SerialDebug.o \
 

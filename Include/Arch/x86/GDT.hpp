@@ -35,6 +35,8 @@
 #define USER_DATA_DESC 0x23
 #define TSS_DESC 0x2B
 
+namespace Kernel::Arch {
+
 struct PACKED ALIGNED(8) GDTEntry {
     u16 limit1;
     u16 base1;
@@ -96,11 +98,6 @@ struct PACKED ALIGNED(16) TaskStateSegment {
     u32 ldtr;
     u32 iopb;
 };
-
-namespace Kernel::Arch {
-
-ASM_LINKAGE void load_gdt(GDTReference* gdtr);
-ASM_LINKAGE void load_tss(u16 descriptor);
 
 void init_gdt();
 

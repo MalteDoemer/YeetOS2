@@ -46,7 +46,7 @@ init_sse:
     ret
 
 
-; void load_gdt(GDTReference gdtr)
+; void load_gdt(GDTReference* gdtr)
 [global load_gdt]
 load_gdt:
     mov eax, [esp + 4]
@@ -62,6 +62,13 @@ load_gdt:
     jmp KERNEL_CODE_DESC:.flush
 .flush:
 
+    ret
+
+; void load_idt(IDTReference* idtr)
+[global load_idt]
+load_idt:
+    mov eax, [esp + 4]
+    lidt [eax]
     ret
 
 ; void load_tss(u16 descriptor)

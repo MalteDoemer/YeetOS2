@@ -28,6 +28,9 @@
 
 namespace Kernel::Arch {
 
+ASM_LINKAGE void load_gdt(GDTReference* gdtr);
+ASM_LINKAGE void load_tss(u16 descriptor);
+
 static TaskStateSegment tss;
 static GDTReference gdtr;
 static GDTEntry gdt[6];
@@ -39,9 +42,9 @@ void init_gdt()
     gdt[2] = GDTEntry(0, 0xFFFFF, 0x92, 0x0C);
     gdt[3] = GDTEntry(0, 0xFFFFF, 0xFA, 0x0C);
     gdt[4] = GDTEntry(0, 0xFFFFF, 0xF2, 0x0C);
-    gdt[5] = GDTEntry((u32)&tss, sizeof(tss), 0xE9, 0x00);
+    gdt[5] = GDTEntry(reinterpret_cast<u32>(&tss), sizeof(tss), 0xE9, 0x00);
 
-    gdtr.offset = (u32)&gdt;
+    gdtr.offset = reinterpret_cast<u32>(&gdt);
     gdtr.size = sizeof(gdt) - 1;
 
     tss.ss0 = KERNEL_DATA_DESC;
@@ -49,6 +52,11 @@ void init_gdt()
 
     load_gdt(&gdtr);
     load_tss(TSS_DESC);
+}
+
+void set_esp0(u32 esp)
+{
+    tss.esp0 = esp;
 }
 
 }

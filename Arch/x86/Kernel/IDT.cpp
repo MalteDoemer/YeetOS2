@@ -25,47 +25,34 @@
 
 #include "Arch/x86/GDT.hpp"
 #include "Arch/x86/IDT.hpp"
+#include "Arch/x86/Registers.hpp"
 
-#include "Kernel/Panic.hpp"
-#include "Kernel/Kernel.hpp"
 #include "Kernel/SerialDebug.hpp"
 
 namespace Kernel::Arch {
 
-typedef void (*CtorFunc)();
+ASM_LINKAGE void load_idt(IDTReference* idtr);
 
-LINKER_SYMBOL(ctors_start);
-LINKER_SYMBOL(ctors_end);
+ASM_LINKAGE ISRStub isr_stubs[256];
 
-ASM_LINKAGE bool init_sse();
+static IDTEntry idt[256];
+static IDTReference idtr;
 
-void call_ctors()
+void init_idt()
 {
-    /* Ehhmm clang tried to optimize this comparison further down.
-       Now I need to do this void* stuff in order to prevent it.   */
-    void* start = (void*)ctors_start;
-    void* end = (void*)ctors_end;
+    idtr.offset = reinterpret_cast<u32>(&idt);
+    idtr.size = sizeof(idt) - 1;
 
-    if (start == end) {
-        return;
+    for (size_t i = 0; i < 256; i++) {
+        idt[i] = IDTEntry(reinterpret_cast<u32>(&isr_stubs[i]), KERNEL_CODE_DESC, 0x8E);
     }
 
-    CtorFunc* ctor = (CtorFunc*)end;
-
-    do {
-        ctor--;
-        (*ctor)();
-    } while (ctor > (CtorFunc*)start);
+    load_idt(&idtr);
 }
 
-void initialize()
+ASM_LINKAGE void isr_handler(Registers* regs)
 {
-    if (!init_sse()) {
-        Serial::println("SSE not supported!");
-    }
-
-    init_gdt();
-    init_idt();
+    Serial::printf("Interrupt %#x was called\n", regs->int_num);
 }
 
 }
