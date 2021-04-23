@@ -52,7 +52,8 @@
 #undef NORETURN
 #define NORETURN [[noreturn]]
 
-#undef SYMBOL_VALUE
+#undef LINKER_SYMBOL
+#define LINKER_SYMBOL(name) extern "C" void name();
 
 constexpr auto is_little_endian = __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__;
 constexpr auto is_bit_endian = __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__;

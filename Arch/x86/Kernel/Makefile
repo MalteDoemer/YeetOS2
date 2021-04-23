@@ -2,6 +2,7 @@
 OBJECTS=\
 Arch.o \
 CPU.o \
+GDT.o \
 misc.o \
 Div.o \
 SerialDebug.o \

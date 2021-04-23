@@ -1,7 +1,14 @@
 bits 32
 
-[global sse_init]
-sse_init:
+%define KERNEL_CODE_DESC 0x08
+%define KERNEL_DATA_DESC 0x10
+%define USER_CODE_DESC 0x1B
+%define USER_DATA_DESC 0x23
+%define TSS_DESC 0x2B
+
+; bool sse_init()
+[global init_sse]
+init_sse:
     push ebp
     mov ebp, esp
 
@@ -34,5 +41,32 @@ sse_init:
     ; return false
     xor eax, eax
     pop ebx
-    leave
+    mov esp, ebp
+    pop ebp
+    ret
+
+
+; void load_gdt(GDTReference gdtr)
+[global load_gdt]
+load_gdt:
+    mov eax, [esp + 4]
+    lgdt [eax]
+
+    mov ax, KERNEL_DATA_DESC
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+
+    jmp KERNEL_CODE_DESC:.flush
+.flush:
+
+    ret
+
+; void load_tss(u16 descriptor)
+[global load_tss]
+load_tss:
+    mov ax, [esp + 4]
+    ltr ax
     ret

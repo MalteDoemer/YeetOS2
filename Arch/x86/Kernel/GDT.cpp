@@ -24,45 +24,31 @@
  */
 
 #include "Arch/x86/GDT.hpp"
-
-#include "Kernel/Panic.hpp"
-#include "Kernel/Kernel.hpp"
+#include "Arch/x86/Arch.hpp"
 
 namespace Kernel::Arch {
 
-typedef void (*CtorFunc)();
+static TaskStateSegment tss;
+static GDTReference gdtr;
+static GDTEntry gdt[6];
 
-LINKER_SYMBOL(ctors_start);
-LINKER_SYMBOL(ctors_end);
-
-ASM_LINKAGE bool init_sse();
-
-void call_ctors()
+void init_gdt()
 {
-    /* Ehhmm clang tried to optimize this comparison further down.
-       Now I need to do this void* stuff in order to prevent it.   */
-    void* start = (void*)ctors_start;
-    void* end = (void*)ctors_end;
+    gdt[0] = GDTEntry(0, 0, 0, 0);
+    gdt[1] = GDTEntry(0, 0xFFFFF, 0x9A, 0x0C);
+    gdt[2] = GDTEntry(0, 0xFFFFF, 0x92, 0x0C);
+    gdt[3] = GDTEntry(0, 0xFFFFF, 0xFA, 0x0C);
+    gdt[4] = GDTEntry(0, 0xFFFFF, 0xF2, 0x0C);
+    gdt[5] = GDTEntry((u32)&tss, sizeof(tss), 0xE9, 0x00);
 
-    if (start == end) {
-        return;
-    }
+    gdtr.offset = (u32)&gdt;
+    gdtr.size = sizeof(gdt) - 1;
 
-    CtorFunc* ctor = (CtorFunc*)end;
+    tss.ss0 = KERNEL_DATA_DESC;
+    tss.iopb = sizeof(tss); /* I don't know what this is or what it does. :( */
 
-    do {
-        ctor--;
-        (*ctor)();
-    } while (ctor > (CtorFunc*)start);
-}
-
-void initialize()
-{
-    if (!init_sse()) {
-        panic("SSE not supported!");
-    }
-
-    init_gdt();
+    load_gdt(&gdtr);
+    load_tss(TSS_DESC);
 }
 
 }
