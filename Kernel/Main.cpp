@@ -24,10 +24,11 @@
  */
 
 #include "New.hpp"
-#include "String.hpp"
-#include "UniquePtr.hpp"
 #include "Verify.hpp"
+#include "String.hpp"
 #include "StdLib.hpp"
+#include "UniquePtr.hpp"
+#include "Functions.hpp"
 #include "StdLibExtras.hpp"
 
 #include "Kernel/Kernel.hpp"
@@ -37,6 +38,11 @@
 #include "Kernel/KernelTests.hpp"
 
 namespace Kernel {
+
+void call_fn(Function<void()> func)
+{
+    func();
+}
 
 ASM_LINKAGE void kernel_main()
 {
@@ -54,5 +60,14 @@ ASM_LINKAGE void kernel_main()
 #ifdef __KERNEL_TESTS__
     Kernel::Tests::run_all_tests();
 #endif
+
+    // Function<int(int, int)> func = [](int a, int b) -> int
+    // {
+    //     return a + b;
+    // };
+
+    call_fn([]() -> void {
+        Serial::println("Heyhey!");
+    });
 }
 }

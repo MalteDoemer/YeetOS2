@@ -442,6 +442,7 @@ constexpr bool is_constant_evaluated()
 
 }
 
+using YT::EnableIf;
 using YT::AddConst;
 using YT::array_size;
 using YT::Conditional;
