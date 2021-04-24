@@ -63,7 +63,7 @@ class PrintfFormatter : public GenericFormatter {
 public:
     PrintfFormatter(OutputFunction out_func, char* buffer, size_t maxlen)
     {
-        m_out_func = out_func;
+        m_out_func = move(out_func);
         m_buffer = buffer;
         m_index = 0;
         m_maxlen = maxlen;

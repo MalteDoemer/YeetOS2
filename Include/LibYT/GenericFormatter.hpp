@@ -29,6 +29,7 @@
 #include "Platform.hpp"
 #include "Concepts.hpp"
 #include "StdLib.hpp"
+#include "Functions.hpp"
 
 namespace YT {
 
@@ -47,7 +48,7 @@ protected:
     };
 
 public:
-    using OutputFunction = void (*)(char c, char* buffer, size_t index, size_t maxlen);
+    using OutputFunction = Function<void(char, char*, size_t, size_t)>;
 
 protected:
     template<IntegralType T, u8 base>
