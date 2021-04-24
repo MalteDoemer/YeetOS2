@@ -25,6 +25,7 @@
 
 #include "Arch/x86/GDT.hpp"
 #include "Arch/x86/IDT.hpp"
+#include "Arch/x86/Interrupts.hpp"
 
 #include "Kernel/Panic.hpp"
 #include "Kernel/Kernel.hpp"
@@ -66,6 +67,7 @@ void initialize()
 
     init_gdt();
     init_idt();
+    init_ints();
 }
 
 }

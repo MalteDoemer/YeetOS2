@@ -61,13 +61,7 @@ ASM_LINKAGE void kernel_main()
     Kernel::Tests::run_all_tests();
 #endif
 
-    // Function<int(int, int)> func = [](int a, int b) -> int
-    // {
-    //     return a + b;
-    // };
 
-    call_fn([]() -> void {
-        Serial::println("Heyhey!");
-    });
+    asm volatile("int $3");
 }
 }
