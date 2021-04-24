@@ -63,8 +63,8 @@ public:
     constexpr bool is_null() const { return m_data == nullptr; }
     constexpr bool is_empty() const { return m_size == 0; }
 
-    constexpr const T* data() const { return m_data; }
-    constexpr T* data() { return m_data; }
+    constexpr ConstPointer data() const { return m_data; }
+    constexpr Pointer data() { return m_data; }
 
     constexpr Iterator begin() { return data(); }
     constexpr ConstIterator begin() const { return data(); }

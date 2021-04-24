@@ -57,8 +57,17 @@ public:
     constexpr Iterator end() { return m_data + Size; }
     constexpr ConstIterator end() const { return m_data + Size; }
 
-    constexpr ConstReference at(DifferenceType index) const { return m_data[index]; }
-    constexpr Reference at(DifferenceType index) { return m_data[index]; }
+    constexpr ConstReference at(DifferenceType index) const
+    {
+        VERIFY(index < count());
+        return m_data[index];
+    }
+    
+    constexpr Reference at(DifferenceType index)
+    {
+        VERIFY(index < count());
+        return m_data[index];
+    }
 
     constexpr ConstReference front() const { return m_data[0]; }
     constexpr Reference front() { return m_data[0]; }

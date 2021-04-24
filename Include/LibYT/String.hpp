@@ -48,7 +48,7 @@ template<class T> struct PaddingHelper<T, 1> {
 }
 
 template<class Char>
-requires IsStandardLayout<Char>::value &&(!IsArray<Char>::value) && IsTrivial<Char>::value class BasicString {
+requires IsStandardLayout<Char>::value && (!IsArray<Char>::value) && IsTrivial<Char>::value class BasicString {
 
 public:
     using ValueType = Char;
@@ -217,11 +217,20 @@ public:
     inline constexpr ConstPointer data() const { return m_data; }
     inline constexpr ConstPointer cstr() const { return m_data; }
 
-    inline constexpr Reference at(SizeType pos) { return data()[pos]; }
-    inline constexpr ConstReference at(SizeType pos) const { return data()[pos]; }
+    inline constexpr Reference at(SizeType index)
+    {
+        VERIFY(index < count());
+        return data()[index];
+    }
 
-    inline constexpr Reference operator[](SizeType pos) { return at(pos); }
-    inline constexpr ConstReference operator[](SizeType pos) const { return at(pos); }
+    inline constexpr ConstReference at(SizeType index) const
+    {
+        VERIFY(index < count());
+        return data()[index];
+    }
+
+    inline constexpr Reference operator[](SizeType index) { return at(index); }
+    inline constexpr ConstReference operator[](SizeType index) const { return at(index); }
 
     inline constexpr Iterator begin() { return Iterator(data()); }
     inline constexpr ConstIterator begin() const { return Iterator(data()); }
@@ -326,8 +335,7 @@ public:
     }
 };
 
-template<class Char>
-inline constexpr bool operator==(const Char* lhs, const BasicString<Char> rhs)
+template<class Char> inline constexpr bool operator==(const Char* lhs, const BasicString<Char> rhs)
 {
     return rhs == lhs;
 }

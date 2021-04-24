@@ -61,14 +61,3 @@ inline constexpr Uint64 GiB = KiB * KiB * KiB;
 inline constexpr Uint64 TiB = KiB * KiB * KiB * KiB;
 inline constexpr Uint64 PiB = KiB * KiB * KiB * KiB * KiB;
 inline constexpr Uint64 EiB = KiB * KiB * KiB * KiB * KiB * KiB;
-
-namespace YT {
-enum class MemoryOrder {
-    relaxed = __ATOMIC_RELAXED,
-    consume = __ATOMIC_CONSUME,
-    acquire = __ATOMIC_ACQUIRE,
-    release = __ATOMIC_RELEASE,
-    acq_rel = __ATOMIC_ACQ_REL,
-    seq_cst = __ATOMIC_SEQ_CST
-};
-}

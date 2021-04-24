@@ -32,6 +32,15 @@
 
 namespace YT {
 
+enum class MemoryOrder {
+    relaxed = __ATOMIC_RELAXED,
+    consume = __ATOMIC_CONSUME,
+    acquire = __ATOMIC_ACQUIRE,
+    release = __ATOMIC_RELEASE,
+    acq_rel = __ATOMIC_ACQ_REL,
+    seq_cst = __ATOMIC_SEQ_CST
+};
+
 static inline void atomic_signal_fence(MemoryOrder order) noexcept
 {
     return __atomic_signal_fence((int)order);
