@@ -22,9 +22,9 @@ memcpy:
     ret
 
 
-;void* memmov(void* dest, const void* src, size_t n)
-global memmov
-memmov:
+;void* memmove(void* dest, const void* src, size_t n)
+global memmove
+memmove:
     push ebp
     mov ebp, esp
     push edi
