@@ -26,6 +26,7 @@
 #pragma once
 
 #include "Types.hpp"
+#include "Optional.hpp"
 #include "Platform.hpp"
 #include "Concepts.hpp"
 
@@ -105,6 +106,36 @@ public:
     }
 
     [[nodiscard]] constexpr Span trim(SizeType end) const { return Span { m_data, min(end, count()) }; }
+
+    constexpr Optional<SizeType> find(const T& value) const
+    {
+        if (is_empty())
+            return {};
+
+        for (SizeType i = 0; i < count(); i++) {
+            if (at(i) == value)
+                return { i };
+        }
+
+        return {};
+    }
+
+    constexpr Optional<SizeType> find(const Span other) const
+    {
+        if (other.count() == 0)
+            return 0;
+
+        if (count() < other.count())
+            return {};
+
+        for (SizeType i = 0; i <= count() - other.count(); i++) {
+            if (equals(data() + i, other.data(), other.count())) {
+                return { i };
+            }
+        }
+
+        return {};
+    }
 
 private:
     T* m_data;

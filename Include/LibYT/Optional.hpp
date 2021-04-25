@@ -28,24 +28,25 @@
 #pragma once
 
 #include "Types.hpp"
+#include "New.hpp"
 #include "Platform.hpp"
 #include "Verify.hpp"
-#include "Utility.hpp"
 
 namespace YT {
 
 template<class T> class alignas(T) Optional {
 
 public:
-    ALWAYS_INLINE Optional() = default;
+    ALWAYS_INLINE constexpr Optional() = default;
 
-    ALWAYS_INLINE Optional(const T& value) : m_has_value(true) { new (&m_storage) T(value); }
+    ALWAYS_INLINE constexpr Optional(const T& value) : m_has_value(true) { new (&m_storage) T(value); }
 
-    template<class U> ALWAYS_INLINE Optional(const U& value) : m_has_value(true) { new (&m_storage) T(value); }
+    template<class U> 
+    ALWAYS_INLINE constexpr Optional(const U& value) : m_has_value(true) { new (&m_storage) T(value); }
 
-    ALWAYS_INLINE Optional(T&& value) : m_has_value(true) { new (&m_storage) T(move(value)); }
+    ALWAYS_INLINE constexpr Optional(T&& value) : m_has_value(true) { new (&m_storage) T(move(value)); }
 
-    ALWAYS_INLINE Optional(Optional&& other) : m_has_value(other.m_has_value)
+    ALWAYS_INLINE constexpr Optional(Optional&& other) : m_has_value(other.m_has_value)
     {
         if (other.has_value()) {
             new (&m_storage) T(other.release_value());
@@ -53,14 +54,14 @@ public:
         }
     }
 
-    ALWAYS_INLINE Optional(const Optional& other) : m_has_value(other.m_has_value)
+    ALWAYS_INLINE constexpr Optional(const Optional& other) : m_has_value(other.m_has_value)
     {
         if (m_has_value) {
             new (&m_storage) T(other.value());
         }
     }
 
-    ALWAYS_INLINE Optional& operator=(const Optional& other)
+    ALWAYS_INLINE constexpr Optional& operator=(const Optional& other)
     {
         if (this != &other) {
             clear();
@@ -72,7 +73,7 @@ public:
         return *this;
     }
 
-    ALWAYS_INLINE Optional& operator=(Optional&& other)
+    ALWAYS_INLINE constexpr Optional& operator=(Optional&& other)
     {
         if (this != &other) {
             clear();
@@ -83,14 +84,15 @@ public:
         return *this;
     }
 
-    template<class O> ALWAYS_INLINE bool operator==(const Optional<O>& other) const
+    template<class O> 
+    ALWAYS_INLINE constexpr bool operator==(const Optional<O>& other) const
     {
         return has_value() == other.has_value() && (!has_value() || value() == other.value());
     }
 
-    ALWAYS_INLINE ~Optional() { clear(); }
+    ALWAYS_INLINE constexpr ~Optional() { clear(); }
 
-    ALWAYS_INLINE void clear()
+    ALWAYS_INLINE constexpr void clear()
     {
         if (m_has_value) {
             value().~T();
@@ -98,22 +100,23 @@ public:
         }
     }
 
-    template<class... Parameters> ALWAYS_INLINE void emplace(Parameters&&... parameters)
+    template<class... Parameters> 
+    ALWAYS_INLINE constexpr void emplace(Parameters&&... parameters)
     {
         clear();
         m_has_value = true;
         new (&m_storage) T(forward<Parameters>(parameters)...);
     }
 
-    ALWAYS_INLINE bool has_value() const { return m_has_value; }
+    ALWAYS_INLINE constexpr bool has_value() const { return m_has_value; }
 
-    [[nodiscard]] ALWAYS_INLINE T& value()
+    [[nodiscard]] ALWAYS_INLINE constexpr T& value()
     {
         VERIFY(m_has_value);
         return *reinterpret_cast<T*>(&m_storage);
     }
 
-    [[nodiscard]] ALWAYS_INLINE const T& value() const
+    [[nodiscard]] ALWAYS_INLINE constexpr const T& value() const
     {
         VERIFY(m_has_value);
         return *reinterpret_cast<const T*>(&m_storage);
@@ -128,18 +131,18 @@ public:
         return released_value;
     }
 
-    [[nodiscard]] ALWAYS_INLINE T value_or(const T& fallback) const
+    [[nodiscard]] ALWAYS_INLINE constexpr T value_or(const T& fallback) const
     {
         if (m_has_value)
             return value();
         return fallback;
     }
 
-    ALWAYS_INLINE const T& operator*() const { return value(); }
-    ALWAYS_INLINE T& operator*() { return value(); }
+    ALWAYS_INLINE constexpr const T& operator*() const { return value(); }
+    ALWAYS_INLINE constexpr T& operator*() { return value(); }
 
-    ALWAYS_INLINE const T* operator->() const { return &value(); }
-    ALWAYS_INLINE T* operator->() { return &value(); }
+    ALWAYS_INLINE constexpr const T* operator->() const { return &value(); }
+    ALWAYS_INLINE constexpr T* operator->() { return &value(); }
 
 private:
     Uint8 m_storage[sizeof(T)] { 0 };

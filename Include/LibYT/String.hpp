@@ -30,6 +30,9 @@
 #include "Concepts.hpp"
 #include "Platform.hpp"
 #include "Utility.hpp"
+#include "StdLib.hpp"
+#include "Span.hpp"
+#include "Optional.hpp"
 #include "StdLibExtras.hpp"
 #include "NumericLimits.hpp"
 #include "InitializerList.hpp"
@@ -48,10 +51,9 @@ template<class T> struct PaddingHelper<T, 1> {
 }
 
 template<class T>
-concept CharType = IsStandardLayout<T>::value && (!IsArray<T>::value) && IsTrivial<T>::value;
+concept CharType = IsStandardLayout<T>::value &&(!IsArray<T>::value) && IsTrivial<T>::value;
 
-template<CharType Char>
-class BasicString {
+template<CharType Char> class BasicString {
 
 public:
     using ValueType = Char;
@@ -235,17 +237,39 @@ public:
     inline constexpr Reference operator[](SizeType index) { return at(index); }
     inline constexpr ConstReference operator[](SizeType index) const { return at(index); }
 
-    inline constexpr Reference front() { VERIFY(!is_empty()); return at(0); }
-    inline constexpr ConstReference front() const { VERIFY(!is_empty()); return at(0); }
+    inline constexpr Reference front()
+    {
+        VERIFY(!is_empty());
+        return at(0);
+    }
+    inline constexpr ConstReference front() const
+    {
+        VERIFY(!is_empty());
+        return at(0);
+    }
 
-    inline constexpr Reference back() { VERIFY(!is_empty()); return at(count() - 1); }
-    inline constexpr ConstReference back() const { VERIFY(!is_empty()); return at(count() - 1); }
+    inline constexpr Reference back()
+    {
+        VERIFY(!is_empty());
+        return at(count() - 1);
+    }
+    inline constexpr ConstReference back() const
+    {
+        VERIFY(!is_empty());
+        return at(count() - 1);
+    }
 
     inline constexpr Iterator begin() { return Iterator(data()); }
     inline constexpr ConstIterator begin() const { return Iterator(data()); }
 
     inline constexpr Iterator end() { return Iterator(data() + count()); }
     inline constexpr ConstIterator end() const { return Iterator(data() + count()); }
+
+    inline constexpr Span<Char> span() { return { data(), count() }; }
+    inline constexpr Span<const Char> span() const { return { data(), count() }; }
+
+    inline constexpr operator Span<Char>() { return span(); }
+    inline constexpr operator Span<const Char>() const { return span(); }
 
     inline constexpr bool operator==(const BasicString& other) const
     {
@@ -322,14 +346,11 @@ public:
         set_count(0);
     }
 
-    inline constexpr void resize(SizeType new_count)
-    {
-        resize(new_count, Char());
-    }
+    inline constexpr void resize(SizeType new_count) { resize(new_count, Char()); }
 
     inline constexpr void resize(SizeType new_count, Char fill)
     {
-        if (new_count > count()){
+        if (new_count > count()) {
             reserve(new_count);
             YT::assign(data() + count(), fill, new_count - count());
             set_count(new_count);
@@ -447,20 +468,23 @@ public:
         move(first, last, count() - index - to_remove);
     }
 
+    inline constexpr Optional<SizeType> find(Char c, SizeType start = 0) const { return span().subspan(start).find(c); }
+
+    inline constexpr Optional<SizeType> find(const BasicString& str, SizeType start = 0) const
+    {
+        return span().subspan(start).find(str.span());
+    }
 };
 
-template<CharType Char> 
-inline constexpr bool operator==(const Char* lhs, const BasicString<Char> rhs)
+template<CharType Char> inline constexpr bool operator==(const Char* lhs, const BasicString<Char> rhs)
 {
     return rhs == lhs;
 }
 
-template<CharType Char> 
-inline constexpr bool operator!=(const Char* lhs, const BasicString<Char> rhs)
+template<CharType Char> inline constexpr bool operator!=(const Char* lhs, const BasicString<Char> rhs)
 {
     return rhs != lhs;
 }
-
 
 using String = BasicString<char>;
 using WString = BasicString<wchar_t>;
