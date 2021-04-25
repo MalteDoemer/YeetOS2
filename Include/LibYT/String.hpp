@@ -47,8 +47,11 @@ template<class T> struct PaddingHelper<T, 1> {
 
 }
 
-template<class Char>
-requires IsStandardLayout<Char>::value && (!IsArray<Char>::value) && IsTrivial<Char>::value class BasicString {
+template<class T>
+concept CharType = IsStandardLayout<T>::value && (!IsArray<T>::value) && IsTrivial<T>::value;
+
+template<CharType Char>
+class BasicString {
 
 public:
     using ValueType = Char;
@@ -232,6 +235,12 @@ public:
     inline constexpr Reference operator[](SizeType index) { return at(index); }
     inline constexpr ConstReference operator[](SizeType index) const { return at(index); }
 
+    inline constexpr Reference front() { VERIFY(!is_empty()); return at(0); }
+    inline constexpr ConstReference front() const { VERIFY(!is_empty()); return at(0); }
+
+    inline constexpr Reference back() { VERIFY(!is_empty()); return at(count() - 1); }
+    inline constexpr ConstReference back() const { VERIFY(!is_empty()); return at(count() - 1); }
+
     inline constexpr Iterator begin() { return Iterator(data()); }
     inline constexpr ConstIterator begin() const { return Iterator(data()); }
 
@@ -252,6 +261,22 @@ public:
             return false;
 
         return equals(data(), cstring, count());
+    }
+
+    inline constexpr bool operator!=(const BasicString& other) const
+    {
+        if (count() != other.count())
+            return true;
+
+        return !equals(data(), other.data(), count());
+    }
+
+    inline constexpr bool operator!=(ConstPointer cstring)
+    {
+        if (count() != cstring_count(cstring))
+            return true;
+
+        return !equals(data(), cstring, count());
     }
 
     inline constexpr void reserve(SizeType new_cap)
@@ -288,11 +313,44 @@ public:
         m_data = new_data;
     }
 
+    inline constexpr void clear()
+    {
+        if (!is_small())
+            delete[] m_data;
+
+        m_data = m_inline_buffer;
+        set_count(0);
+    }
+
+    inline constexpr void resize(SizeType new_count)
+    {
+        resize(new_count, Char());
+    }
+
+    inline constexpr void resize(SizeType new_count, Char fill)
+    {
+        if (new_count > count()){
+            reserve(new_count);
+            YT::assign(data() + count(), fill, new_count - count());
+            set_count(new_count);
+        } else if (new_count < count()) {
+            set_count(new_count);
+            shrink_to_fit();
+        }
+    }
+
     inline constexpr void append(Char value)
     {
         grow_if_needed();
-        at(count()) = value;
+        data()[count()] = value;
         set_count(count() + 1);
+    }
+
+    inline constexpr void append(Char value, SizeType cnt)
+    {
+        reserve(count() + cnt);
+        YT::assign(data() + count(), value, cnt);
+        set_count(count() + cnt);
     }
 
     inline constexpr void append(ConstPointer other)
@@ -313,7 +371,7 @@ public:
     inline constexpr void append(const BasicString& other)
     {
         reserve(count() + other.count());
-        copy(data() + count(), other.data(), other.count());
+        move(data() + count(), other.data(), other.count());
         set_count(count() + other.count());
     }
 
@@ -321,24 +379,88 @@ public:
     {
         VERIFY(num <= other.count());
         reserve(count() + num);
-        copy(data() + count(), other.data(), num);
+        move(data() + count(), other.data(), num);
         set_count(count() + num);
     }
 
-    inline constexpr void clear()
+    inline constexpr void insert(SizeType index, SizeType cnt, Char c)
     {
-        if (!is_small())
-            delete[] m_data;
-
-        m_data = m_inline_buffer;
-        set_count(0);
+        VERIFY(index < count());
+        reserve(count() + cnt);
+        move(data() + index + cnt, data() + index, count() - index);
+        assign(data() + index, c, cnt);
+        set_count(count() + cnt);
     }
+
+    inline constexpr void insert(SizeType index, ConstPointer cstring)
+    {
+        VERIFY(index < count());
+        SizeType cnt = cstring_count(cstring);
+        reserve(count() + cnt);
+        move(data() + index + cnt, data() + index, count() - index);
+        copy(data() + index, cstring, cnt);
+        set_count(count() + cnt);
+    }
+
+    inline constexpr void insert(SizeType index, const BasicString& str)
+    {
+        VERIFY(index < count());
+        SizeType cnt = str.count();
+        reserve(count() + cnt);
+        move(data() + index + cnt, data() + index, count() - index);
+        copy(data() + index, str.data(), cnt);
+        set_count(count() + cnt);
+    }
+
+    inline constexpr void insert(SizeType index, SizeType cnt, ConstPointer cstring)
+    {
+        VERIFY(index < count());
+        reserve(count() + cnt);
+        move(data() + index + cnt, data() + index, count() - index);
+        copy(data() + index, cstring, cnt);
+        set_count(count() + cnt);
+    }
+
+    inline constexpr void insert(SizeType index, SizeType cnt, const BasicString& str)
+    {
+        VERIFY(index < count());
+        reserve(count() + cnt);
+        move(data() + index + cnt, data() + index, count() - index);
+        copy(data() + index, str.data(), cnt);
+        set_count(count() + cnt);
+    }
+
+    inline constexpr void erase(SizeType index, SizeType cnt)
+    {
+        VERIFY(index < count());
+        SizeType to_remove = min(cnt, count() - index);
+        move(data() + index, data() + index + to_remove, count() - index - to_remove);
+        set_count(count() - to_remove);
+    }
+
+    inline constexpr void erase(ConstIterator first, ConstIterator last)
+    {
+        VERIFY(first >= begin());
+        VERIFY(last <= end());
+        SizeType to_remove = last - first;
+        SizeType index = first - begin();
+        move(first, last, count() - index - to_remove);
+    }
+
 };
 
-template<class Char> inline constexpr bool operator==(const Char* lhs, const BasicString<Char> rhs)
+template<CharType Char> 
+inline constexpr bool operator==(const Char* lhs, const BasicString<Char> rhs)
 {
     return rhs == lhs;
 }
+
+template<CharType Char> 
+inline constexpr bool operator!=(const Char* lhs, const BasicString<Char> rhs)
+{
+    return rhs != lhs;
+}
+
 
 using String = BasicString<char>;
 using WString = BasicString<wchar_t>;

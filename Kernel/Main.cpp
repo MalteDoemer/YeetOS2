@@ -61,7 +61,5 @@ ASM_LINKAGE void kernel_main()
     Kernel::Tests::run_all_tests();
 #endif
 
-
-    asm volatile("int $3");
 }
 }

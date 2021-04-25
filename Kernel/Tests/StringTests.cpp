@@ -81,6 +81,103 @@ TEST_CASE(string_data)
 
 TEST_CASE(string_capacity)
 {
+    String str;
+
+    EXPECT_EQU(str.capacity(), String::inline_capacity);
+
+    str.append('f', String::inline_capacity);
+
+    EXPECT_EQU(str.capacity(), String::inline_capacity);
+
+    str.append('f');
+
+    EXPECT(!str.is_small());
+
+    /* String has to grow more than only 1 element */
+    EXPECT(str.capacity() > String::inline_capacity + 1);
+
+    str.shrink_to_fit();
+    EXPECT_EQU(str.capacity(), String::inline_capacity + 1);
+
+    str.reserve(String::inline_capacity * 10);
+    EXPECT_EQU(str.capacity(), String::inline_capacity * 10);
+
+    str.clear();
+    EXPECT_EQU(str.capacity(), String::inline_capacity);
+
+    return true;
+}
+
+
+TEST_CASE(string_resize)
+{
+    String str;
+    EXPECT_EQU(str.count(), 0);
+
+    str.append("ffff");
+    EXPECT_EQU(str.count(), 4);
+
+    str.resize(512);
+    EXPECT_EQU(str.count(), 512);
+
+    str.resize(0);
+    EXPECT_EQU(str.count(), 0);
+
+    str.resize(64, 'f');
+    EXPECT_EQU(str, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+
+    return true;
+}
+
+TEST_CASE(string_append)
+{
+    String str;
+
+    str.append('f');
+    EXPECT_EQU(str, "f");
+
+    str.append('f', 63);
+    EXPECT_EQU(str, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+
+    str.append("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+    EXPECT_EQU(str, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+
+    str.clear();
+
+    auto data = "lol lol lol lol lol lol lol lol ";
+
+    str.append(data, strlen(data) / 2);
+    str.append(data, strlen(data) / 2);
+
+    EXPECT_EQU(str, data);
+
+    String cpy = str;
+    cpy.append(str);
+    EXPECT_EQU(str.count(), cpy.count() / 2);
+
+    str.append(str);
+    EXPECT_EQU(str, cpy);
+
+    String ref(data);
+    ref.append(data);
+    ref.append(data);
+
+    str.append(cpy, cpy.count() / 2);
+    EXPECT_EQU(str, ref);
+
+    return true;
+}
+
+TEST_CASE(string_insert)
+{
+
+    
+
+    return true;
+}
+
+TEST_CASE(string_erase)
+{
     return true;
 }
 

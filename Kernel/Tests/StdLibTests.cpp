@@ -55,7 +55,7 @@ TEST_CASE(memcpy_overrun)
     return true;
 }
 
-TEST_CASE(memmov_underrun)
+TEST_CASE(memmove_underrun)
 {
     char magic_byte = 0xaa;
     size_t test_size = 32;
@@ -65,7 +65,7 @@ TEST_CASE(memmov_underrun)
     // so we need to test for a "underrun"
 
     const char* data = "-----------------------------------------------------------------------------------------------"
-                       "-This is a very good memmov test";
+                       "-This is a very good memmove test";
     const char* src = data + total_size - test_size;
 
     char* mem = new char[total_size];
@@ -75,7 +75,7 @@ TEST_CASE(memmov_underrun)
         mem[i] = magic_byte;
     }
 
-    memmov(dest, src, test_size);
+    memmove(dest, src, test_size);
 
     for (size_t i = 0; i < total_size - test_size; i++) {
         EXPECT_EQU(mem[i], magic_byte);
@@ -124,14 +124,14 @@ TEST_CASE(memcpy_content)
     return true;
 }
 
-TEST_CASE(memmov_content)
+TEST_CASE(memmove_content)
 {
     const char* data = "Here is some string data to test";
 
     size_t size = strlen(data);
     char* mem = new char[size];
 
-    memmov(mem, data, size);
+    memmove(mem, data, size);
 
     for (size_t i = 0; i < size; i++) {
         EXPECT_EQU(mem[i], data[i]);
