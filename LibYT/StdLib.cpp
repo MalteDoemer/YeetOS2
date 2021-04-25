@@ -89,6 +89,24 @@ int memcmp(const void* p1, const void* p2, size_t n)
     return 0;
 }
 
+const void* memmem(const void* haystack, size_t haystacklen, const void* needle, size_t needlelen)
+{
+    const u8* ptr = static_cast<const u8*>(haystack);
+    
+    if (needlelen == 0)
+        return haystack;
+
+    if (haystacklen < needlelen)
+        return nullptr;
+
+    for (size_t i = 0; i <= haystacklen - needlelen; i++){
+        if (memcmp(ptr + i, needle, needlelen) == 0)
+            return static_cast<const void*>(ptr + i);
+    }
+
+    return nullptr;
+}
+
 int strncmp(const char* str1, const char* str2, size_t n)
 {
     for (; n--; str1++, str2++) {

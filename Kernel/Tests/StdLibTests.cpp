@@ -107,6 +107,22 @@ TEST_CASE(memset_overrun)
     return true;
 }
 
+TEST_CASE(memmem_correctness)
+{
+    const char* str = "Hello this is a very very long string. Actually that is not true, cause there are many strings that are mucho mucho more long XD torolololololol";
+    const char* ptr1 = str + 126;
+    const char* ptr2 = str + 0;
+    const char* ptr3 = str + 129;
+    const char* ptr4 = str + 31;
+    
+    EXPECT_EQU(memmem(str, strlen(str), "XD", 2), ptr1);
+    EXPECT_EQU(memmem(str, strlen(str), "Hello", 5), ptr2);
+    EXPECT_EQU(memmem(str, strlen(str), "torolololololol", 15), ptr3);
+    EXPECT_EQU(memmem(str, strlen(str), "string", 6), ptr4);
+
+    return true;
+}
+
 TEST_CASE(memcpy_content)
 {
     const char* data = "Here is some string data to test";
